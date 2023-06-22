@@ -1,0 +1,266 @@
+---
+title: "SignalFlow  Tutorial"
+format:
+  html:
+    code-fold: true
+    toc: true
+    number-sections: true
+jupyter: python3
+---
+
+SignalFlowEEG is a EEG analysis program that allows easy processing and analysis. It also saves what has been done to files. WHich follows some guideline TODO
+
+# Tutorials
+
+## ERP tutorial
+
+1. Download SignalFlowEEG from github. See @sec-DownloadingSignalFlowFromGithub for more details. 
+2. Start the GUI. See @sec-StartGUI for more details. 
+3. Setup toolboxes, dependancies, folders, and project. See @sec-SetupTab for more details.
+4. Navigate to the Builder tab. See @sec-BuilderTab for more details.
+5. Add the following modules in order, for information on adding modules to the pipeline see @sec-AddingModules.
+    1. Import **Insert EEG file type** File
+    2. Resample EEG data (500 Hz)
+    3. Highpass Filter (0.3 Hz)
+    4. Lowpass Filter (35 HZ)
+    5. Wavelet Denoise
+    6. Artifact Subspace Reconstruction
+    7. Channel Interpolation
+    8. TODO Add ERP to SignalFlow
+    9. Export Set
+6. Navigate to the Execute tab. See @sec-ExecuteTab for more details.
+7. Left-click the "Execute (Loop)" button.
+8. Wait for pipeline to complete. You should be able to watch the Matlab Command Window.
+9. Navigate to the Browse tab. See @sec-BrowseTab for more details.
+10. View your data using the tools provided. 
+
+
+# Downloading SignalFlow from github {#sec-DownloadingSignalFlowFromGithub}
+1. Go to the GitHub website and sign in to your account.
+2. Navigate to the repository you want to download.
+3. On the repository's main page, click on the green "Code" button located near the top-right corner.
+4. In the dropdown menu that appears, click on the "Download ZIP" option.
+5. The repository will be downloaded as a ZIP file to your computer.
+6. Locate the downloaded ZIP file and extract its contents to a desired location on your computer.
+    A.  On Windows, you can right-click on the ZIP file and choose "Extract All" or use third-party extraction software like 7-Zip or WinRAR.
+    B.  On macOS, you can double-click the ZIP file to extract its contents.
+    C.  On Linux, you can use the "unzip" command in the terminal. For example: unzip repository.zip.
+7. After extraction, you will have the complete repository with all its files and folders available on your computer.
+
+# Starting the GUI {#sec-StartGUI}
+1. Open Matlab.
+2. Navigate to SignalFlow Directory.
+    i) This is usually in the Documents/Github folder.
+         A.   For Windows: Go to C:\\Users\\**YourUsername**\\Documents\\GitHub\\SignalFlow_Modules_Dev
+         B.   For Linux: Go to /home/**YourUsername**/Documents/GitHub/SignalFlow_Modules_Dev
+3. In MATLAB, locate the file viewer on the left side and scroll to the bottom.
+4. Find the file named "SignalFlowEEG.mlapp", right-click on it, and select "Run".
+5. The SignalFlow GUI should open up.
+
+![](BasicQuiPictures/OpenSetupPage.png)
+
+# Setup Tab {#sec-SetupTab}
+![](BasicQuiPictures/SetupTab.png)
+*  The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline to their indidual needs.
+
+## Adding Dependancies 
+1. Navigate to the "Setup" Tab.
+2. Decide which toolbox/dependency you would like to add .
+    A. A Red circle indicated the toolbox/dependency has not been added.
+    B. A Green circle indicates that the toolbox/dependency has been added.
+3. Left-click on the "Click to Fix: *Insert Toolbox*".
+4. File Explorer will open.
+5. Select the directory that contains your toolbox. Click "Open" in the file explorer.
+    A. This can vary based on the toolbox, contact us if you have issues .
+6. The circle should turn from red to green, may take a second due to SignalFLow checking if it's the right toolbox.
+
+## Adding Projct Folder locations
+1. Navigate to the "Setup" Tab.
+2. Decide which folder you would like to add.
+    A. A Red circle indicated the folder has not been added.
+    B. A Green circle indicates that the folder has been added.
+3. Left-click on the "Click to Fix: *Insert folder*".
+4. File Explorer will open.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. The circle will turn from red to green.
+
+## Adding Custom Projct Folder locations
+1. Navigate to the "Setup" Tab.
+2. Left-click the "Add Custom Folder" button.
+3. A Matlab figure will open.
+4. Left-click the "Select Directory" button.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. Enter a tag. A tag is an easily recognizable name used for selecting this Projct Folder later.
+7. Left-click the "Confirm" button.
+8. A new project foler will be added. The circle will turn from red to green.
+
+## Edit Project Information
+1. Navigate to the "Setup" Tab.
+2. Enter a Title for your project.
+3. Enter a Description for you project.
+4. Enter an Author for your project. 
+5. Left-click the "Save" button.
+
+# Builder Tab {#sec-BuilderTab}
+![](BasicQuiPictures/BuilderTab.png)
+*  The Builder tab is used to create the pipeline and edit modules. Most work is done in this tab.
+
+## Filter Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the filter dropdown.
+3. Select the filter you would like to use.
+4. Module Libraries will only show modules that agree with your filter.
+
+## Adding Modules {#sec-AddingModules}
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will the be added to the pipeline. It will show up in the Pipeline Builder.
+
+## Copy and Edit Module TODO this might have a bug
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will then be opened in Matlab.
+5. Edit any parameters or code.
+6. Save the Module file. 
+7. The Module file should show up in the User module library.
+
+## Delete Module 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to delete.
+    A.  This can only be from the Pipeline Builder
+3. Below the Pipeline Builder, there is an "Delete Module" button, left-click it.
+4. The Module will be removed from the pipeline.
+
+## Reorder Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to reorder.
+    A.  This can only be from the Pipeline Builder.
+3. To the right of the Pipeline Builder, there are 2 arrows.
+4. Left-click the arrow that corresponds with the direction you would like to move the module.
+5. The Module will be reordered in the pipeline.
+
+## Reset Pipeline 
+1. Navigate to the "Builder" Tab.
+2. Left-click the "Reset Pipeline" button.
+3. All Modules within the Pipeline Builder will be deleted.
+
+## Change Module Information
+1. Navigate to the "Builder" Tab.
+2. Enter the new Module Name.
+3. If the module is an outflow module.
+    A. Select the needed output folder tag in the dropdown.
+4. Left-click the "Update" button.
+5. Your changes will be saved. 
+6. If you would like to return to default name and folder tag
+    A. Left-click the "Default" button.
+
+# Execute Tab {#sec-ExecuteTab}
+![](BasicQuiPictures/ExecuteTab.png)
+*  The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.
+
+## Refresh
+* This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Execute (Loop)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time. 
+* Use this if there are steps that require user input.
+    A. Examples of this include: Remove channels, remove epochs, etc.
+
+## Execute (Parallel)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time. 
+* This should only be used when the follwoing are true.
+    A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. 
+    B. You have a high performance computer.
+    C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer.
+    D. You have the Matlab Parralel Processing Toolbox  
+
+## Execute (File)
+* This button is used to execute the pipeline on a selected eeg file in the import directory.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Execute (File)" button.
+
+## Open Import Folder 
+* This button is used to open the import directory in the computers file explorer.
+
+## Open Export Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
+
+# Browse Tab {#sec-BrowseTab}
+![](BasicQuiPictures/BrowseTab.png)
+*  The browse tab is used to analyze and look at data. The user has access to many tools to aid with this. 
+
+## Select Project Folder 
+1. Navigate to the "Browse" Tab.
+2. Left-click the current folder dropdown.
+3. Select the folder you would like to see.
+4. The file catalog will be updated based on your selection.
+
+## Refresh
+* This button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Open Selected Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
+
+## Close Windows
+* This button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed. 

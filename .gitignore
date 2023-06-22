@@ -1,0 +1,20 @@
+# Build and Release Folders
+
+
+# Other files and folders
+
+# Executables
+*.asv
+
+# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
+# should NOT be excluded as they contain compiler settings and other important
+# information for Eclipse / Flash Builder.
+*.sc
+*.sph
+*.wts
+vhtp_gui_savedata.mat
+.DS_Store
+UserModules/
+UserSavedFolders/
+icaweights/
+*.code-workspace
