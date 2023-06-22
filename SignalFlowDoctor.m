@@ -1,5 +1,5 @@
 function [results, paths]  = SignalFlowDoctor( action )
-timestamp = datestr(now, 'yymmddHHMMSS'); % timestamp
+timestamp = datetime('now', 'Format', 'yyMMddHHmmss'); % timestamp
 [note, fixnote, failednote, successnote, successpath] = sf_utilities();
 
 if nargin < 1, action = missing;
@@ -11,9 +11,9 @@ if nargin < 1, action = missing;
 end
 
 if ~ismissing(action)
-    isValidAction =  ismember(action, {'fix_vhtp','check_vhtp','fix_eeglab', 'check_eeglab', 'check_brainstorm',... 
+    isValidAction =  ismember(action, ['fix_vhtp','check_vhtp','fix_eeglab', 'check_eeglab', 'check_brainstorm',... 
         'check_biosig', 'check_braph', 'check_bct', 'fix_bct', 'fix_braph', 'fix_biosig', 'fix_viewprops', 'fix_cleanrawdata', 'fix_brainstorm', ...
-        'fix_firfilt', 'check_spectralevents', 'fix_spectralevents'});
+        'fix_firfilt', 'check_spectralevents', 'fix_spectralevents'] );
 else
     action = 'default';
     isValidAction = true;

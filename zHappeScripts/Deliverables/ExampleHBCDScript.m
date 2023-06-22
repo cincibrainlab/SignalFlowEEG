@@ -20,13 +20,13 @@ obj.proj.path_temp = '/srv/Analysis/Nate_Projects/';
 obj.proj.path_results = '/srv/Analysis/Nate_Projects/Test_Happe_HBCD_Output/';
 
 % Module Information
-obj.module.Modules = {'inflow_HappeMergeSet','outflow_ExportSet'};
+obj.module.Modules = {'inflow_HappeMergeSet','midflow_hbcd','midflow_HBCDMADEEpoching','outflow_ExportSet'};
 
 %Add Modules to workflow
 obj.module.TargetModuleArray = AddModules(obj.module.Modules);
 % Set file locations for import and output (inflow and outflow)
 obj.module.TargetModuleArray{1,1}.fileIoVar = obj.proj.path_import;
-obj.module.TargetModuleArray{1,2}.fileIoVar = obj.proj.path_results;
+obj.module.TargetModuleArray{1,4}.fileIoVar = obj.proj.path_results;
 
 % Run Workflow
 EEG = obj.module.TargetModuleArray{1}.run(); 
@@ -34,6 +34,13 @@ obj.module.TargetModuleArray{1}.endEEG = EEG;
 obj.module.TargetModuleArray{2}.beginEEG = EEG;
 EEG = obj.module.TargetModuleArray{2}.run();
 obj.module.TargetModuleArray{2}.endEEG = EEG;
+obj.module.TargetModuleArray{3}.beginEEG = EEG;
+EEG = obj.module.TargetModuleArray{3}.run();
+obj.module.TargetModuleArray{3}.endEEG = EEG;
+obj.module.TargetModuleArray{4}.beginEEG = EEG;
+EEG = obj.module.TargetModuleArray{4}.run();
+obj.module.TargetModuleArray{4}.endEEG = EEG;
+
 
 % Required Functions to run Modules
 function Workflow = AddModules(ModuleCellArray)

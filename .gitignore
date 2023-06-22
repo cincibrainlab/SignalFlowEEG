@@ -14,7 +14,6 @@
 *.wts
 vhtp_gui_savedata.mat
 .DS_Store
-UserModules/
 UserSavedFolders/
 icaweights/
 *.code-workspace

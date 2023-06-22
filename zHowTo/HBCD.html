@@ -71,10 +71,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="fullcontent">
+<body>
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#how-to-setup-the-signalflow-hbcd-module" id="toc-how-to-setup-the-signalflow-hbcd-module" class="nav-link active" data-scroll-target="#how-to-setup-the-signalflow-hbcd-module"><span class="header-section-number">1</span> How to setup the SignalFlow HBCD module</a></li>
+  <li><a href="#how-to-start-the-signalflow-hbcd-module" id="toc-how-to-start-the-signalflow-hbcd-module" class="nav-link" data-scroll-target="#how-to-start-the-signalflow-hbcd-module"><span class="header-section-number">2</span> How to start the SignalFlow HBCD module</a></li>
+  <li><a href="#changes-i-made-due-to-the-fact-that-i-do-not-know-the-specific-requirements-of-the-hbcd-module" id="toc-changes-i-made-due-to-the-fact-that-i-do-not-know-the-specific-requirements-of-the-hbcd-module" class="nav-link" data-scroll-target="#changes-i-made-due-to-the-fact-that-i-do-not-know-the-specific-requirements-of-the-hbcd-module"><span class="header-section-number">3</span> Changes I made, due to the fact that I do not know the specific requirements of the HBCD module</a></li>
+  </ul>
+</nav>
+</div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -94,250 +104,48 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>HBCD SignalFLow Tutorial</p>
-<pre class="{matlab}"><code>classdef inflow_HappeMergeSet &lt; SignalFlowSuperClass
-    methods
-        function obj = inflow_HappeMergeSet(varargin)
-           
-            % Define Custom Flow Function
-            setup.flabel = 'HAPPE Merge SET';
-            setup.flowMode = 'inflow';
-
-            % Construction Function
-            obj = obj@SignalFlowSuperClass(setup, varargin{:});
-        end
-
-        function EEG = run(obj)
-            % run() - Process the EEG data.         
-            % Signal Processing Code Below
-
-            % Gets Default Parameter if User parameter is invalid or empty 
-            args.char_filepath = obj.fileIoVar;
-            args.highpass = .3;
-            args.lowpass = 50;
-            args.high_transband = args.highpass; % High pass transition band
-            args.low_transband = 10; % Low pass transition band
-            args.channel_locations = '/srv/Analysis/Nate_Projects/Github/SignalFlow_Modules_Dev/zHappeScripts/GSN129.sfp';
-            args.outerlayer_channel = {'E17' 'E38' 'E43' 'E44' 'E48' 'E49' 'E113' 'E114' 'E119' 'E120' 'E121' 'E125' 'E126' 'E127' 'E128' 'E56' 'E63' 'E68' 'E73' 'E81' 'E88' 'E94' 'E99' 'E107'}; % list of channels
-            args.output_location = '/srv/Analysis/Nate_Projects/Test_Happe_HBCD_Output/';
-
-            % Get the folder path, file name, and file extension
-            [folderPath, ~, fileExtension] = fileparts(args.char_filepath);        
-            % Add the folder path to the search path
-            addpath(folderPath);
-            %Merge the files similarly to HAPPE
-            args.reference_used_for_faster =[];
-            
-                   
-            sub_file_list=dir([args.char_filepath]);
-            sub_file_list={sub_file_list.name};
-            sub_file_list=sub_file_list(contains(sub_file_list,{'.set'}));
-            
-            ALLEEG=[];
-            % TODO fix this
-            subject = 'TestSubject';
-                    
-            for c=1:length(sub_file_list) %loop throuh files for this participant
-                entirefilename = sub_file_list{c};
-                
-                EEG = pop_loadset('filename',entirefilename,'filepath',args.char_filepath);
-                EEG = eeg_checkset( EEG );
-                
-                % add label to the event structure to include input file name, FACE,
-                % MMN etc.....
-                EEG = pop_editeventfield( EEG, 'indices',  strcat('1:', int2str(length(EEG.event))), 'input_file',{EEG.filename});
-                EEG = eeg_checkset( EEG );
-                
-                %remove discontinuities
-                disconMarkers = find(strcmp({EEG.event.type}, 'boundary')); % boundary markers often indicate discontinuity
-                if size(disconMarkers) &gt; 0
-                    EEG = eeg_eegrej( EEG, [1 EEG.event(disconMarkers(1)).latency] ); % remove discontinuous chunk... if not EGI, MODIFY BEFORE USING THIS SECTION
-                    EEG = eeg_checkset( EEG );
-                end
-                % remove data after last trsp (OPTIONAL for EGI files... useful when file has noisy data at the end)
-                % trsp_flags = find(strcmp({EEG.event.type},'TRSP')); % find indices of TRSP flags
-                % EEG = eeg_eegrej( EEG, [(EEG.event(trsp_flags(end)).latency+(1.5*EEG.srate)) EEG.pnts] ); % remove everything 1.5 seconds after the last TRSP
-                % EEG = eeg_checkset( EEG );
-               
-                %% Filter data
-                % Calculate filder order using the formula: m = dF / (df / fs), where m = filter order,
-                % df = transition band width, dF = normalized transition width, fs = sampling rate
-                % dF is specific for the window type. Hamming window dF = 3.3                
-                
-                hp_fl_order = 3.3 / (args.high_transband / EEG.srate);
-                lp_fl_order = 3.3 / (args.low_transband / EEG.srate);
-                
-                % Round filter order to next higher even integer. Filter order is always even integer.
-                if mod(floor(hp_fl_order),2) == 0
-                    hp_fl_order=floor(hp_fl_order);
-                elseif mod(floor(hp_fl_order),2) == 1
-                    hp_fl_order=floor(hp_fl_order)+1;
-                end
-                
-                if mod(floor(lp_fl_order),2) == 0
-                    lp_fl_order=floor(lp_fl_order)+2;
-                elseif mod(floor(lp_fl_order),2) == 1
-                    lp_fl_order=floor(lp_fl_order)+1;
-                end
-                
-                % Calculate cutoff frequency
-                high_cutoff = args.highpass/2;
-                low_cutoff = args.lowpass + (args.low_transband/2);
-                
-                % Performing highpass filtering
-                EEG = eeg_checkset( EEG );
-                EEG = pop_firws(EEG, 'fcutoff', high_cutoff, 'ftype', 'highpass', 'wtype', 'hamming', 'forder', hp_fl_order, 'minphase', 0);
-                %[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
-                EEG = eeg_checkset( EEG );
-                
-                % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-                
-                % pop_firws() - filter window type hamming ('wtype', 'hamming')
-                % pop_firws() - applying zero-phase (non-causal) filter ('minphase', 0)
-                
-                % Performing lowpass filtering
-                EEG = eeg_checkset( EEG );
-                EEG = pop_firws(EEG, 'fcutoff', low_cutoff, 'ftype', 'lowpass', 'wtype', 'hamming', 'forder', lp_fl_order, 'minphase', 0);
-                %[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
-                EEG = eeg_checkset( EEG );
-                     
-                % pop_firws() - transition band width: 10 Hz
-                % pop_firws() - filter window type hamming ('wtype', 'hamming')
-                % pop_firws() - applying zero-phase (non-causal) filter ('minphase', 0)
-                
-                EEG.chanlocs(end).labels = ' Cz'; % changed "end+1" to "end" since Cz is already in the file
-                
-                EEG = eeg_checkset( EEG );
-                
-                % Import the file that contains scalp locations of Cz channels.
-                EEG=pop_chanedit(EEG, 'load',{args.channel_locations 'filetype' 'autodetect'});
-                EEG = eeg_checkset( EEG );
-                
-                nbchans=cell(1,EEG.nbchan);
-                for i=1:EEG.nbchan
-                    nbchans{i}= EEG.chanlocs(i).labels;
-                end
-                
-                chans_labels=cell(1,EEG.nbchan);
-                 
-                for i=1:EEG.nbchan
-                  chans_labels{i}= EEG.chanlocs(i).labels;
-                end
-                [chans,chansidx] = ismember(args.outerlayer_channel, chans_labels);
-                outerlayer_channel_idx = chansidx(chansidx ~= 0);
-        
-                EEG = pop_select( EEG,'nochannel', outerlayer_channel_idx); %remove outer layer of channels
-                EEG = eeg_checkset( EEG );
-                
-                [ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, c);
-                
-                EEG_idx(c)=1;
-            end %end loop through files for this participant
-                   
-            %% Merging files
-          
-            EEG2Merge= find(EEG_idx==1);
-            if length(EEG2Merge) &gt;=2
-                EEG = pop_mergeset(ALLEEG,EEG2Merge);
-                EEG = eeg_checkset( EEG );
-                EEG = pop_editset(EEG, 'setname', [subject '_Merged']);
-            end
-
-            %% Run faster
-            ref_chan=[]; FASTbadChans=[]; all_chan_bad_FAST=0;
-            ref_chan=find(any(EEG.data, 2)==0);
-            if numel(ref_chan)&gt;1
-                error(['There are more than 1 zeroed channel (i.e. zero value throughout recording) in data.'...
-                    ' Only reference channel should be zeroed channel. Delete the zeroed channel/s which is not reference channel.']);
-            elseif numel(ref_chan)==1
-                list_properties = channel_properties(EEG, 1:EEG.nbchan, EEG.nbchan); % run faster
-                FASTbadIdx=min_z(list_properties);
-                FASTbadChans=find(FASTbadIdx==1);
-                FASTbadChans=FASTbadChans(FASTbadChans~=ref_chan);
-                args.reference_used_for_faste={EEG.chanlocs(ref_chan).labels};
-                EEG = eeg_checkset(EEG);
-                args.channels_analysed=EEG.chanlocs; % keep full channel locations to use later for interpolation of bad channels
-            elseif numel(ref_chan)==0
-                warning('Reference channel is not present in data. Cz channel will be used as reference channel.');
-                ref_chan=find(strcmp({EEG.chanlocs.labels}, 'Cz')); % find Cz channel index
-
-                EEG_copy=EEG; % make a copy of the dataset
-                EEG_copy = pop_reref( EEG_copy, ref_chan,'keepref','on'); % rerefer to Cz in copied dataset
-                EEG_copy = eeg_checkset(EEG_copy);
-                list_properties = channel_properties(EEG_copy, 1:EEG_copy.nbchan, EEG.nbchan); % run faster on copied dataset
-                FASTbadIdx=min_z(list_properties);
-                FASTbadChans=find(FASTbadIdx==1);
-                args.channels_analysed=EEG.chanlocs;
-                args.reference_used_for_faster={EEG.chanlocs(ref_chan).labels};
-            end
-                
-            % If FASTER identifies all channels as bad channels, save the dataset
-            % at this stage and ignore the remaining of the preprocessing.
-            if numel(FASTbadChans)==EEG.nbchan || numel(FASTbadChans)+1==EEG.nbchan
-                all_chan_bad_FAST=1;
-                % TODO fix this
-                datafile_names = 'Testdatafile_names';
-                warning(['No usable data for datafile', datafile_names]);
-                if output_format==1
-                    EEG = eeg_checkset(EEG);
-                    EEG = pop_editset(EEG, 'setname',  strrep(datafile_names, ext, '_no_usable_data_all_bad_channels'));
-                    EEG = pop_saveset(EEG, 'filename', strrep(datafile_name, ext, '_no_usable_data_all_bad_channels.set'),'filepath', [args.output_location filesep 'processed_data' filesep ]); % save .set format
-                elseif output_format==2
-                    save([[args.output_location filesep 'processed_data' filesep ] strrep(datafile_names, ext, '_no_usable_data_all_bad_channels.mat')], 'EEG'); % save .mat format
-                end
-            else
-                % Reject channels that are bad as identified by Faster
-                EEG = pop_select( EEG,'nochannel', FASTbadChans);
-                EEG = eeg_checkset(EEG);
-                if numel(ref_chan)==1
-                    ref_chan=find(any(EEG.data, 2)==0);
-                    EEG = pop_select( EEG,'nochannel', ref_chan); % remove reference channel
-                end
-            end
-                
-            if numel(FASTbadChans)==0
-                args.faster_bad_channels='0';
-            else
-                args.faster_bad_channels=num2str(FASTbadChans');
-            end
-            
-            if all_chan_bad_FAST==1
-                args.faster_bad_channels='0';
-                args.ica_preparation_bad_channels='0';
-                args.length_ica_data=0;
-                args.total_ICs=0;
-                args.ICs_removed='0';
-                args.total_epochs_before_artifact_rejection=0;
-                args.total_epochs_after_artifact_rejection=0;
-                args.total_channels_interpolated=0;
-                %continue % ignore rest of the processing and go to next subject
-            end
-                    
-            %% VISUAL INSPECTION (QUICK)... checking filtered data with chunks removed for issues ... final check before saving
-            %plot filtered eeg data for the current task
-    %         pop_eegplot(EEG,1,1,1);
-    %         % window to pause code
-    %         uiwait(msgbox({'Visually inspecting merged EEG for... '; ''; ['Subject:   ' subject]; ''; 'When you are finished, hit OK to continue'; ''}));
-    %         fprintf('\n\n')
-    %         disp('Saving and then moving onto the next subject');
-    %         
-            %% Give a name to the dataset and save on hard drive
-            EEG = eeg_checkset( EEG );
-            EEG = pop_editset(EEG, 'setname', ['sub-' subject '_ses-V03_task-ALL_acq-eeg_eeg_filtered_data']);
-            EEG = pop_saveset( EEG, 'filename',['sub-' subject '_ses-V03_task-ALL_acq-eeg_eeg_filtered_data.set'],'filepath', args.output_location );
-            [ALLEEG EEG] = eeg_store(ALLEEG, EEG, CURRENTSET);
-
-            %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
-            EEG = obj.HistoryTable(EEG, args);
-            
-%             %% Remove the saved dataset from EEGLAB memory
-%             STUDY = []; CURRENTSTUDY = 0; ALLEEG = []; EEG=[]; CURRENTSET=[];
-        end
-    end
-end
-</code></pre>
+<p>Hello Colleagues, today we will be going over the SignalFlow HBCD Tutorial. This tutorial will cover the basics of how to use the SignalFlow HBCD module. This tutorial will cover the following topics:</p>
+<ol type="1">
+<li>How to setup the SignalFlow HBCD module for script.</li>
+<li>How to setup the SignalFlow HBCD module for GUI.</li>
+<li>Changes I made, due to the fact that I do not know the specific requirements of the HBCD module</li>
+</ol>
+<section id="how-to-setup-the-signalflow-hbcd-module" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> How to setup the SignalFlow HBCD module</h1>
+<ol type="1">
+<li>In SignalFlowEEG, go to the zHappeScripts folder. This folder is located in the following directory: /srv/Analysis/Nate_Projects/Github/SignalFlowEEG_HBCD/zHappeScripts. Open this folder as your main Matlab folder.</li>
+<li>In the zHappeScripts folder, there is a file called “ExampleHBCDScript.m”. This file is the script you can use that has all the modules.</li>
+<li>Edit the “External dependencies locations” and “Project Information” sections to the correct filepaths.</li>
+<li>Left-click the “Run” button in the Matlab toolbar. This will run the script.</li>
+</ol>
+</section>
+<section id="how-to-start-the-signalflow-hbcd-module" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> How to start the SignalFlow HBCD module</h1>
+<p>Our GUI is not able to handle the merging of files. Therefore, we will be using the script to run the first HBCD module.</p>
+<ol type="1">
+<li>In SignalFlowEEG, go to the zHappeScripts folder. This folder is located in the following directory: /srv/Analysis/Nate_Projects/Github/SignalFlow_Modules_Dev/zHappeScripts. Open this folder as your main Matlab folder.</li>
+<li>In the zHappeScripts folder, there is a file called “MergeFasterScript.m”. This file is the script you can use that has the first module.</li>
+<li>Edit the “External dependencies locations” and “Project Information” sections to the correct filepaths.</li>
+<li>Left-click the “Run” button in the Matlab toolbar. This will run the script.</li>
+<li>Navigate to the following directory in Matlab: /srv/Analysis/Nate_Projects/Github/SignalFlowEEG_HBCD</li>
+<li>Towards the bottom of the file explorer, there is a file called “SignalFlowEEG_HBCD.mlapp”. Right-click this file and left-click “Run”. This will open the GUI.</li>
+<li>In the Setup Tab, follow instructons for the “Setup” section in BasicGUI.qmd.</li>
+<li>In the Builder Tab, Look at the User Module Library.</li>
+<li>Add the following modules in order, for information on adding modules to the pipeline see BasicGUI.qmd.
+<ol type="1">
+<li>Hbcd</li>
+<li>Hbcd Epoching</li>
+<li>Export Set</li>
+</ol></li>
+<li>Follow the instructions to execute in BasicGUI.qmd.</li>
+</ol>
+</section>
+<section id="changes-i-made-due-to-the-fact-that-i-do-not-know-the-specific-requirements-of-the-hbcd-module" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Changes I made, due to the fact that I do not know the specific requirements of the HBCD module</h1>
+<p>I had to make a lot of changes in order to get the HBCD module to work. This was mostly due to the fact that I do not know the specific requirements of the HBCD module. You seem to have a complex folder system that I do not know how to replicate. Please do not run this code as if it was production. If you would liek to use this for production. I would need to have a meeting with you to discuss the specific requirements of the HBCD module.</p>
 <!-- -->
 
+</section>
 
 </main>
 <!-- /main column -->
@@ -625,261 +433,48 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "SignalFlow HBCD Tutorial"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>HBCD SignalFLow Tutorial</span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{matlab}</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="kw">classdef</span> <span class="va">inflow_HappeMergeSet</span> <span class="op">&lt;</span> <span class="va">SignalFlowSuperClass</span></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">methods</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>        <span class="kw">function</span> <span class="va">obj</span> <span class="op">=</span> <span class="va">inflow_HappeMergeSet</span>(<span class="va">varargin</span>)</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>           </span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Define Custom Flow Function</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>            <span class="va">setup</span>.<span class="va">flabel</span> <span class="op">=</span> <span class="ss">'HAPPE Merge SET'</span><span class="op">;</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            <span class="va">setup</span>.<span class="va">flowMode</span> <span class="op">=</span> <span class="ss">'inflow'</span><span class="op">;</span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Construction Function</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>            <span class="va">obj</span> <span class="op">=</span> <span class="va">obj</span><span class="op">@</span><span class="va">SignalFlowSuperClass</span>(<span class="va">setup</span><span class="op">,</span> <span class="va">varargin</span>{<span class="op">:</span>})<span class="op">;</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>        <span class="kw">function</span> <span class="va">EEG</span> <span class="op">=</span> <span class="va">run</span>(<span class="va">obj</span>)</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>            <span class="co">% run() - Process the EEG data.         </span></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Signal Processing Code Below</span></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Gets Default Parameter if User parameter is invalid or empty </span></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">char_filepath</span> <span class="op">=</span> <span class="va">obj</span>.<span class="va">fileIoVar</span><span class="op">;</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">highpass</span> <span class="op">=</span> <span class="fl">.3</span><span class="op">;</span></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">lowpass</span> <span class="op">=</span> <span class="fl">50</span><span class="op">;</span></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">high_transband</span> <span class="op">=</span> <span class="va">args</span>.<span class="va">highpass</span><span class="op">;</span> <span class="co">% High pass transition band</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">low_transband</span> <span class="op">=</span> <span class="fl">10</span><span class="op">;</span> <span class="co">% Low pass transition band</span></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">channel_locations</span> <span class="op">=</span> <span class="ss">'/srv/Analysis/Nate_Projects/Github/SignalFlow_Modules_Dev/zHappeScripts/GSN129.sfp'</span><span class="op">;</span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">outerlayer_channel</span> <span class="op">=</span> {<span class="ss">'E17'</span> <span class="ss">'E38'</span> <span class="ss">'E43'</span> <span class="ss">'E44'</span> <span class="ss">'E48'</span> <span class="ss">'E49'</span> <span class="ss">'E113'</span> <span class="ss">'E114'</span> <span class="ss">'E119'</span> <span class="ss">'E120'</span> <span class="ss">'E121'</span> <span class="ss">'E125'</span> <span class="ss">'E126'</span> <span class="ss">'E127'</span> <span class="ss">'E128'</span> <span class="ss">'E56'</span> <span class="ss">'E63'</span> <span class="ss">'E68'</span> <span class="ss">'E73'</span> <span class="ss">'E81'</span> <span class="ss">'E88'</span> <span class="ss">'E94'</span> <span class="ss">'E99'</span> <span class="ss">'E107'</span>}<span class="op">;</span> <span class="co">% list of channels</span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">output_location</span> <span class="op">=</span> <span class="ss">'/srv/Analysis/Nate_Projects/Test_Happe_HBCD_Output/'</span><span class="op">;</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Get the folder path, file name, and file extension</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>            [<span class="va">folderPath</span><span class="op">,</span> <span class="op">~,</span> <span class="va">fileExtension</span>] <span class="op">=</span> <span class="va">fileparts</span>(<span class="va">args</span>.<span class="va">char_filepath</span>)<span class="op">;</span>        </span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>            <span class="co">% Add the folder path to the search path</span></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>            <span class="va">addpath</span>(<span class="va">folderPath</span>)<span class="op">;</span></span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>            <span class="co">%Merge the files similarly to HAPPE</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>            <span class="va">args</span>.<span class="va">reference_used_for_faster</span> <span class="op">=</span>[]<span class="op">;</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>                   </span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>            <span class="va">sub_file_list</span><span class="op">=</span><span class="va">dir</span>([<span class="va">args</span>.<span class="va">char_filepath</span>])<span class="op">;</span></span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>            <span class="va">sub_file_list</span><span class="op">=</span>{<span class="va">sub_file_list</span>.<span class="va">name</span>}<span class="op">;</span></span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>            <span class="va">sub_file_list</span><span class="op">=</span><span class="va">sub_file_list</span>(<span class="va">contains</span>(<span class="va">sub_file_list</span><span class="op">,</span>{<span class="ss">'.set'</span>}))<span class="op">;</span></span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>            <span class="va">ALLEEG</span><span class="op">=</span>[]<span class="op">;</span></span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>            <span class="co">% </span><span class="al">TODO</span><span class="co"> fix this</span></span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>            <span class="va">subject</span> <span class="op">=</span> <span class="ss">'TestSubject'</span><span class="op">;</span></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>                    </span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>            <span class="kw">for</span> <span class="va">c</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="va">length</span>(<span class="va">sub_file_list</span>) <span class="co">%loop throuh files for this participant</span></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>                <span class="va">entirefilename</span> <span class="op">=</span> <span class="va">sub_file_list</span>{<span class="va">c</span>}<span class="op">;</span></span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_loadset</span>(<span class="ss">'filename'</span><span class="op">,</span><span class="va">entirefilename</span><span class="op">,</span><span class="ss">'filepath'</span><span class="op">,</span><span class="va">args</span>.<span class="va">char_filepath</span>)<span class="op">;</span></span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a>                <span class="co">% add label to the event structure to include input file name, FACE,</span></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a>                <span class="co">% MMN etc.....</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_editeventfield</span>( <span class="va">EEG</span><span class="op">,</span> <span class="ss">'indices'</span><span class="op">,</span>  <span class="va">strcat</span>(<span class="ss">'1:'</span><span class="op">,</span> <span class="va">int2str</span>(<span class="va">length</span>(<span class="va">EEG</span>.<span class="va">event</span>)))<span class="op">,</span> <span class="ss">'input_file'</span><span class="op">,</span>{<span class="va">EEG</span>.<span class="va">filename</span>})<span class="op">;</span></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>                <span class="co">%remove discontinuities</span></span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a>                <span class="va">disconMarkers</span> <span class="op">=</span> <span class="va">find</span>(<span class="va">strcmp</span>({<span class="va">EEG</span>.<span class="va">event</span>.<span class="va">type</span>}<span class="op">,</span> <span class="ss">'boundary'</span>))<span class="op">;</span> <span class="co">% boundary markers often indicate discontinuity</span></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="va">size</span>(<span class="va">disconMarkers</span>) <span class="op">&gt;</span> <span class="fl">0</span></span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_eegrej</span>( <span class="va">EEG</span><span class="op">,</span> [<span class="fl">1</span> <span class="va">EEG</span>.<span class="va">event</span>(<span class="va">disconMarkers</span>(<span class="fl">1</span>)).<span class="va">latency</span>] )<span class="op">;</span> <span class="co">% remove discontinuous chunk... if not EGI, MODIFY BEFORE USING THIS SECTION</span></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>                <span class="co">% remove data after last trsp (OPTIONAL for EGI files... useful when file has noisy data at the end)</span></span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a>                <span class="co">% trsp_flags = find(strcmp({EEG.event.type},'TRSP')); % find indices of TRSP flags</span></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>                <span class="co">% EEG = eeg_eegrej( EEG, [(EEG.event(trsp_flags(end)).latency+(1.5*EEG.srate)) EEG.pnts] ); % remove everything 1.5 seconds after the last TRSP</span></span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a>                <span class="co">% EEG = eeg_checkset( EEG );</span></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a>               </span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a>                <span class="co">%% Filter data</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Calculate filder order using the formula: m = dF / (df / fs), where m = filter order,</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a>                <span class="co">% df = transition band width, dF = normalized transition width, fs = sampling rate</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a>                <span class="co">% dF is specific for the window type. Hamming window dF = 3.3                </span></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a>                <span class="va">hp_fl_order</span> <span class="op">=</span> <span class="fl">3.3</span> <span class="op">/</span> (<span class="va">args</span>.<span class="va">high_transband</span> <span class="op">/</span> <span class="va">EEG</span>.<span class="va">srate</span>)<span class="op">;</span></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>                <span class="va">lp_fl_order</span> <span class="op">=</span> <span class="fl">3.3</span> <span class="op">/</span> (<span class="va">args</span>.<span class="va">low_transband</span> <span class="op">/</span> <span class="va">EEG</span>.<span class="va">srate</span>)<span class="op">;</span></span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Round filter order to next higher even integer. Filter order is always even integer.</span></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="va">mod</span>(<span class="va">floor</span>(<span class="va">hp_fl_order</span>)<span class="op">,</span><span class="fl">2</span>) <span class="op">==</span> <span class="fl">0</span></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>                    <span class="va">hp_fl_order</span><span class="op">=</span><span class="va">floor</span>(<span class="va">hp_fl_order</span>)<span class="op">;</span></span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a>                <span class="kw">elseif</span> <span class="va">mod</span>(<span class="va">floor</span>(<span class="va">hp_fl_order</span>)<span class="op">,</span><span class="fl">2</span>) <span class="op">==</span> <span class="fl">1</span></span>
-<span id="cb2-91"><a href="#cb2-91" aria-hidden="true" tabindex="-1"></a>                    <span class="va">hp_fl_order</span><span class="op">=</span><span class="va">floor</span>(<span class="va">hp_fl_order</span>)<span class="op">+</span><span class="fl">1</span><span class="op">;</span></span>
-<span id="cb2-92"><a href="#cb2-92" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="va">mod</span>(<span class="va">floor</span>(<span class="va">lp_fl_order</span>)<span class="op">,</span><span class="fl">2</span>) <span class="op">==</span> <span class="fl">0</span></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a>                    <span class="va">lp_fl_order</span><span class="op">=</span><span class="va">floor</span>(<span class="va">lp_fl_order</span>)<span class="op">+</span><span class="fl">2</span><span class="op">;</span></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a>                <span class="kw">elseif</span> <span class="va">mod</span>(<span class="va">floor</span>(<span class="va">lp_fl_order</span>)<span class="op">,</span><span class="fl">2</span>) <span class="op">==</span> <span class="fl">1</span></span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a>                    <span class="va">lp_fl_order</span><span class="op">=</span><span class="va">floor</span>(<span class="va">lp_fl_order</span>)<span class="op">+</span><span class="fl">1</span><span class="op">;</span></span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-99"><a href="#cb2-99" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-100"><a href="#cb2-100" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Calculate cutoff frequency</span></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a>                <span class="va">high_cutoff</span> <span class="op">=</span> <span class="va">args</span>.<span class="va">highpass</span><span class="op">/</span><span class="fl">2</span><span class="op">;</span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a>                <span class="va">low_cutoff</span> <span class="op">=</span> <span class="va">args</span>.<span class="va">lowpass</span> <span class="op">+</span> (<span class="va">args</span>.<span class="va">low_transband</span><span class="op">/</span><span class="fl">2</span>)<span class="op">;</span></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Performing highpass filtering</span></span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_firws</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'fcutoff'</span><span class="op">,</span> <span class="va">high_cutoff</span><span class="op">,</span> <span class="ss">'ftype'</span><span class="op">,</span> <span class="ss">'highpass'</span><span class="op">,</span> <span class="ss">'wtype'</span><span class="op">,</span> <span class="ss">'hamming'</span><span class="op">,</span> <span class="ss">'forder'</span><span class="op">,</span> <span class="va">hp_fl_order</span><span class="op">,</span> <span class="ss">'minphase'</span><span class="op">,</span> <span class="fl">0</span>)<span class="op">;</span></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>                <span class="co">%[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );</span></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a>                <span class="co">% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %</span></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a>                <span class="co">% pop_firws() - filter window type hamming ('wtype', 'hamming')</span></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a>                <span class="co">% pop_firws() - applying zero-phase (non-causal) filter ('minphase', 0)</span></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Performing lowpass filtering</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_firws</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'fcutoff'</span><span class="op">,</span> <span class="va">low_cutoff</span><span class="op">,</span> <span class="ss">'ftype'</span><span class="op">,</span> <span class="ss">'lowpass'</span><span class="op">,</span> <span class="ss">'wtype'</span><span class="op">,</span> <span class="ss">'hamming'</span><span class="op">,</span> <span class="ss">'forder'</span><span class="op">,</span> <span class="va">lp_fl_order</span><span class="op">,</span> <span class="ss">'minphase'</span><span class="op">,</span> <span class="fl">0</span>)<span class="op">;</span></span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a>                <span class="co">%[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );</span></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a>                     </span>
-<span id="cb2-121"><a href="#cb2-121" aria-hidden="true" tabindex="-1"></a>                <span class="co">% pop_firws() - transition band width: 10 Hz</span></span>
-<span id="cb2-122"><a href="#cb2-122" aria-hidden="true" tabindex="-1"></a>                <span class="co">% pop_firws() - filter window type hamming ('wtype', 'hamming')</span></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a>                <span class="co">% pop_firws() - applying zero-phase (non-causal) filter ('minphase', 0)</span></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span>.<span class="va">chanlocs</span>(<span class="kw">end</span>).<span class="va">labels</span> <span class="op">=</span> <span class="ss">' Cz'</span><span class="op">;</span> <span class="co">% changed "end+1" to "end" since Cz is already in the file</span></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Import the file that contains scalp locations of Cz channels.</span></span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span><span class="op">=</span><span class="va">pop_chanedit</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'load'</span><span class="op">,</span>{<span class="va">args</span>.<span class="va">channel_locations</span> <span class="ss">'filetype'</span> <span class="ss">'autodetect'</span>})<span class="op">;</span></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a>                <span class="va">nbchans</span><span class="op">=</span><span class="va">cell</span>(<span class="fl">1</span><span class="op">,</span><span class="va">EEG</span>.<span class="va">nbchan</span>)<span class="op">;</span></span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="va">EEG</span>.<span class="va">nbchan</span></span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>                    <span class="va">nbchans</span>{<span class="va">i</span>}<span class="op">=</span> <span class="va">EEG</span>.<span class="va">chanlocs</span>(<span class="va">i</span>).<span class="va">labels</span><span class="op">;</span></span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a>                <span class="va">chans_labels</span><span class="op">=</span><span class="va">cell</span>(<span class="fl">1</span><span class="op">,</span><span class="va">EEG</span>.<span class="va">nbchan</span>)<span class="op">;</span></span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>                 </span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>                <span class="kw">for</span> <span class="va">i</span><span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="va">EEG</span>.<span class="va">nbchan</span></span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a>                  <span class="va">chans_labels</span>{<span class="va">i</span>}<span class="op">=</span> <span class="va">EEG</span>.<span class="va">chanlocs</span>(<span class="va">i</span>).<span class="va">labels</span><span class="op">;</span></span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a>                [<span class="va">chans</span><span class="op">,</span><span class="va">chansidx</span>] <span class="op">=</span> <span class="va">ismember</span>(<span class="va">args</span>.<span class="va">outerlayer_channel</span><span class="op">,</span> <span class="va">chans_labels</span>)<span class="op">;</span></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>                <span class="va">outerlayer_channel_idx</span> <span class="op">=</span> <span class="va">chansidx</span>(<span class="va">chansidx</span> <span class="op">~=</span> <span class="fl">0</span>)<span class="op">;</span></span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb2-146"><a href="#cb2-146" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_select</span>( <span class="va">EEG</span><span class="op">,</span><span class="ss">'nochannel'</span><span class="op">,</span> <span class="va">outerlayer_channel_idx</span>)<span class="op">;</span> <span class="co">%remove outer layer of channels</span></span>
-<span id="cb2-147"><a href="#cb2-147" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a>                [<span class="va">ALLEEG</span><span class="op">,</span> <span class="va">EEG</span><span class="op">,</span> <span class="va">CURRENTSET</span>] <span class="op">=</span> <span class="va">eeg_store</span>( <span class="va">ALLEEG</span><span class="op">,</span> <span class="va">EEG</span><span class="op">,</span> <span class="va">c</span>)<span class="op">;</span></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG_idx</span>(<span class="va">c</span>)<span class="op">=</span><span class="fl">1</span><span class="op">;</span></span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span> <span class="co">%end loop through files for this participant</span></span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>                   </span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a>            <span class="co">%% Merging files</span></span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>          </span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>            <span class="va">EEG2Merge</span><span class="op">=</span> <span class="va">find</span>(<span class="va">EEG_idx</span><span class="op">==</span><span class="fl">1</span>)<span class="op">;</span></span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="va">length</span>(<span class="va">EEG2Merge</span>) <span class="op">&gt;=</span><span class="fl">2</span></span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_mergeset</span>(<span class="va">ALLEEG</span><span class="op">,</span><span class="va">EEG2Merge</span>)<span class="op">;</span></span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_editset</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'setname'</span><span class="op">,</span> [<span class="va">subject</span> <span class="ss">'_Merged'</span>])<span class="op">;</span></span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span></span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>            <span class="co">%% Run faster</span></span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>            <span class="va">ref_chan</span><span class="op">=</span>[]<span class="op">;</span> <span class="va">FASTbadChans</span><span class="op">=</span>[]<span class="op">;</span> <span class="va">all_chan_bad_FAST</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>            <span class="va">ref_chan</span><span class="op">=</span><span class="va">find</span>(<span class="va">any</span>(<span class="va">EEG</span>.<span class="va">data</span><span class="op">,</span> <span class="fl">2</span>)<span class="op">==</span><span class="fl">0</span>)<span class="op">;</span></span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="va">numel</span>(<span class="va">ref_chan</span>)<span class="op">&gt;</span><span class="fl">1</span></span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a>                <span class="va">error</span>([<span class="ss">'There are more than 1 zeroed channel (i.e. zero value throughout recording) in data.'</span><span class="op">...</span></span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a>                    <span class="ss">' Only reference channel should be zeroed channel. Delete the zeroed channel/s which is not reference channel.'</span>])<span class="op">;</span></span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>            <span class="kw">elseif</span> <span class="va">numel</span>(<span class="va">ref_chan</span>)<span class="op">==</span><span class="fl">1</span></span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a>                <span class="va">list_properties</span> <span class="op">=</span> <span class="va">channel_properties</span>(<span class="va">EEG</span><span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="va">EEG</span>.<span class="va">nbchan</span><span class="op">,</span> <span class="va">EEG</span>.<span class="va">nbchan</span>)<span class="op">;</span> <span class="co">% run faster</span></span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>                <span class="va">FASTbadIdx</span><span class="op">=</span><span class="va">min_z</span>(<span class="va">list_properties</span>)<span class="op">;</span></span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a>                <span class="va">FASTbadChans</span><span class="op">=</span><span class="va">find</span>(<span class="va">FASTbadIdx</span><span class="op">==</span><span class="fl">1</span>)<span class="op">;</span></span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a>                <span class="va">FASTbadChans</span><span class="op">=</span><span class="va">FASTbadChans</span>(<span class="va">FASTbadChans</span><span class="op">~=</span><span class="va">ref_chan</span>)<span class="op">;</span></span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">reference_used_for_faste</span><span class="op">=</span>{<span class="va">EEG</span>.<span class="va">chanlocs</span>(<span class="va">ref_chan</span>).<span class="va">labels</span>}<span class="op">;</span></span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>(<span class="va">EEG</span>)<span class="op">;</span></span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">channels_analysed</span><span class="op">=</span><span class="va">EEG</span>.<span class="va">chanlocs</span><span class="op">;</span> <span class="co">% keep full channel locations to use later for interpolation of bad channels</span></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a>            <span class="kw">elseif</span> <span class="va">numel</span>(<span class="va">ref_chan</span>)<span class="op">==</span><span class="fl">0</span></span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a>                <span class="va">warning</span>(<span class="ss">'Reference channel is not present in data. Cz channel will be used as reference channel.'</span>)<span class="op">;</span></span>
-<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a>                <span class="va">ref_chan</span><span class="op">=</span><span class="va">find</span>(<span class="va">strcmp</span>({<span class="va">EEG</span>.<span class="va">chanlocs</span>.<span class="va">labels</span>}<span class="op">,</span> <span class="ss">'Cz'</span>))<span class="op">;</span> <span class="co">% find Cz channel index</span></span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG_copy</span><span class="op">=</span><span class="va">EEG</span><span class="op">;</span> <span class="co">% make a copy of the dataset</span></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG_copy</span> <span class="op">=</span> <span class="va">pop_reref</span>( <span class="va">EEG_copy</span><span class="op">,</span> <span class="va">ref_chan</span><span class="op">,</span><span class="ss">'keepref'</span><span class="op">,</span><span class="ss">'on'</span>)<span class="op">;</span> <span class="co">% rerefer to Cz in copied dataset</span></span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG_copy</span> <span class="op">=</span> <span class="va">eeg_checkset</span>(<span class="va">EEG_copy</span>)<span class="op">;</span></span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a>                <span class="va">list_properties</span> <span class="op">=</span> <span class="va">channel_properties</span>(<span class="va">EEG_copy</span><span class="op">,</span> <span class="fl">1</span><span class="op">:</span><span class="va">EEG_copy</span>.<span class="va">nbchan</span><span class="op">,</span> <span class="va">EEG</span>.<span class="va">nbchan</span>)<span class="op">;</span> <span class="co">% run faster on copied dataset</span></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a>                <span class="va">FASTbadIdx</span><span class="op">=</span><span class="va">min_z</span>(<span class="va">list_properties</span>)<span class="op">;</span></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a>                <span class="va">FASTbadChans</span><span class="op">=</span><span class="va">find</span>(<span class="va">FASTbadIdx</span><span class="op">==</span><span class="fl">1</span>)<span class="op">;</span></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">channels_analysed</span><span class="op">=</span><span class="va">EEG</span>.<span class="va">chanlocs</span><span class="op">;</span></span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">reference_used_for_faster</span><span class="op">=</span>{<span class="va">EEG</span>.<span class="va">chanlocs</span>(<span class="va">ref_chan</span>).<span class="va">labels</span>}<span class="op">;</span></span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span></span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a>            <span class="co">% If FASTER identifies all channels as bad channels, save the dataset</span></span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a>            <span class="co">% at this stage and ignore the remaining of the preprocessing.</span></span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="va">numel</span>(<span class="va">FASTbadChans</span>)<span class="op">==</span><span class="va">EEG</span>.<span class="va">nbchan</span> <span class="op">||</span> <span class="va">numel</span>(<span class="va">FASTbadChans</span>)<span class="op">+</span><span class="fl">1</span><span class="op">==</span><span class="va">EEG</span>.<span class="va">nbchan</span></span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a>                <span class="va">all_chan_bad_FAST</span><span class="op">=</span><span class="fl">1</span><span class="op">;</span></span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a>                <span class="co">% </span><span class="al">TODO</span><span class="co"> fix this</span></span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>                <span class="va">datafile_names</span> <span class="op">=</span> <span class="ss">'Testdatafile_names'</span><span class="op">;</span></span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a>                <span class="va">warning</span>([<span class="ss">'No usable data for datafile'</span><span class="op">,</span> <span class="va">datafile_names</span>])<span class="op">;</span></span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="va">output_format</span><span class="op">==</span><span class="fl">1</span></span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>(<span class="va">EEG</span>)<span class="op">;</span></span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_editset</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'setname'</span><span class="op">,</span>  <span class="va">strrep</span>(<span class="va">datafile_names</span><span class="op">,</span> <span class="va">ext</span><span class="op">,</span> <span class="ss">'_no_usable_data_all_bad_channels'</span>))<span class="op">;</span></span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_saveset</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'filename'</span><span class="op">,</span> <span class="va">strrep</span>(<span class="va">datafile_name</span><span class="op">,</span> <span class="va">ext</span><span class="op">,</span> <span class="ss">'_no_usable_data_all_bad_channels.set'</span>)<span class="op">,</span><span class="ss">'filepath'</span><span class="op">,</span> [<span class="va">args</span>.<span class="va">output_location</span> <span class="va">filesep</span> <span class="ss">'processed_data'</span> <span class="va">filesep</span> ])<span class="op">;</span> <span class="co">% save .set format</span></span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a>                <span class="kw">elseif</span> <span class="va">output_format</span><span class="op">==</span><span class="fl">2</span></span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>                    <span class="va">save</span>([[<span class="va">args</span>.<span class="va">output_location</span> <span class="va">filesep</span> <span class="ss">'processed_data'</span> <span class="va">filesep</span> ] <span class="va">strrep</span>(<span class="va">datafile_names</span><span class="op">,</span> <span class="va">ext</span><span class="op">,</span> <span class="ss">'_no_usable_data_all_bad_channels.mat'</span>)]<span class="op">,</span> <span class="ss">'EEG'</span>)<span class="op">;</span> <span class="co">% save .mat format</span></span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a>            <span class="kw">else</span></span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>                <span class="co">% Reject channels that are bad as identified by Faster</span></span>
-<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_select</span>( <span class="va">EEG</span><span class="op">,</span><span class="ss">'nochannel'</span><span class="op">,</span> <span class="va">FASTbadChans</span>)<span class="op">;</span></span>
-<span id="cb2-208"><a href="#cb2-208" aria-hidden="true" tabindex="-1"></a>                <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>(<span class="va">EEG</span>)<span class="op">;</span></span>
-<span id="cb2-209"><a href="#cb2-209" aria-hidden="true" tabindex="-1"></a>                <span class="kw">if</span> <span class="va">numel</span>(<span class="va">ref_chan</span>)<span class="op">==</span><span class="fl">1</span></span>
-<span id="cb2-210"><a href="#cb2-210" aria-hidden="true" tabindex="-1"></a>                    <span class="va">ref_chan</span><span class="op">=</span><span class="va">find</span>(<span class="va">any</span>(<span class="va">EEG</span>.<span class="va">data</span><span class="op">,</span> <span class="fl">2</span>)<span class="op">==</span><span class="fl">0</span>)<span class="op">;</span></span>
-<span id="cb2-211"><a href="#cb2-211" aria-hidden="true" tabindex="-1"></a>                    <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_select</span>( <span class="va">EEG</span><span class="op">,</span><span class="ss">'nochannel'</span><span class="op">,</span> <span class="va">ref_chan</span>)<span class="op">;</span> <span class="co">% remove reference channel</span></span>
-<span id="cb2-212"><a href="#cb2-212" aria-hidden="true" tabindex="-1"></a>                <span class="kw">end</span></span>
-<span id="cb2-213"><a href="#cb2-213" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span></span>
-<span id="cb2-214"><a href="#cb2-214" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb2-215"><a href="#cb2-215" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="va">numel</span>(<span class="va">FASTbadChans</span>)<span class="op">==</span><span class="fl">0</span></span>
-<span id="cb2-216"><a href="#cb2-216" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">faster_bad_channels</span><span class="op">=</span><span class="ss">'0'</span><span class="op">;</span></span>
-<span id="cb2-217"><a href="#cb2-217" aria-hidden="true" tabindex="-1"></a>            <span class="kw">else</span></span>
-<span id="cb2-218"><a href="#cb2-218" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">faster_bad_channels</span><span class="op">=</span><span class="va">num2str</span>(<span class="va">FASTbadChans</span><span class="op">'</span>)<span class="op">;</span></span>
-<span id="cb2-219"><a href="#cb2-219" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span></span>
-<span id="cb2-220"><a href="#cb2-220" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb2-221"><a href="#cb2-221" aria-hidden="true" tabindex="-1"></a>            <span class="kw">if</span> <span class="va">all_chan_bad_FAST</span><span class="op">==</span><span class="fl">1</span></span>
-<span id="cb2-222"><a href="#cb2-222" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">faster_bad_channels</span><span class="op">=</span><span class="ss">'0'</span><span class="op">;</span></span>
-<span id="cb2-223"><a href="#cb2-223" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">ica_preparation_bad_channels</span><span class="op">=</span><span class="ss">'0'</span><span class="op">;</span></span>
-<span id="cb2-224"><a href="#cb2-224" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">length_ica_data</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-225"><a href="#cb2-225" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">total_ICs</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-226"><a href="#cb2-226" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">ICs_removed</span><span class="op">=</span><span class="ss">'0'</span><span class="op">;</span></span>
-<span id="cb2-227"><a href="#cb2-227" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">total_epochs_before_artifact_rejection</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-228"><a href="#cb2-228" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">total_epochs_after_artifact_rejection</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-229"><a href="#cb2-229" aria-hidden="true" tabindex="-1"></a>                <span class="va">args</span>.<span class="va">total_channels_interpolated</span><span class="op">=</span><span class="fl">0</span><span class="op">;</span></span>
-<span id="cb2-230"><a href="#cb2-230" aria-hidden="true" tabindex="-1"></a>                <span class="co">%continue % ignore rest of the processing and go to next subject</span></span>
-<span id="cb2-231"><a href="#cb2-231" aria-hidden="true" tabindex="-1"></a>            <span class="kw">end</span></span>
-<span id="cb2-232"><a href="#cb2-232" aria-hidden="true" tabindex="-1"></a>                    </span>
-<span id="cb2-233"><a href="#cb2-233" aria-hidden="true" tabindex="-1"></a>            <span class="co">%% VISUAL INSPECTION (QUICK)... checking filtered data with chunks removed for issues ... final check before saving</span></span>
-<span id="cb2-234"><a href="#cb2-234" aria-hidden="true" tabindex="-1"></a>            <span class="co">%plot filtered eeg data for the current task</span></span>
-<span id="cb2-235"><a href="#cb2-235" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         pop_eegplot(EEG,1,1,1);</span></span>
-<span id="cb2-236"><a href="#cb2-236" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         % window to pause code</span></span>
-<span id="cb2-237"><a href="#cb2-237" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         uiwait(msgbox({'Visually inspecting merged EEG for... '; ''; ['Subject:   ' subject]; ''; 'When you are finished, hit OK to continue'; ''}));</span></span>
-<span id="cb2-238"><a href="#cb2-238" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         fprintf('\n\n')</span></span>
-<span id="cb2-239"><a href="#cb2-239" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         disp('Saving and then moving onto the next subject');</span></span>
-<span id="cb2-240"><a href="#cb2-240" aria-hidden="true" tabindex="-1"></a>    <span class="co">%         </span></span>
-<span id="cb2-241"><a href="#cb2-241" aria-hidden="true" tabindex="-1"></a>            <span class="co">%% Give a name to the dataset and save on hard drive</span></span>
-<span id="cb2-242"><a href="#cb2-242" aria-hidden="true" tabindex="-1"></a>            <span class="va">EEG</span> <span class="op">=</span> <span class="va">eeg_checkset</span>( <span class="va">EEG</span> )<span class="op">;</span></span>
-<span id="cb2-243"><a href="#cb2-243" aria-hidden="true" tabindex="-1"></a>            <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_editset</span>(<span class="va">EEG</span><span class="op">,</span> <span class="ss">'setname'</span><span class="op">,</span> [<span class="ss">'sub-'</span> <span class="va">subject</span> <span class="ss">'_ses-V03_task-ALL_acq-eeg_eeg_filtered_data'</span>])<span class="op">;</span></span>
-<span id="cb2-244"><a href="#cb2-244" aria-hidden="true" tabindex="-1"></a>            <span class="va">EEG</span> <span class="op">=</span> <span class="va">pop_saveset</span>( <span class="va">EEG</span><span class="op">,</span> <span class="ss">'filename'</span><span class="op">,</span>[<span class="ss">'sub-'</span> <span class="va">subject</span> <span class="ss">'_ses-V03_task-ALL_acq-eeg_eeg_filtered_data.set'</span>]<span class="op">,</span><span class="ss">'filepath'</span><span class="op">,</span> <span class="va">args</span>.<span class="va">output_location</span> )<span class="op">;</span></span>
-<span id="cb2-245"><a href="#cb2-245" aria-hidden="true" tabindex="-1"></a>            [<span class="va">ALLEEG</span> <span class="va">EEG</span>] <span class="op">=</span> <span class="va">eeg_store</span>(<span class="va">ALLEEG</span><span class="op">,</span> <span class="va">EEG</span><span class="op">,</span> <span class="va">CURRENTSET</span>)<span class="op">;</span></span>
-<span id="cb2-246"><a href="#cb2-246" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-247"><a href="#cb2-247" aria-hidden="true" tabindex="-1"></a>            <span class="co">%Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure</span></span>
-<span id="cb2-248"><a href="#cb2-248" aria-hidden="true" tabindex="-1"></a>            <span class="va">EEG</span> <span class="op">=</span> <span class="va">obj</span>.<span class="va">HistoryTable</span>(<span class="va">EEG</span><span class="op">,</span> <span class="va">args</span>)<span class="op">;</span></span>
-<span id="cb2-249"><a href="#cb2-249" aria-hidden="true" tabindex="-1"></a>            </span>
-<span id="cb2-250"><a href="#cb2-250" aria-hidden="true" tabindex="-1"></a><span class="co">%             %% Remove the saved dataset from EEGLAB memory</span></span>
-<span id="cb2-251"><a href="#cb2-251" aria-hidden="true" tabindex="-1"></a><span class="co">%             STUDY = []; CURRENTSTUDY = 0; ALLEEG = []; EEG=[]; CURRENTSET=[];</span></span>
-<span id="cb2-252"><a href="#cb2-252" aria-hidden="true" tabindex="-1"></a>        <span class="kw">end</span></span>
-<span id="cb2-253"><a href="#cb2-253" aria-hidden="true" tabindex="-1"></a>    <span class="kw">end</span></span>
-<span id="cb2-254"><a href="#cb2-254" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span>
-<span id="cb2-255"><a href="#cb2-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-256"><a href="#cb2-256" aria-hidden="true" tabindex="-1"></a>```</span>
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "SignalFlow HBCD Tutorial"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">format:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">  html:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">    code-fold: true</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">    code-tools: true</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    toc: true</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    number-sections: true</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="an">jupyter:</span><span class="co"> python3</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>Hello Colleagues, today we will be going over the SignalFlow HBCD Tutorial. This tutorial will cover the basics of how to use the SignalFlow HBCD module. This tutorial will cover the following topics:</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>How to setup the SignalFlow HBCD module for script.</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>How to setup the SignalFlow HBCD module for GUI.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Changes I made, due to the fact that I do not know the specific requirements of the HBCD module</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu"># How to setup the SignalFlow HBCD module</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>In SignalFlowEEG, go to the zHappeScripts folder. This folder is located in the following directory: /srv/Analysis/Nate_Projects/Github/SignalFlowEEG_HBCD/zHappeScripts. Open this folder as your main Matlab folder. </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>In the zHappeScripts folder, there is a file called "ExampleHBCDScript.m". This file is the script you can use that has all the modules.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Edit the "External dependencies locations" and "Project Information" sections to the correct filepaths. </span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Left-click the "Run" button in the Matlab toolbar. This will run the script.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="fu"># How to start the SignalFlow HBCD module</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Our GUI is not able to handle the merging of files. Therefore, we will be using the script to run the first HBCD module.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>In SignalFlowEEG, go to the zHappeScripts folder. This folder is located in the following directory: /srv/Analysis/Nate_Projects/Github/SignalFlow_Modules_Dev/zHappeScripts. Open this folder as your main Matlab folder. </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>In the zHappeScripts folder, there is a file called "MergeFasterScript.m". This file is the script you can use that has the first module.</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Edit the "External dependencies locations" and "Project Information" sections to the correct filepaths. </span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>Left-click the "Run" button in the Matlab toolbar. This will run the script.</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="ss">5. </span>Navigate to the following directory in Matlab: /srv/Analysis/Nate_Projects/Github/SignalFlowEEG_HBCD </span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">6. </span>Towards the bottom of the file explorer, there is a file called "SignalFlowEEG_HBCD.mlapp". Right-click this file and left-click "Run". This will open the GUI.</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">7. </span>In the Setup Tab, follow instructons for the "Setup" section in BasicGUI.qmd.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">8. </span>In the Builder Tab, Look at the User Module Library.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">9. </span>Add the following modules in order, for information on adding modules to the pipeline see BasicGUI.qmd.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">    1. </span>Hbcd</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="ss">    2. </span>Hbcd Epoching</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">    3. </span>Export Set</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="ss">10. </span>Follow the instructions to execute in BasicGUI.qmd.</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="fu"># Changes I made, due to the fact that I do not know the specific requirements of the HBCD module</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>I had to make a lot of changes in order to get the HBCD module to work. This was mostly due to the fact that I do not know the specific requirements of the HBCD module. You seem to have a complex folder system that I do not know how to replicate. Please do not run this code as if it was production. If you would liek to use this for production. I would need to have a meeting with you to discuss the specific requirements of the HBCD module.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
