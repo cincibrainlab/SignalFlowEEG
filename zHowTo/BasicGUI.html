@@ -83,61 +83,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#a-reproducible-eeg-processing-framework" id="toc-a-reproducible-eeg-processing-framework" class="nav-link" data-scroll-target="#a-reproducible-eeg-processing-framework"><span class="header-section-number">1.1</span> A Reproducible EEG Processing Framework</a></li>
   <li><a href="#core-features" id="toc-core-features" class="nav-link" data-scroll-target="#core-features"><span class="header-section-number">1.2</span> Core Features</a></li>
-  <li><a href="#getting-started-erp-tutorial" id="toc-getting-started-erp-tutorial" class="nav-link" data-scroll-target="#getting-started-erp-tutorial"><span class="header-section-number">1.3</span> Getting Started: ERP Tutorial</a>
+  <li><a href="#getting-started-vep-tutorial-using-happe" id="toc-getting-started-vep-tutorial-using-happe" class="nav-link" data-scroll-target="#getting-started-vep-tutorial-using-happe"><span class="header-section-number">1.3</span> Getting Started: VEP Tutorial (using HAPPE)</a>
   <ul class="collapse">
-  <li><a href="#using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" id="toc-using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" class="nav-link" data-scroll-target="#using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings"><span class="header-section-number">1.3.1</span> Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings</a></li>
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.3.2</span> Overview</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.3.1</span> Overview</a></li>
+  <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough"><span class="header-section-number">1.3.2</span> Walkthrough</a></li>
   </ul></li>
-  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives"><span class="header-section-number">1.4</span> Objectives:</a></li>
   </ul></li>
-  <li><a href="#sec-DownloadingSignalFlowFromGithub" id="toc-sec-DownloadingSignalFlowFromGithub" class="nav-link" data-scroll-target="#sec-DownloadingSignalFlowFromGithub"><span class="header-section-number">2</span> Downloading SignalFlow from GitHub</a>
+  <li><a href="#sec-InstallSignalFlow" id="toc-sec-InstallSignalFlow" class="nav-link" data-scroll-target="#sec-InstallSignalFlow"><span class="header-section-number">2</span> Downloading SignalFlow from GitHub</a>
   <ul class="collapse">
   <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1"><span class="header-section-number">2.1</span> Overview</a>
   <ul class="collapse">
   <li><a href="#method-1-using-git" id="toc-method-1-using-git" class="nav-link" data-scroll-target="#method-1-using-git"><span class="header-section-number">2.1.1</span> Method 1: Using Git</a></li>
   </ul></li>
+  <li><a href="#method-2-downloading-toolkits-as-zip-files" id="toc-method-2-downloading-toolkits-as-zip-files" class="nav-link" data-scroll-target="#method-2-downloading-toolkits-as-zip-files"><span class="header-section-number">2.2</span> Method 2: Downloading Toolkits as Zip Files</a></li>
   </ul></li>
-  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">3</span> Starting the GUI</a></li>
-  <li><a href="#sec-SetupTab" id="toc-sec-SetupTab" class="nav-link" data-scroll-target="#sec-SetupTab"><span class="header-section-number">4</span> Setup Tab</a>
+  <li><a href="#sec-OrganizeFiles" id="toc-sec-OrganizeFiles" class="nav-link" data-scroll-target="#sec-OrganizeFiles"><span class="header-section-number">3</span> Preparing and Organizing Files</a>
   <ul class="collapse">
-  <li><a href="#adding-dependancies" id="toc-adding-dependancies" class="nav-link" data-scroll-target="#adding-dependancies"><span class="header-section-number">4.1</span> Adding Dependancies</a></li>
-  <li><a href="#adding-projct-folder-locations" id="toc-adding-projct-folder-locations" class="nav-link" data-scroll-target="#adding-projct-folder-locations"><span class="header-section-number">4.2</span> Adding Projct Folder locations</a></li>
-  <li><a href="#adding-custom-projct-folder-locations" id="toc-adding-custom-projct-folder-locations" class="nav-link" data-scroll-target="#adding-custom-projct-folder-locations"><span class="header-section-number">4.3</span> Adding Custom Projct Folder locations</a></li>
-  <li><a href="#edit-project-information" id="toc-edit-project-information" class="nav-link" data-scroll-target="#edit-project-information"><span class="header-section-number">4.4</span> Edit Project Information</a></li>
+  <li><a href="#overview-2" id="toc-overview-2" class="nav-link" data-scroll-target="#overview-2"><span class="header-section-number">3.1</span> Overview</a></li>
+  <li><a href="#using-the-bids-format" id="toc-using-the-bids-format" class="nav-link" data-scroll-target="#using-the-bids-format"><span class="header-section-number">3.2</span> Using the BIDS format</a></li>
   </ul></li>
-  <li><a href="#sec-BuilderTab" id="toc-sec-BuilderTab" class="nav-link" data-scroll-target="#sec-BuilderTab"><span class="header-section-number">5</span> Builder Tab</a>
+  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">4</span> Starting the SignalFlow Application</a></li>
+  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">5</span> Starting the GUI</a></li>
+  <li><a href="#sec-SetupTab" id="toc-sec-SetupTab" class="nav-link" data-scroll-target="#sec-SetupTab"><span class="header-section-number">6</span> Setup Tab</a>
   <ul class="collapse">
-  <li><a href="#filter-modules" id="toc-filter-modules" class="nav-link" data-scroll-target="#filter-modules"><span class="header-section-number">5.1</span> Filter Modules</a></li>
-  <li><a href="#sec-AddingModules" id="toc-sec-AddingModules" class="nav-link" data-scroll-target="#sec-AddingModules"><span class="header-section-number">5.2</span> Adding Modules</a></li>
-  <li><a href="#copy-and-edit-module-todo-this-might-have-a-bug" id="toc-copy-and-edit-module-todo-this-might-have-a-bug" class="nav-link" data-scroll-target="#copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">5.3</span> Copy and Edit Module TODO this might have a bug</a></li>
-  <li><a href="#delete-module" id="toc-delete-module" class="nav-link" data-scroll-target="#delete-module"><span class="header-section-number">5.4</span> Delete Module</a></li>
-  <li><a href="#reorder-modules" id="toc-reorder-modules" class="nav-link" data-scroll-target="#reorder-modules"><span class="header-section-number">5.5</span> Reorder Modules</a></li>
-  <li><a href="#reset-pipeline" id="toc-reset-pipeline" class="nav-link" data-scroll-target="#reset-pipeline"><span class="header-section-number">5.6</span> Reset Pipeline</a></li>
-  <li><a href="#change-module-information" id="toc-change-module-information" class="nav-link" data-scroll-target="#change-module-information"><span class="header-section-number">5.7</span> Change Module Information</a></li>
+  <li><a href="#adding-dependancies" id="toc-adding-dependancies" class="nav-link" data-scroll-target="#adding-dependancies"><span class="header-section-number">6.1</span> Adding Dependancies</a></li>
+  <li><a href="#adding-projct-folder-locations" id="toc-adding-projct-folder-locations" class="nav-link" data-scroll-target="#adding-projct-folder-locations"><span class="header-section-number">6.2</span> Adding Projct Folder locations</a></li>
+  <li><a href="#adding-custom-projct-folder-locations" id="toc-adding-custom-projct-folder-locations" class="nav-link" data-scroll-target="#adding-custom-projct-folder-locations"><span class="header-section-number">6.3</span> Adding Custom Projct Folder locations</a></li>
+  <li><a href="#edit-project-information" id="toc-edit-project-information" class="nav-link" data-scroll-target="#edit-project-information"><span class="header-section-number">6.4</span> Edit Project Information</a></li>
   </ul></li>
-  <li><a href="#sec-ExecuteTab" id="toc-sec-ExecuteTab" class="nav-link" data-scroll-target="#sec-ExecuteTab"><span class="header-section-number">6</span> Execute Tab</a>
+  <li><a href="#sec-BuilderTab" id="toc-sec-BuilderTab" class="nav-link" data-scroll-target="#sec-BuilderTab"><span class="header-section-number">7</span> Builder Tab</a>
   <ul class="collapse">
-  <li><a href="#refresh" id="toc-refresh" class="nav-link" data-scroll-target="#refresh"><span class="header-section-number">6.1</span> Refresh</a></li>
-  <li><a href="#execute-loop" id="toc-execute-loop" class="nav-link" data-scroll-target="#execute-loop"><span class="header-section-number">6.2</span> Execute (Loop)</a></li>
-  <li><a href="#execute-parallel" id="toc-execute-parallel" class="nav-link" data-scroll-target="#execute-parallel"><span class="header-section-number">6.3</span> Execute (Parallel)</a></li>
-  <li><a href="#execute-file" id="toc-execute-file" class="nav-link" data-scroll-target="#execute-file"><span class="header-section-number">6.4</span> Execute (File)</a></li>
-  <li><a href="#open-import-folder" id="toc-open-import-folder" class="nav-link" data-scroll-target="#open-import-folder"><span class="header-section-number">6.5</span> Open Import Folder</a></li>
-  <li><a href="#open-export-folder" id="toc-open-export-folder" class="nav-link" data-scroll-target="#open-export-folder"><span class="header-section-number">6.6</span> Open Export Folder</a></li>
-  <li><a href="#open-in-eeglab" id="toc-open-in-eeglab" class="nav-link" data-scroll-target="#open-in-eeglab"><span class="header-section-number">6.7</span> Open in EEGLAB</a></li>
-  <li><a href="#plot-data" id="toc-plot-data" class="nav-link" data-scroll-target="#plot-data"><span class="header-section-number">6.8</span> Plot Data</a></li>
-  <li><a href="#view-electrode-map" id="toc-view-electrode-map" class="nav-link" data-scroll-target="#view-electrode-map"><span class="header-section-number">6.9</span> View Electrode Map</a></li>
-  <li><a href="#view-channel-spectra" id="toc-view-channel-spectra" class="nav-link" data-scroll-target="#view-channel-spectra"><span class="header-section-number">6.10</span> View Channel Spectra</a></li>
+  <li><a href="#filter-modules" id="toc-filter-modules" class="nav-link" data-scroll-target="#filter-modules"><span class="header-section-number">7.1</span> Filter Modules</a></li>
+  <li><a href="#sec-AddingModules" id="toc-sec-AddingModules" class="nav-link" data-scroll-target="#sec-AddingModules"><span class="header-section-number">7.2</span> Adding Modules</a></li>
+  <li><a href="#copy-and-edit-module-todo-this-might-have-a-bug" id="toc-copy-and-edit-module-todo-this-might-have-a-bug" class="nav-link" data-scroll-target="#copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">7.3</span> Copy and Edit Module TODO this might have a bug</a></li>
+  <li><a href="#delete-module" id="toc-delete-module" class="nav-link" data-scroll-target="#delete-module"><span class="header-section-number">7.4</span> Delete Module</a></li>
+  <li><a href="#reorder-modules" id="toc-reorder-modules" class="nav-link" data-scroll-target="#reorder-modules"><span class="header-section-number">7.5</span> Reorder Modules</a></li>
+  <li><a href="#reset-pipeline" id="toc-reset-pipeline" class="nav-link" data-scroll-target="#reset-pipeline"><span class="header-section-number">7.6</span> Reset Pipeline</a></li>
+  <li><a href="#change-module-information" id="toc-change-module-information" class="nav-link" data-scroll-target="#change-module-information"><span class="header-section-number">7.7</span> Change Module Information</a></li>
   </ul></li>
-  <li><a href="#sec-BrowseTab" id="toc-sec-BrowseTab" class="nav-link" data-scroll-target="#sec-BrowseTab"><span class="header-section-number">7</span> Browse Tab</a>
+  <li><a href="#sec-ExecuteTab" id="toc-sec-ExecuteTab" class="nav-link" data-scroll-target="#sec-ExecuteTab"><span class="header-section-number">8</span> Execute Tab</a>
   <ul class="collapse">
-  <li><a href="#select-project-folder" id="toc-select-project-folder" class="nav-link" data-scroll-target="#select-project-folder"><span class="header-section-number">7.1</span> Select Project Folder</a></li>
-  <li><a href="#refresh-1" id="toc-refresh-1" class="nav-link" data-scroll-target="#refresh-1"><span class="header-section-number">7.2</span> Refresh</a></li>
-  <li><a href="#open-selected-folder" id="toc-open-selected-folder" class="nav-link" data-scroll-target="#open-selected-folder"><span class="header-section-number">7.3</span> Open Selected Folder</a></li>
-  <li><a href="#open-in-eeglab-1" id="toc-open-in-eeglab-1" class="nav-link" data-scroll-target="#open-in-eeglab-1"><span class="header-section-number">7.4</span> Open in EEGLAB</a></li>
-  <li><a href="#plot-data-1" id="toc-plot-data-1" class="nav-link" data-scroll-target="#plot-data-1"><span class="header-section-number">7.5</span> Plot Data</a></li>
-  <li><a href="#view-electrode-map-1" id="toc-view-electrode-map-1" class="nav-link" data-scroll-target="#view-electrode-map-1"><span class="header-section-number">7.6</span> View Electrode Map</a></li>
-  <li><a href="#view-channel-spectra-1" id="toc-view-channel-spectra-1" class="nav-link" data-scroll-target="#view-channel-spectra-1"><span class="header-section-number">7.7</span> View Channel Spectra</a></li>
-  <li><a href="#close-windows" id="toc-close-windows" class="nav-link" data-scroll-target="#close-windows"><span class="header-section-number">7.8</span> Close Windows</a></li>
+  <li><a href="#refresh" id="toc-refresh" class="nav-link" data-scroll-target="#refresh"><span class="header-section-number">8.1</span> Refresh</a></li>
+  <li><a href="#execute-loop" id="toc-execute-loop" class="nav-link" data-scroll-target="#execute-loop"><span class="header-section-number">8.2</span> Execute (Loop)</a></li>
+  <li><a href="#execute-parallel" id="toc-execute-parallel" class="nav-link" data-scroll-target="#execute-parallel"><span class="header-section-number">8.3</span> Execute (Parallel)</a></li>
+  <li><a href="#execute-file" id="toc-execute-file" class="nav-link" data-scroll-target="#execute-file"><span class="header-section-number">8.4</span> Execute (File)</a></li>
+  <li><a href="#open-import-folder" id="toc-open-import-folder" class="nav-link" data-scroll-target="#open-import-folder"><span class="header-section-number">8.5</span> Open Import Folder</a></li>
+  <li><a href="#open-export-folder" id="toc-open-export-folder" class="nav-link" data-scroll-target="#open-export-folder"><span class="header-section-number">8.6</span> Open Export Folder</a></li>
+  <li><a href="#open-in-eeglab" id="toc-open-in-eeglab" class="nav-link" data-scroll-target="#open-in-eeglab"><span class="header-section-number">8.7</span> Open in EEGLAB</a></li>
+  <li><a href="#plot-data" id="toc-plot-data" class="nav-link" data-scroll-target="#plot-data"><span class="header-section-number">8.8</span> Plot Data</a></li>
+  <li><a href="#view-electrode-map" id="toc-view-electrode-map" class="nav-link" data-scroll-target="#view-electrode-map"><span class="header-section-number">8.9</span> View Electrode Map</a></li>
+  <li><a href="#view-channel-spectra" id="toc-view-channel-spectra" class="nav-link" data-scroll-target="#view-channel-spectra"><span class="header-section-number">8.10</span> View Channel Spectra</a></li>
+  </ul></li>
+  <li><a href="#sec-BrowseTab" id="toc-sec-BrowseTab" class="nav-link" data-scroll-target="#sec-BrowseTab"><span class="header-section-number">9</span> Browse Tab</a>
+  <ul class="collapse">
+  <li><a href="#select-project-folder" id="toc-select-project-folder" class="nav-link" data-scroll-target="#select-project-folder"><span class="header-section-number">9.1</span> Select Project Folder</a></li>
+  <li><a href="#refresh-1" id="toc-refresh-1" class="nav-link" data-scroll-target="#refresh-1"><span class="header-section-number">9.2</span> Refresh</a></li>
+  <li><a href="#open-selected-folder" id="toc-open-selected-folder" class="nav-link" data-scroll-target="#open-selected-folder"><span class="header-section-number">9.3</span> Open Selected Folder</a></li>
+  <li><a href="#open-in-eeglab-1" id="toc-open-in-eeglab-1" class="nav-link" data-scroll-target="#open-in-eeglab-1"><span class="header-section-number">9.4</span> Open in EEGLAB</a></li>
+  <li><a href="#plot-data-1" id="toc-plot-data-1" class="nav-link" data-scroll-target="#plot-data-1"><span class="header-section-number">9.5</span> Plot Data</a></li>
+  <li><a href="#view-electrode-map-1" id="toc-view-electrode-map-1" class="nav-link" data-scroll-target="#view-electrode-map-1"><span class="header-section-number">9.6</span> View Electrode Map</a></li>
+  <li><a href="#view-channel-spectra-1" id="toc-view-channel-spectra-1" class="nav-link" data-scroll-target="#view-channel-spectra-1"><span class="header-section-number">9.7</span> View Channel Spectra</a></li>
+  <li><a href="#close-windows" id="toc-close-windows" class="nav-link" data-scroll-target="#close-windows"><span class="header-section-number">9.8</span> Close Windows</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -177,18 +183,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>High-Performance File Formats:</strong> For handling high-dimensional data such as connectivity matrices, SignalFlowEEG adopts high-performance file formats like Apache Parquet. This approach not only ensures data integrity but also facilitates speedy retrieval and efficient storage.</p></li>
 </ol>
 </section>
-<section id="getting-started-erp-tutorial" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="getting-started-erp-tutorial"><span class="header-section-number">1.3</span> Getting Started: ERP Tutorial</h2>
-<section id="using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings"><span class="header-section-number">1.3.1</span> Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings</h3>
-</section>
-<section id="overview" class="level3" data-number="1.3.2">
-<h3 data-number="1.3.2" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.3.2</span> Overview</h3>
-<p>In this walkthrough, we will guide you on how to use <strong>SignalFlowEEG (SF)</strong> to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.</p>
-</section>
-</section>
-<section id="objectives" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="objectives"><span class="header-section-number">1.4</span> Objectives:</h2>
+<section id="getting-started-vep-tutorial-using-happe" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="getting-started-vep-tutorial-using-happe"><span class="header-section-number">1.3</span> Getting Started: VEP Tutorial (using HAPPE)</h2>
+<section id="overview" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.3.1</span> Overview</h3>
+<p>In this walkthrough, we will guide you on how to use <strong>SignalFlowEEG</strong> to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.</p>
+<p>In the following sections, we will dive deeper into each of these steps:</p>
 <ol type="1">
 <li><p><strong>Setting up SignalFlowEEG and its Dependencies:</strong> Learn how to install and configure SignalFlowEEG and its dependencies.</p></li>
 <li><p><strong>Arrange Files for Optimized Processing:</strong> We’ll begin by organizing our files in a way that optimizes SignalFlowEEG’s processing capabilities.</p></li>
@@ -201,14 +201,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul></li>
 <li><p><strong>Modify Preprocessing Step to Observe Effect on ERPs:</strong> Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.</p></li>
 </ol>
-<p>In the following sections, we will dive deeper into each of these steps.</p>
-<!-- You can now include code snippets and detailed steps for each objective -->
+</section>
+<section id="walkthrough" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="walkthrough"><span class="header-section-number">1.3.2</span> Walkthrough</h3>
 <ol type="1">
-<li>Download SignalFlowEEG from github. See <a href="#sec-DownloadingSignalFlowFromGithub">Section&nbsp;2</a> for more details.</li>
-<li>Start the GUI. See <a href="#sec-StartGUI">Section&nbsp;3</a> for more details.</li>
-<li>Setup toolboxes, dependancies, folders, and project. See <a href="#sec-SetupTab">Section&nbsp;4</a> for more details.</li>
-<li>Navigate to the Builder tab. See <a href="#sec-BuilderTab">Section&nbsp;5</a> for more details.</li>
-<li>Add the following modules in order, for information on adding modules to the pipeline see <a href="#sec-AddingModules">Section&nbsp;5.2</a>.
+<li><p>Install SignalFlow and other toolkits. See <a href="#sec-InstallSignalFlow">Section&nbsp;2</a>.</p></li>
+<li><p>Organize EEG files. See <a href="#sec-OrganizeFiles">Section&nbsp;3</a>.</p></li>
+<li><p>Start the GUI. See <a href="#sec-StartGUI">Section&nbsp;5</a> for more details.</p></li>
+<li><p>Setup toolboxes, dependancies, folders, and project. See <a href="#sec-SetupTab">Section&nbsp;6</a> for more details.</p></li>
+<li><p>Navigate to the Builder tab. See <a href="#sec-BuilderTab">Section&nbsp;7</a> for more details.</p></li>
+<li><p>Add the following modules in order, for information on adding modules to the pipeline see <a href="#sec-AddingModules">Section&nbsp;7.2</a>.</p>
 <ol type="1">
 <li>Import <strong>Insert EEG file type</strong> File</li>
 <li>Resample EEG data (500 Hz)</li>
@@ -220,15 +222,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>TODO Add ERP to SignalFlow</li>
 <li>Export Set</li>
 </ol></li>
-<li>Navigate to the Execute tab. See <a href="#sec-ExecuteTab">Section&nbsp;6</a> for more details.</li>
-<li>Left-click the “Execute (Loop)” button.</li>
-<li>Wait for pipeline to complete. You should be able to watch the Matlab Command Window.</li>
-<li>Navigate to the Browse tab. See <a href="#sec-BrowseTab">Section&nbsp;7</a> for more details.</li>
-<li>View your data using the tools provided.</li>
+<li><p>Navigate to the Execute tab. See <a href="#sec-ExecuteTab">Section&nbsp;8</a> for more details.</p></li>
+<li><p>Left-click the “Execute (Loop)” button.</p></li>
+<li><p>Wait for pipeline to complete. You should be able to watch the Matlab Command Window.</p></li>
+<li><p>Navigate to the Browse tab. See <a href="#sec-BrowseTab">Section&nbsp;9</a> for more details.</p></li>
+<li><p>View your data using the tools provided.</p></li>
 </ol>
 </section>
 </section>
-<section id="sec-DownloadingSignalFlowFromGithub" class="level1" data-number="2">
+</section>
+<section id="sec-InstallSignalFlow" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> Downloading SignalFlow from GitHub</h1>
 <section id="overview-1" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="overview-1"><span class="header-section-number">2.1</span> Overview</h2>
@@ -246,32 +249,116 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Run use your file explorer or run following command to create a new directory called ‘github’ and navigate to it:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> github</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> github</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>Clone the repository with submodules:</strong></p>
+<li><p><strong>Clone the SignalFlow repository with submodules:</strong></p>
 <p>Run the following command to clone the repository and its submodules:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This will clone the repository and its submodules into the ‘github’ directory. The output will be displayed in the terminal or command prompt. ```</p></li>
+<p>This will clone the repository and its submodules into the ‘github’ directory. The output will be displayed in the terminal or command prompt.</p></li>
+<li><p><strong>Clone other necessary toolkits:</strong> In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:</p></li>
 </ol>
-<p>Copy and paste the content above into a Markdown file or editor to see the formatted instructions.</p>
-<p>By Perplexity at https://www.perplexity.ai/search/b220cb51-c9e5-405d-9b09-4b4b803f09d1</p>
+<ul>
+<li><p><strong>EEGLAB</strong>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/sccn/eeglab.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Brainstorm</strong>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/brainstorm-tools/brainstorm3.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>HAPPE Pipeline</strong>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/PINE-Lab/HAPPE.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>MADE Pipeline</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone <span class="at">--recurse-submodules</span> https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After cloning these repositories, you’ll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull <span class="at">--recurse-submodules</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+</section>
+<section id="method-2-downloading-toolkits-as-zip-files" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="method-2-downloading-toolkits-as-zip-files"><span class="header-section-number">2.2</span> Method 2: Downloading Toolkits as Zip Files</h2>
+<p>If you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.</p>
+<p>Here are the steps to download and organize the repositories:</p>
 <ol type="1">
-<li>Go to the GitHub website and sign in to your account.</li>
-<li>Navigate to the repository you want to download.</li>
-<li>On the repository’s main page, click on the green “Code” button located near the top-right corner.</li>
-<li>In the dropdown menu that appears, click on the “Download ZIP” option.</li>
-<li>The repository will be downloaded as a ZIP file to your computer.</li>
-<li>Locate the downloaded ZIP file and extract its contents to a desired location on your computer.
-<ol type="A">
-<li>On Windows, you can right-click on the ZIP file and choose “Extract All” or use third-party extraction software like 7-Zip or WinRAR.</li>
-<li>On macOS, you can double-click the ZIP file to extract its contents.</li>
-<li>On Linux, you can use the “unzip” command in the terminal. For example: unzip repository.zip.</li>
-</ol></li>
-<li>After extraction, you will have the complete repository with all its files and folders available on your computer.</li>
+<li><p>Navigate to each repository’s GitHub page in your web browser.</p></li>
+<li><p>Click on the <code>Code</code> button and then click <code>Download ZIP</code>.</p></li>
+<li><p>Once the download is complete, extract the ZIP file.</p></li>
+<li><p>Create a new folder in your <code>github</code> directory for each extracted repository. The name of the folder should <em>match</em> the repository name.</p></li>
 </ol>
+<p>Here are the links to each repository: - <strong>SignalFlow</strong>: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git - <strong>VHTP</strong>: https://github.com/cincibrainlab/vhtp - <strong>VHTP Dependencies</strong>: https://github.com/cincibrainlab/vhtp_dependencies - <strong>HAPPE Pipeline</strong>: https://github.com/PINE-Lab/HAPPE - <strong>MADE Pipeline</strong>: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline</p>
+<p>Note: For the VHTP and VHTP Dependencies, make sure to place these folders in the <code>SignalFlowEEG_HBCD</code> folder, as they are necessary for certain SignalFlow operations.</p>
+<p>EEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.</p>
+<ul>
+<li><strong>EEGLAB</strong>: https://sccn.ucsd.edu/eeglab/index.php</li>
+<li><strong>Brainstorm</strong>:https://neuroimage.usc.edu/brainstorm/Introduction</li>
+</ul>
+<p>After extraction, you will have the complete repository with all its files and folders available on your computer.</p>
 </section>
 </section>
+<section id="sec-OrganizeFiles" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Preparing and Organizing Files</h1>
+<section id="overview-2" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="overview-2"><span class="header-section-number">3.1</span> Overview</h2>
+<p>When working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self).</p>
+<p>Considering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: <code>data</code>, <code>temp</code>, and <code>results</code>.</p>
+<p>These directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a <code>readme.txt</code> file in the main folder and describing the contents and purpose of the project and folders.</p>
+<p>Here’s a simple, recommended structure:</p>
+<ul>
+<li>ProjectName/
+<ul>
+<li>readme.txt</li>
+<li>data/</li>
+<li>temp/</li>
+<li>results/</li>
+</ul></li>
+</ul>
+<p>The <code>data</code> directory should contain all the raw data that will be processed. The <code>temp</code> directory will store any temporary files created during data processing, and the <code>results</code> directory will hold the output from your analyses.</p>
 </section>
-<section id="sec-StartGUI" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Starting the GUI</h1>
+<section id="using-the-bids-format" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="using-the-bids-format"><span class="header-section-number">3.2</span> Using the BIDS format</h2>
+<p>The <em>Brain Imaging Data Structure (BIDS)</em> is a formal way to name and organize neuroimaging data and metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.</p>
+<p>SignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">-</span> ProjectName/</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-</span> readme.txt</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-</span> data/</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">-</span> BIDS/</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      <span class="ex">-</span> sub-01/</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="ex">-</span> ses-01/</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          <span class="ex">-</span> eeg/</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> sub-01_ses-01_task-mytask_eeg.edf</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> sub-01_ses-01_task-mytask_channels.tsv</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> sub-01_ses-01_task-mytask_electrodes.tsv</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> sub-01_ses-01_task-mytask_events.tsv</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>            <span class="ex">-</span> ...</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>      <span class="ex">-</span> ...</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-</span> temp/</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="ex">-</span> results/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>SignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility (<a href="https://github.com/cincibrainlab/vhtp/blob/main/util_htpDirListing.m">util_htpDirListing.m</a>) can create a custom file list from a BIDS directory structure.</p>
+<p>Remember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows.</p>
+</section>
+</section>
+<section id="sec-StartGUI" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Starting the SignalFlow Application</h1>
+<p>Follow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:</p>
+<ol type="1">
+<li><p><strong>Open MATLAB.</strong></p>
+<p>Launch the MATLAB software from your applications menu or desktop shortcut.</p></li>
+<li><p><strong>Navigate to the SignalFlow Directory.</strong></p>
+<p>The SignalFlow directory is typically located within the <code>GitHub</code> folder in your <code>Documents</code>. This might vary depending on where you cloned the repository. The paths are generally as follows:</p>
+<ul>
+<li><p>For Windows: <code>C:\\Users\\**YourUsername**\\Documents\\github\\SignalFlow_HBCD</code></p></li>
+<li><p>For Linux or macOS: <code>/home/**YourUsername**/Documents/github/SignalFlow_HBCD</code></p></li>
+</ul>
+<p>Replace <code>**YourUsername**</code> with your actual username on your computer.</p>
+<p>To navigate to this directory in MATLAB, you can use the <code>cd</code> (change directory) command in MATLAB’s Command Window:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode matlab code-with-copy"><code class="sourceCode matlab"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">cd</span>(<span class="ss">'path-to-directory'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Replace <code>'path-to-directory'</code> with the appropriate path above.</p></li>
+<li><p><strong>Find the SignalFlow application file.</strong></p>
+<p>In MATLAB’s Current Folder pane (typically located on the left side of the interface), scroll to locate the SignalFlow application file named “SignalFlowEEG.mlapp”.</p></li>
+<li><p><strong>Run the SignalFlow application.</strong> <img src="BasicQuiPictures/RunSignalFlow.png" class="img-fluid" alt="Run SignalFlow"></p>
+<p>Right-click on the “SignalFlowEEG.mlapp” file and select “Run” from the context menu.</p></li>
+<li><p><strong>Check SignalFlow Application.</strong></p>
+<img src="BasicQuiPictures/OpenSetupPage.png" class="img-fluid" alt="The SignalFlow Interface">
+<p>The SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the “SignalFlowEEG.mlapp” file is present.</p></li>
+</ol>
+<p>With these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB.</p>
+</section>
+<section id="sec-StartGUI" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Starting the GUI</h1>
 <ol type="1">
 <li>Open Matlab.</li>
 <li>Navigate to SignalFlow Directory.
@@ -286,13 +373,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Find the file named “SignalFlowEEG.mlapp”, right-click on it, and select “Run”.</li>
 <li>The SignalFlow GUI should open up.</li>
 </ol>
-<p><img src="BasicQuiPictures/OpenSetupPage.png" class="img-fluid"></p>
 </section>
-<section id="sec-SetupTab" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Setup Tab</h1>
+<section id="sec-SetupTab" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Setup Tab</h1>
 <p><img src="BasicQuiPictures/SetupTab.png" class="img-fluid"> * The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline to their indidual needs.</p>
-<section id="adding-dependancies" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="adding-dependancies"><span class="header-section-number">4.1</span> Adding Dependancies</h2>
+<section id="adding-dependancies" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="adding-dependancies"><span class="header-section-number">6.1</span> Adding Dependancies</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Decide which toolbox/dependency you would like to add . A. A Red circle indicated the toolbox/dependency has not been added. B. A Green circle indicates that the toolbox/dependency has been added.</li>
@@ -302,8 +388,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The circle should turn from red to green, may take a second due to SignalFLow checking if it’s the right toolbox.</li>
 </ol>
 </section>
-<section id="adding-projct-folder-locations" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="adding-projct-folder-locations"><span class="header-section-number">4.2</span> Adding Projct Folder locations</h2>
+<section id="adding-projct-folder-locations" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="adding-projct-folder-locations"><span class="header-section-number">6.2</span> Adding Projct Folder locations</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Decide which folder you would like to add. A. A Red circle indicated the folder has not been added. B. A Green circle indicates that the folder has been added.</li>
@@ -313,8 +399,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The circle will turn from red to green.</li>
 </ol>
 </section>
-<section id="adding-custom-projct-folder-locations" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="adding-custom-projct-folder-locations"><span class="header-section-number">4.3</span> Adding Custom Projct Folder locations</h2>
+<section id="adding-custom-projct-folder-locations" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="adding-custom-projct-folder-locations"><span class="header-section-number">6.3</span> Adding Custom Projct Folder locations</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Left-click the “Add Custom Folder” button.</li>
@@ -326,8 +412,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>A new project foler will be added. The circle will turn from red to green.</li>
 </ol>
 </section>
-<section id="edit-project-information" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="edit-project-information"><span class="header-section-number">4.4</span> Edit Project Information</h2>
+<section id="edit-project-information" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="edit-project-information"><span class="header-section-number">6.4</span> Edit Project Information</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Enter a Title for your project.</li>
@@ -337,11 +423,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="sec-BuilderTab" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Builder Tab</h1>
+<section id="sec-BuilderTab" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Builder Tab</h1>
 <p><img src="BasicQuiPictures/BuilderTab.png" class="img-fluid"> * The Builder tab is used to create the pipeline and edit modules. Most work is done in this tab.</p>
-<section id="filter-modules" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="filter-modules"><span class="header-section-number">5.1</span> Filter Modules</h2>
+<section id="filter-modules" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="filter-modules"><span class="header-section-number">7.1</span> Filter Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the filter dropdown.</li>
@@ -349,8 +435,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Module Libraries will only show modules that agree with your filter.</li>
 </ol>
 </section>
-<section id="sec-AddingModules" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="sec-AddingModules"><span class="header-section-number">5.2</span> Adding Modules</h2>
+<section id="sec-AddingModules" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sec-AddingModules"><span class="header-section-number">7.2</span> Adding Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to use.
@@ -361,8 +447,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The module will the be added to the pipeline. It will show up in the Pipeline Builder.</li>
 </ol>
 </section>
-<section id="copy-and-edit-module-todo-this-might-have-a-bug" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">5.3</span> Copy and Edit Module TODO this might have a bug</h2>
+<section id="copy-and-edit-module-todo-this-might-have-a-bug" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">7.3</span> Copy and Edit Module TODO this might have a bug</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to use.
@@ -376,8 +462,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module file should show up in the User module library.</li>
 </ol>
 </section>
-<section id="delete-module" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="delete-module"><span class="header-section-number">5.4</span> Delete Module</h2>
+<section id="delete-module" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="delete-module"><span class="header-section-number">7.4</span> Delete Module</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to delete.
@@ -388,8 +474,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module will be removed from the pipeline.</li>
 </ol>
 </section>
-<section id="reorder-modules" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="reorder-modules"><span class="header-section-number">5.5</span> Reorder Modules</h2>
+<section id="reorder-modules" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="reorder-modules"><span class="header-section-number">7.5</span> Reorder Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to reorder.
@@ -401,16 +487,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module will be reordered in the pipeline.</li>
 </ol>
 </section>
-<section id="reset-pipeline" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="reset-pipeline"><span class="header-section-number">5.6</span> Reset Pipeline</h2>
+<section id="reset-pipeline" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="reset-pipeline"><span class="header-section-number">7.6</span> Reset Pipeline</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the “Reset Pipeline” button.</li>
 <li>All Modules within the Pipeline Builder will be deleted.</li>
 </ol>
 </section>
-<section id="change-module-information" class="level2" data-number="5.7">
-<h2 data-number="5.7" class="anchored" data-anchor-id="change-module-information"><span class="header-section-number">5.7</span> Change Module Information</h2>
+<section id="change-module-information" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="change-module-information"><span class="header-section-number">7.7</span> Change Module Information</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Enter the new Module Name.</li>
@@ -421,11 +507,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="sec-ExecuteTab" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Execute Tab</h1>
+<section id="sec-ExecuteTab" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Execute Tab</h1>
 <p><img src="BasicQuiPictures/ExecuteTab.png" class="img-fluid"> * The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.</p>
-<section id="refresh" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="refresh"><span class="header-section-number">6.1</span> Refresh</h2>
+<section id="refresh" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="refresh"><span class="header-section-number">8.1</span> Refresh</h2>
 <ul>
 <li>This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
 <ol type="A">
@@ -433,22 +519,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="execute-loop" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="execute-loop"><span class="header-section-number">6.2</span> Execute (Loop)</h2>
+<section id="execute-loop" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="execute-loop"><span class="header-section-number">8.2</span> Execute (Loop)</h2>
 <ul>
 <li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time.</li>
 <li>Use this if there are steps that require user input. A. Examples of this include: Remove channels, remove epochs, etc.</li>
 </ul>
 </section>
-<section id="execute-parallel" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="execute-parallel"><span class="header-section-number">6.3</span> Execute (Parallel)</h2>
+<section id="execute-parallel" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="execute-parallel"><span class="header-section-number">8.3</span> Execute (Parallel)</h2>
 <ul>
 <li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time.</li>
 <li>This should only be used when the follwoing are true. A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. B. You have a high performance computer. C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer. D. You have the Matlab Parralel Processing Toolbox</li>
 </ul>
 </section>
-<section id="execute-file" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="execute-file"><span class="header-section-number">6.4</span> Execute (File)</h2>
+<section id="execute-file" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="execute-file"><span class="header-section-number">8.4</span> Execute (File)</h2>
 <ul>
 <li>This button is used to execute the pipeline on a selected eeg file in the import directory.</li>
 <li>To use this button:
@@ -458,14 +544,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-import-folder" class="level2" data-number="6.5">
-<h2 data-number="6.5" class="anchored" data-anchor-id="open-import-folder"><span class="header-section-number">6.5</span> Open Import Folder</h2>
+<section id="open-import-folder" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="open-import-folder"><span class="header-section-number">8.5</span> Open Import Folder</h2>
 <ul>
 <li>This button is used to open the import directory in the computers file explorer.</li>
 </ul>
 </section>
-<section id="open-export-folder" class="level2" data-number="6.6">
-<h2 data-number="6.6" class="anchored" data-anchor-id="open-export-folder"><span class="header-section-number">6.6</span> Open Export Folder</h2>
+<section id="open-export-folder" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="open-export-folder"><span class="header-section-number">8.6</span> Open Export Folder</h2>
 <ul>
 <li>This button is used to open the selected directory in the computers file explorer.</li>
 <li>To use this button:
@@ -475,8 +561,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-in-eeglab" class="level2" data-number="6.7">
-<h2 data-number="6.7" class="anchored" data-anchor-id="open-in-eeglab"><span class="header-section-number">6.7</span> Open in EEGLAB</h2>
+<section id="open-in-eeglab" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="open-in-eeglab"><span class="header-section-number">8.7</span> Open in EEGLAB</h2>
 <ul>
 <li>This button is used to open a selected eeg file in the EEGLAB gui.</li>
 <li>To use this button:
@@ -486,8 +572,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="plot-data" class="level2" data-number="6.8">
-<h2 data-number="6.8" class="anchored" data-anchor-id="plot-data"><span class="header-section-number">6.8</span> Plot Data</h2>
+<section id="plot-data" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="plot-data"><span class="header-section-number">8.8</span> Plot Data</h2>
 <ul>
 <li>This button is used to plot data for a selected eeg file.</li>
 <li>To use this button:
@@ -497,8 +583,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-electrode-map" class="level2" data-number="6.9">
-<h2 data-number="6.9" class="anchored" data-anchor-id="view-electrode-map"><span class="header-section-number">6.9</span> View Electrode Map</h2>
+<section id="view-electrode-map" class="level2" data-number="8.9">
+<h2 data-number="8.9" class="anchored" data-anchor-id="view-electrode-map"><span class="header-section-number">8.9</span> View Electrode Map</h2>
 <ul>
 <li>This button is used to view the electrode map for a selected eeg file.</li>
 <li>To use this button:
@@ -508,8 +594,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-channel-spectra" class="level2" data-number="6.10">
-<h2 data-number="6.10" class="anchored" data-anchor-id="view-channel-spectra"><span class="header-section-number">6.10</span> View Channel Spectra</h2>
+<section id="view-channel-spectra" class="level2" data-number="8.10">
+<h2 data-number="8.10" class="anchored" data-anchor-id="view-channel-spectra"><span class="header-section-number">8.10</span> View Channel Spectra</h2>
 <ul>
 <li>This button is used to view the channel spectra for a selected eeg file.</li>
 <li>To use this button:
@@ -520,11 +606,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 </section>
-<section id="sec-BrowseTab" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Browse Tab</h1>
+<section id="sec-BrowseTab" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Browse Tab</h1>
 <p><img src="BasicQuiPictures/BrowseTab.png" class="img-fluid"> * The browse tab is used to analyze and look at data. The user has access to many tools to aid with this.</p>
-<section id="select-project-folder" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="select-project-folder"><span class="header-section-number">7.1</span> Select Project Folder</h2>
+<section id="select-project-folder" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="select-project-folder"><span class="header-section-number">9.1</span> Select Project Folder</h2>
 <ol type="1">
 <li>Navigate to the “Browse” Tab.</li>
 <li>Left-click the current folder dropdown.</li>
@@ -532,8 +618,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The file catalog will be updated based on your selection.</li>
 </ol>
 </section>
-<section id="refresh-1" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="refresh-1"><span class="header-section-number">7.2</span> Refresh</h2>
+<section id="refresh-1" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="refresh-1"><span class="header-section-number">9.2</span> Refresh</h2>
 <ul>
 <li>This button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.
 <ol type="A">
@@ -541,8 +627,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-selected-folder" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="open-selected-folder"><span class="header-section-number">7.3</span> Open Selected Folder</h2>
+<section id="open-selected-folder" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="open-selected-folder"><span class="header-section-number">9.3</span> Open Selected Folder</h2>
 <ul>
 <li>This button is used to open the selected directory in the computers file explorer.</li>
 <li>To use this button:
@@ -552,8 +638,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-in-eeglab-1" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="open-in-eeglab-1"><span class="header-section-number">7.4</span> Open in EEGLAB</h2>
+<section id="open-in-eeglab-1" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="open-in-eeglab-1"><span class="header-section-number">9.4</span> Open in EEGLAB</h2>
 <ul>
 <li>This button is used to open a selected eeg file in the EEGLAB gui.</li>
 <li>To use this button:
@@ -563,8 +649,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="plot-data-1" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="plot-data-1"><span class="header-section-number">7.5</span> Plot Data</h2>
+<section id="plot-data-1" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="plot-data-1"><span class="header-section-number">9.5</span> Plot Data</h2>
 <ul>
 <li>This button is used to plot data for a selected eeg file.</li>
 <li>To use this button:
@@ -574,8 +660,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-electrode-map-1" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="view-electrode-map-1"><span class="header-section-number">7.6</span> View Electrode Map</h2>
+<section id="view-electrode-map-1" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="view-electrode-map-1"><span class="header-section-number">9.6</span> View Electrode Map</h2>
 <ul>
 <li>This button is used to view the electrode map for a selected eeg file.</li>
 <li>To use this button:
@@ -585,8 +671,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-channel-spectra-1" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="view-channel-spectra-1"><span class="header-section-number">7.7</span> View Channel Spectra</h2>
+<section id="view-channel-spectra-1" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="view-channel-spectra-1"><span class="header-section-number">9.7</span> View Channel Spectra</h2>
 <ul>
 <li>This button is used to view the channel spectra for a selected eeg file.</li>
 <li>To use this button:
@@ -596,8 +682,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="close-windows" class="level2" data-number="7.8">
-<h2 data-number="7.8" class="anchored" data-anchor-id="close-windows"><span class="header-section-number">7.8</span> Close Windows</h2>
+<section id="close-windows" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="close-windows"><span class="header-section-number">9.8</span> Close Windows</h2>
 <ul>
 <li>This button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed.</li>
 </ul>

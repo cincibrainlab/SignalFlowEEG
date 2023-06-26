@@ -30,14 +30,13 @@ The overarching objective of SF is to generate robust data tables that facilitat
 4. **High-Performance File Formats:** 
     For handling high-dimensional data such as connectivity matrices, SignalFlowEEG adopts high-performance file formats like Apache Parquet. This approach not only ensures data integrity but also facilitates speedy retrieval and efficient storage.
 
-## Getting Started: ERP Tutorial
-### Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings
+## Getting Started: VEP Tutorial (using HAPPE)
 
 ### Overview
+In this walkthrough, we will guide you on how to use **SignalFlowEEG** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
 
-In this walkthrough, we will guide you on how to use **SignalFlowEEG (SF)** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
+In the following sections, we will dive deeper into each of these steps:
 
-## Objectives:
 1. **Setting up SignalFlowEEG and its Dependencies:** 
     Learn how to install and configure SignalFlowEEG and its dependencies.
 
@@ -56,13 +55,17 @@ In this walkthrough, we will guide you on how to use **SignalFlowEEG (SF)** to p
 1. **Modify Preprocessing Step to Observe Effect on ERPs:** 
     Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.
 
-In the following sections, we will dive deeper into each of these steps.
 
-<!-- You can now include code snippets and detailed steps for each objective -->
+### Walkthrough
 
-1. Download SignalFlowEEG from github. See @sec-DownloadingSignalFlowFromGithub for more details. 
-2. Start the GUI. See @sec-StartGUI for more details. 
-3. Setup toolboxes, dependancies, folders, and project. See @sec-SetupTab for more details.
+1. Install SignalFlow and other toolkits. See @sec-InstallSignalFlow. 
+
+1. Organize EEG files. See @sec-OrganizeFiles.
+
+1. Start the GUI. See @sec-StartGUI for more details. 
+
+1. Setup toolboxes, dependancies, folders, and project. See @sec-SetupTab for more details.
+
 4. Navigate to the Builder tab. See @sec-BuilderTab for more details.
 5. Add the following modules in order, for information on adding modules to the pipeline see @sec-AddingModules.
     1. Import **Insert EEG file type** File
@@ -81,7 +84,7 @@ In the following sections, we will dive deeper into each of these steps.
 10. View your data using the tools provided. 
 
 
-# Downloading SignalFlow from GitHub {#sec-DownloadingSignalFlowFromGithub}
+# Downloading SignalFlow from GitHub {#sec-InstallSignalFlow}
 
 ## Overview
 
@@ -113,7 +116,7 @@ The source code for SignalFlow is hosted on GitHub. There are two primary method
    cd github
    ```
 
-4. **Clone the repository with submodules:**
+4. **Clone the SignalFlow repository with submodules:**
 
    Run the following command to clone the repository and its submodules:
 
@@ -122,32 +125,163 @@ The source code for SignalFlow is hosted on GitHub. There are two primary method
    ```
 
    This will clone the repository and its submodules into the 'github' directory. The output will be displayed in the terminal or command prompt.
+
+5. **Clone other necessary toolkits:**
+In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:
+
+- **EEGLAB**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/sccn/eeglab.git
+    ```
+
+- **Brainstorm**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/brainstorm-tools/brainstorm3.git
+    ```
+
+- **HAPPE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/PINE-Lab/HAPPE.git
+    ```
+
+- **MADE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git
+    ```
+After cloning these repositories, you'll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:
+
+    ```bash
+    git pull --recurse-submodules
+    ```
+
+## Method 2: Downloading Toolkits as Zip Files 
+
+If you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.
+
+Here are the steps to download and organize the repositories:
+
+1. Navigate to each repository's GitHub page in your web browser.
+
+2. Click on the `Code` button and then click `Download ZIP`.
+
+3. Once the download is complete, extract the ZIP file.
+
+4. Create a new folder in your `github` directory for each extracted repository. The name of the folder should *match* the repository name.
+
+Here are the links to each repository:
+- **SignalFlow**: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+- **VHTP**: https://github.com/cincibrainlab/vhtp
+- **VHTP Dependencies**: https://github.com/cincibrainlab/vhtp_dependencies
+- **HAPPE Pipeline**: https://github.com/PINE-Lab/HAPPE
+- **MADE Pipeline**: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline
+
+Note: For the VHTP and VHTP Dependencies, make sure to place these folders in the `SignalFlowEEG_HBCD` folder, as they are necessary for certain SignalFlow operations. 
+
+EEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.
+
+- **EEGLAB**: https://sccn.ucsd.edu/eeglab/index.php
+- **Brainstorm**:https://neuroimage.usc.edu/brainstorm/Introduction
+
+After extraction, you will have the complete repository with all its files and folders available on your computer.
+
+# Preparing and Organizing Files {#sec-OrganizeFiles}
+
+## Overview
+
+When working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self). 
+
+Considering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: `data`, `temp`, and `results`. 
+
+These directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a `readme.txt` file in the main folder and  describing the contents and purpose of the project and folders.
+
+Here's a simple, recommended structure:
+
+- ProjectName/
+  - readme.txt
+  - data/
+  - temp/
+  - results/
+
+The `data` directory should contain all the raw data that will be processed. The `temp` directory will store any temporary files created during data processing, and the `results` directory will hold the output from your analyses.
+
+## Using the BIDS format
+
+The *Brain Imaging Data Structure (BIDS)* is a formal way to name and organize neuroimaging data and  metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.
+
+SignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.
+``` bash
+- ProjectName/
+  - readme.txt
+  - data/
+    - BIDS/
+      - sub-01/
+        - ses-01/
+          - eeg/
+            - sub-01_ses-01_task-mytask_eeg.edf
+            - sub-01_ses-01_task-mytask_channels.tsv
+            - sub-01_ses-01_task-mytask_electrodes.tsv
+            - sub-01_ses-01_task-mytask_events.tsv
+            - ...
+      - ...
+  - temp/
+  - results/
 ```
+SignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility ([util_htpDirListing.m](https://github.com/cincibrainlab/vhtp/blob/main/util_htpDirListing.m)) can create a custom file list from a BIDS directory structure. 
+
+Remember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows.
+
+# Starting the SignalFlow Application {#sec-StartGUI}
+
+Follow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:
+
+1. **Open MATLAB.**
+
+    Launch the MATLAB software from your applications menu or desktop shortcut.
+
+2. **Navigate to the SignalFlow Directory.**
+
+    The SignalFlow directory is typically located within the `GitHub` folder in your `Documents`. This might vary depending on where you cloned the repository. The paths are generally as follows:
+
+    - For Windows: 
+    `C:\\Users\\**YourUsername**\\Documents\\github\\SignalFlow_HBCD`
+      
+    - For Linux or macOS: 
+    `/home/**YourUsername**/Documents/github/SignalFlow_HBCD`
+
+    Replace `**YourUsername**` with your actual username on your computer.
+
+    To navigate to this directory in MATLAB, you can use the `cd` (change directory) command in MATLAB's Command Window:
+
+    ```matlab
+    cd('path-to-directory')
+    ```
+
+    Replace `'path-to-directory'` with the appropriate path above.
+
+3. **Find the SignalFlow application file.**
+
+    In MATLAB's Current Folder pane (typically located on the left side of the interface), scroll to locate the SignalFlow application file named "SignalFlowEEG.mlapp".
+
+4. **Run the SignalFlow application.**
+    ![Run SignalFlow](BasicQuiPictures/RunSignalFlow.png)
+
+    Right-click on the "SignalFlowEEG.mlapp" file and select "Run" from the context menu.
+
+5. **Check SignalFlow Application.**
+
+    ![The SignalFlow Interface](BasicQuiPictures/OpenSetupPage.png)
+
+
+    The SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the "SignalFlowEEG.mlapp" file is present.
+
+With these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB.
 
 
 
-1. Go to the GitHub website and sign in to your account.
-2. Navigate to the repository you want to download.
-3. On the repository's main page, click on the green "Code" button located near the top-right corner.
-4. In the dropdown menu that appears, click on the "Download ZIP" option.
-5. The repository will be downloaded as a ZIP file to your computer.
-6. Locate the downloaded ZIP file and extract its contents to a desired location on your computer.
-    A.  On Windows, you can right-click on the ZIP file and choose "Extract All" or use third-party extraction software like 7-Zip or WinRAR.
-    B.  On macOS, you can double-click the ZIP file to extract its contents.
-    C.  On Linux, you can use the "unzip" command in the terminal. For example: unzip repository.zip.
-7. After extraction, you will have the complete repository with all its files and folders available on your computer.
-
-# Starting the GUI {#sec-StartGUI}
-1. Open Matlab.
-2. Navigate to SignalFlow Directory.
-    i) This is usually in the Documents/Github folder.
-         A.   For Windows: Go to C:\\Users\\**YourUsername**\\Documents\\GitHub\\SignalFlow_Modules_Dev
-         B.   For Linux: Go to /home/**YourUsername**/Documents/GitHub/SignalFlow_Modules_Dev
-3. In MATLAB, locate the file viewer on the left side and scroll to the bottom.
-4. Find the file named "SignalFlowEEG.mlapp", right-click on it, and select "Run".
-5. The SignalFlow GUI should open up.
-
-![](BasicQuiPictures/OpenSetupPage.png)
 
 # Setup Tab {#sec-SetupTab}
 ![](BasicQuiPictures/SetupTab.png)
