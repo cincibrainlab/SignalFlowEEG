@@ -1,5 +1,5 @@
 ---
-title: "SignalFlowEEG  Tutorial"
+title: "SignalFlowEEG HBCD Tutorial"
 format:
   html:
     code-fold: true
@@ -31,18 +31,34 @@ The overarching objective of SF is to generate robust data tables that facilitat
     For handling high-dimensional data such as connectivity matrices, SignalFlowEEG adopts high-performance file formats like Apache Parquet. This approach not only ensures data integrity but also facilitates speedy retrieval and efficient storage.
 
 ## Getting Started: ERP Tutorial
+### Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings
 
 ### Overview
 
-Let's jump in and use SignalFlow to preprocess and generate ERP tracings from a VEP dataset. We will have a few objectives:
+In this walkthrough, we will guide you on how to use **SignalFlowEEG (SF)** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
 
-- Arrange the files for optimized processing 
-- Preprocess the files using the popular HAPPE pipeline
-- Output 3 data tables
-    - A table of EEG characteristics (i.e. original length)
-    - A table of preprocessing results (i.e., # of epochs)
-    - A table of amplitudes to generate ERPs
-- Modify a preprocessing step to observe effect on ERPs
+## Objectives:
+1. **Setting up SignalFlowEEG and its Dependencies:** 
+    Learn how to install and configure SignalFlowEEG and its dependencies.
+
+1. **Arrange Files for Optimized Processing:** 
+    We'll begin by organizing our files in a way that optimizes SignalFlowEEG's processing capabilities.
+
+1. **Preprocess Files Using HAPPE Pipeline:** 
+    Next, we'll utilize the popular HAPPE pipeline to preprocess our VEP dataset.
+
+1. **Output Data Tables:** 
+    After preprocessing, we will output three data tables:
+    - **EEG Characteristics Table:** This table will present the EEG characteristics of our VEP data, such as original length.
+    - **Preprocessing Results Table:** This table will showcase the results of our preprocessing steps, including the number of epochs.
+    - **Amplitude Table for ERPs:** This table will contain the amplitudes necessary to generate ERPs from our VEP dataset.
+
+1. **Modify Preprocessing Step to Observe Effect on ERPs:** 
+    Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.
+
+In the following sections, we will dive deeper into each of these steps.
+
+<!-- You can now include code snippets and detailed steps for each objective -->
 
 1. Download SignalFlowEEG from github. See @sec-DownloadingSignalFlowFromGithub for more details. 
 2. Start the GUI. See @sec-StartGUI for more details. 

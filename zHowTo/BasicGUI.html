@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SignalFlowEEG Tutorial</title>
+<title>SignalFlowEEG HBCD Tutorial</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -51,8 +51,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#core-features" id="toc-core-features" class="nav-link" data-scroll-target="#core-features"><span class="header-section-number">1.2</span> Core Features</a></li>
   <li><a href="#getting-started-erp-tutorial" id="toc-getting-started-erp-tutorial" class="nav-link" data-scroll-target="#getting-started-erp-tutorial"><span class="header-section-number">1.3</span> Getting Started: ERP Tutorial</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.3.1</span> Overview</a></li>
+  <li><a href="#using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" id="toc-using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" class="nav-link" data-scroll-target="#using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings"><span class="header-section-number">1.3.1</span> Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.3.2</span> Overview</a></li>
   </ul></li>
+  <li><a href="#objectives" id="toc-objectives" class="nav-link" data-scroll-target="#objectives"><span class="header-section-number">1.4</span> Objectives:</a></li>
   </ul></li>
   <li><a href="#sec-DownloadingSignalFlowFromGithub" id="toc-sec-DownloadingSignalFlowFromGithub" class="nav-link" data-scroll-target="#sec-DownloadingSignalFlowFromGithub"><span class="header-section-number">2</span> Downloading SignalFlow from github</a></li>
   <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">3</span> Starting the GUI</a></li>
@@ -104,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">SignalFlowEEG Tutorial</h1>
+<h1 class="title">SignalFlowEEG HBCD Tutorial</h1>
 </div>
 
 
@@ -137,20 +139,30 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="getting-started-erp-tutorial" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="getting-started-erp-tutorial"><span class="header-section-number">1.3</span> Getting Started: ERP Tutorial</h2>
-<section id="overview" class="level3" data-number="1.3.1">
-<h3 data-number="1.3.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.3.1</span> Overview</h3>
-<p>Let’s jump in and use SignalFlow to preprocess and generate ERP tracings from a VEP dataset. We will have a few objectives:</p>
+<section id="using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="using-happe-pipeline-to-preprocess-vep-dataset-and-generate-erp-tracings"><span class="header-section-number">1.3.1</span> Using HAPPE pipeline to preprocess VEP dataset and generate ERP tracings</h3>
+</section>
+<section id="overview" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="overview"><span class="header-section-number">1.3.2</span> Overview</h3>
+<p>In this walkthrough, we will guide you on how to use <strong>SignalFlowEEG (SF)</strong> to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.</p>
+</section>
+</section>
+<section id="objectives" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="objectives"><span class="header-section-number">1.4</span> Objectives:</h2>
+<ol type="1">
+<li><p><strong>Setting up SignalFlowEEG and its Dependencies:</strong> Learn how to install and configure SignalFlowEEG and its dependencies.</p></li>
+<li><p><strong>Arrange Files for Optimized Processing:</strong> We’ll begin by organizing our files in a way that optimizes SignalFlowEEG’s processing capabilities.</p></li>
+<li><p><strong>Preprocess Files Using HAPPE Pipeline:</strong> Next, we’ll utilize the popular HAPPE pipeline to preprocess our VEP dataset.</p></li>
+<li><p><strong>Output Data Tables:</strong> After preprocessing, we will output three data tables:</p>
 <ul>
-<li>Arrange the files for optimized processing</li>
-<li>Preprocess the files using the popular HAPPE pipeline</li>
-<li>Output 3 data tables
-<ul>
-<li>A table of EEG characteristics (i.e.&nbsp;original length)</li>
-<li>A table of preprocessing results (i.e., # of epochs)</li>
-<li>A table of amplitudes to generate ERPs</li>
+<li><strong>EEG Characteristics Table:</strong> This table will present the EEG characteristics of our VEP data, such as original length.</li>
+<li><strong>Preprocessing Results Table:</strong> This table will showcase the results of our preprocessing steps, including the number of epochs.</li>
+<li><strong>Amplitude Table for ERPs:</strong> This table will contain the amplitudes necessary to generate ERPs from our VEP dataset.</li>
 </ul></li>
-<li>Modify a preprocessing step to observe effect on ERPs</li>
-</ul>
+<li><p><strong>Modify Preprocessing Step to Observe Effect on ERPs:</strong> Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.</p></li>
+</ol>
+<p>In the following sections, we will dive deeper into each of these steps.</p>
+<!-- You can now include code snippets and detailed steps for each objective -->
 <ol type="1">
 <li>Download SignalFlowEEG from github. See <a href="#sec-DownloadingSignalFlowFromGithub">Section&nbsp;2</a> for more details.</li>
 <li>Start the GUI. See <a href="#sec-StartGUI">Section&nbsp;3</a> for more details.</li>
@@ -174,7 +186,6 @@ ul.task-list li input[type="checkbox"] {
 <li>Navigate to the Browse tab. See <a href="#sec-BrowseTab">Section&nbsp;7</a> for more details.</li>
 <li>View your data using the tools provided.</li>
 </ol>
-</section>
 </section>
 </section>
 <section id="sec-DownloadingSignalFlowFromGithub" class="level1" data-number="2">
