@@ -1,3 +1,8 @@
 [submodule "vhtp"]
 	path = vhtp
 	url = https://github.com/cincibrainlab/vhtp.git
+	branch = main
+[submodule "vhtp_dependencies"]
+	path = vhtp_dependencies
+	url = https://github.com/cincibrainlab/vhtp_dependencies.git
+	branch = main
