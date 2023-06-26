@@ -81,7 +81,51 @@ In the following sections, we will dive deeper into each of these steps.
 10. View your data using the tools provided. 
 
 
-# Downloading SignalFlow from github {#sec-DownloadingSignalFlowFromGithub}
+# Downloading SignalFlow from GitHub {#sec-DownloadingSignalFlowFromGithub}
+
+## Overview
+
+The source code for SignalFlow is hosted on GitHub. There are two primary methods to acquire the code - either through utilizing Git software or directly downloading from the website. However, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process.
+
+### Method 1: Using Git
+
+1. **Check if Git is installed:**
+
+   Open a terminal or command prompt and run the following command:
+
+   ```bash
+   git --version
+   ```
+
+   If Git is installed, you will see the version number. If not, proceed to the next step.
+
+2. **Install Git:**
+
+    Download the install from the official Git website for your operating system at [official Git website](https://git-scm.com).
+
+3. **Create a 'github' directory:**
+    Choose a location on your drive that will be used to store your toolboxes. 
+
+   Run use your file explorer or run following command to create a new directory called 'github' and navigate to it:
+
+   ```bash
+   mkdir github
+   cd github
+   ```
+
+4. **Clone the repository with submodules:**
+
+   Run the following command to clone the repository and its submodules:
+
+   ```bash
+   git clone --recurse-submodules https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+   ```
+
+   This will clone the repository and its submodules into the 'github' directory. The output will be displayed in the terminal or command prompt.
+```
+
+
+
 1. Go to the GitHub website and sign in to your account.
 2. Navigate to the repository you want to download.
 3. On the repository's main page, click on the green "Code" button located near the top-right corner.
