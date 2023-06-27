@@ -7,6 +7,7 @@ format:
     number-sections: true
 jupyter: python3
 ---
+![](sflogo.png){width=30% fig-align="center"}
 
 # Introduction
 

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.427">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,10 +17,9 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -47,13 +46,43 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
+    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -79,71 +108,70 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a>
   <ul class="collapse">
-  <li><a href="#a-reproducible-eeg-processing-framework" id="toc-a-reproducible-eeg-processing-framework" class="nav-link" data-scroll-target="#a-reproducible-eeg-processing-framework"><span class="header-section-number">1.1</span> A Reproducible EEG Processing Framework</a></li>
-  <li><a href="#core-features" id="toc-core-features" class="nav-link" data-scroll-target="#core-features"><span class="header-section-number">1.2</span> Core Features</a></li>
-  <li><a href="#getting-started-vep-tutorial-using-happe" id="toc-getting-started-vep-tutorial-using-happe" class="nav-link" data-scroll-target="#getting-started-vep-tutorial-using-happe"><span class="header-section-number">1.3</span> Getting Started: VEP Tutorial (using HAPPE)</a>
+  <li><a href="#a-reproducible-eeg-processing-framework" id="toc-a-reproducible-eeg-processing-framework" class="nav-link" data-scroll-target="#a-reproducible-eeg-processing-framework"><span class="toc-section-number">1.1</span>  A Reproducible EEG Processing Framework</a></li>
+  <li><a href="#core-features" id="toc-core-features" class="nav-link" data-scroll-target="#core-features"><span class="toc-section-number">1.2</span>  Core Features</a></li>
+  <li><a href="#getting-started-vep-tutorial-using-happe" id="toc-getting-started-vep-tutorial-using-happe" class="nav-link" data-scroll-target="#getting-started-vep-tutorial-using-happe"><span class="toc-section-number">1.3</span>  Getting Started: VEP Tutorial (using HAPPE)</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="header-section-number">1.3.1</span> Overview</a></li>
-  <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough"><span class="header-section-number">1.3.2</span> Walkthrough</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"><span class="toc-section-number">1.3.1</span>  Overview</a></li>
+  <li><a href="#walkthrough" id="toc-walkthrough" class="nav-link" data-scroll-target="#walkthrough"><span class="toc-section-number">1.3.2</span>  Walkthrough</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#sec-InstallSignalFlow" id="toc-sec-InstallSignalFlow" class="nav-link" data-scroll-target="#sec-InstallSignalFlow"><span class="header-section-number">2</span> Downloading SignalFlow from GitHub</a>
+  <li><a href="#sec-InstallSignalFlow" id="toc-sec-InstallSignalFlow" class="nav-link" data-scroll-target="#sec-InstallSignalFlow"><span class="toc-section-number">2</span>  Downloading SignalFlow from GitHub</a>
   <ul class="collapse">
-  <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1"><span class="header-section-number">2.1</span> Overview</a>
+  <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1"><span class="toc-section-number">2.1</span>  Overview</a>
   <ul class="collapse">
-  <li><a href="#method-1-using-git" id="toc-method-1-using-git" class="nav-link" data-scroll-target="#method-1-using-git"><span class="header-section-number">2.1.1</span> Method 1: Using Git</a></li>
+  <li><a href="#method-1-using-git" id="toc-method-1-using-git" class="nav-link" data-scroll-target="#method-1-using-git"><span class="toc-section-number">2.1.1</span>  Method 1: Using Git</a></li>
   </ul></li>
-  <li><a href="#method-2-downloading-toolkits-as-zip-files" id="toc-method-2-downloading-toolkits-as-zip-files" class="nav-link" data-scroll-target="#method-2-downloading-toolkits-as-zip-files"><span class="header-section-number">2.2</span> Method 2: Downloading Toolkits as Zip Files</a></li>
+  <li><a href="#method-2-downloading-toolkits-as-zip-files" id="toc-method-2-downloading-toolkits-as-zip-files" class="nav-link" data-scroll-target="#method-2-downloading-toolkits-as-zip-files"><span class="toc-section-number">2.2</span>  Method 2: Downloading Toolkits as Zip Files</a></li>
   </ul></li>
-  <li><a href="#sec-OrganizeFiles" id="toc-sec-OrganizeFiles" class="nav-link" data-scroll-target="#sec-OrganizeFiles"><span class="header-section-number">3</span> Preparing and Organizing Files</a>
+  <li><a href="#sec-OrganizeFiles" id="toc-sec-OrganizeFiles" class="nav-link" data-scroll-target="#sec-OrganizeFiles"><span class="toc-section-number">3</span>  Preparing and Organizing Files</a>
   <ul class="collapse">
-  <li><a href="#overview-2" id="toc-overview-2" class="nav-link" data-scroll-target="#overview-2"><span class="header-section-number">3.1</span> Overview</a></li>
-  <li><a href="#using-the-bids-format" id="toc-using-the-bids-format" class="nav-link" data-scroll-target="#using-the-bids-format"><span class="header-section-number">3.2</span> Using the BIDS format</a></li>
+  <li><a href="#overview-2" id="toc-overview-2" class="nav-link" data-scroll-target="#overview-2"><span class="toc-section-number">3.1</span>  Overview</a></li>
+  <li><a href="#using-the-bids-format" id="toc-using-the-bids-format" class="nav-link" data-scroll-target="#using-the-bids-format"><span class="toc-section-number">3.2</span>  Using the BIDS format</a></li>
   </ul></li>
-  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">4</span> Starting the SignalFlow Application</a></li>
-  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="header-section-number">5</span> Starting the GUI</a></li>
-  <li><a href="#sec-SetupTab" id="toc-sec-SetupTab" class="nav-link" data-scroll-target="#sec-SetupTab"><span class="header-section-number">6</span> Setup Tab</a>
+  <li><a href="#sec-StartGUI" id="toc-sec-StartGUI" class="nav-link" data-scroll-target="#sec-StartGUI"><span class="toc-section-number">4</span>  Starting the SignalFlow Application</a></li>
+  <li><a href="#sec-SetupTab" id="toc-sec-SetupTab" class="nav-link" data-scroll-target="#sec-SetupTab"><span class="toc-section-number">5</span>  Setup Tab</a>
   <ul class="collapse">
-  <li><a href="#adding-dependancies" id="toc-adding-dependancies" class="nav-link" data-scroll-target="#adding-dependancies"><span class="header-section-number">6.1</span> Adding Dependancies</a></li>
-  <li><a href="#adding-projct-folder-locations" id="toc-adding-projct-folder-locations" class="nav-link" data-scroll-target="#adding-projct-folder-locations"><span class="header-section-number">6.2</span> Adding Projct Folder locations</a></li>
-  <li><a href="#adding-custom-projct-folder-locations" id="toc-adding-custom-projct-folder-locations" class="nav-link" data-scroll-target="#adding-custom-projct-folder-locations"><span class="header-section-number">6.3</span> Adding Custom Projct Folder locations</a></li>
-  <li><a href="#edit-project-information" id="toc-edit-project-information" class="nav-link" data-scroll-target="#edit-project-information"><span class="header-section-number">6.4</span> Edit Project Information</a></li>
+  <li><a href="#adding-dependancies" id="toc-adding-dependancies" class="nav-link" data-scroll-target="#adding-dependancies"><span class="toc-section-number">5.1</span>  Adding Dependancies</a></li>
+  <li><a href="#adding-projct-folder-locations" id="toc-adding-projct-folder-locations" class="nav-link" data-scroll-target="#adding-projct-folder-locations"><span class="toc-section-number">5.2</span>  Adding Projct Folder locations</a></li>
+  <li><a href="#adding-custom-projct-folder-locations" id="toc-adding-custom-projct-folder-locations" class="nav-link" data-scroll-target="#adding-custom-projct-folder-locations"><span class="toc-section-number">5.3</span>  Adding Custom Projct Folder locations</a></li>
+  <li><a href="#edit-project-information" id="toc-edit-project-information" class="nav-link" data-scroll-target="#edit-project-information"><span class="toc-section-number">5.4</span>  Edit Project Information</a></li>
   </ul></li>
-  <li><a href="#sec-BuilderTab" id="toc-sec-BuilderTab" class="nav-link" data-scroll-target="#sec-BuilderTab"><span class="header-section-number">7</span> Builder Tab</a>
+  <li><a href="#sec-BuilderTab" id="toc-sec-BuilderTab" class="nav-link" data-scroll-target="#sec-BuilderTab"><span class="toc-section-number">6</span>  Builder Tab</a>
   <ul class="collapse">
-  <li><a href="#filter-modules" id="toc-filter-modules" class="nav-link" data-scroll-target="#filter-modules"><span class="header-section-number">7.1</span> Filter Modules</a></li>
-  <li><a href="#sec-AddingModules" id="toc-sec-AddingModules" class="nav-link" data-scroll-target="#sec-AddingModules"><span class="header-section-number">7.2</span> Adding Modules</a></li>
-  <li><a href="#copy-and-edit-module-todo-this-might-have-a-bug" id="toc-copy-and-edit-module-todo-this-might-have-a-bug" class="nav-link" data-scroll-target="#copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">7.3</span> Copy and Edit Module TODO this might have a bug</a></li>
-  <li><a href="#delete-module" id="toc-delete-module" class="nav-link" data-scroll-target="#delete-module"><span class="header-section-number">7.4</span> Delete Module</a></li>
-  <li><a href="#reorder-modules" id="toc-reorder-modules" class="nav-link" data-scroll-target="#reorder-modules"><span class="header-section-number">7.5</span> Reorder Modules</a></li>
-  <li><a href="#reset-pipeline" id="toc-reset-pipeline" class="nav-link" data-scroll-target="#reset-pipeline"><span class="header-section-number">7.6</span> Reset Pipeline</a></li>
-  <li><a href="#change-module-information" id="toc-change-module-information" class="nav-link" data-scroll-target="#change-module-information"><span class="header-section-number">7.7</span> Change Module Information</a></li>
+  <li><a href="#filter-modules" id="toc-filter-modules" class="nav-link" data-scroll-target="#filter-modules"><span class="toc-section-number">6.1</span>  Filter Modules</a></li>
+  <li><a href="#sec-AddingModules" id="toc-sec-AddingModules" class="nav-link" data-scroll-target="#sec-AddingModules"><span class="toc-section-number">6.2</span>  Adding Modules</a></li>
+  <li><a href="#copy-and-edit-module-todo-this-might-have-a-bug" id="toc-copy-and-edit-module-todo-this-might-have-a-bug" class="nav-link" data-scroll-target="#copy-and-edit-module-todo-this-might-have-a-bug"><span class="toc-section-number">6.3</span>  Copy and Edit Module TODO this might have a bug</a></li>
+  <li><a href="#delete-module" id="toc-delete-module" class="nav-link" data-scroll-target="#delete-module"><span class="toc-section-number">6.4</span>  Delete Module</a></li>
+  <li><a href="#reorder-modules" id="toc-reorder-modules" class="nav-link" data-scroll-target="#reorder-modules"><span class="toc-section-number">6.5</span>  Reorder Modules</a></li>
+  <li><a href="#reset-pipeline" id="toc-reset-pipeline" class="nav-link" data-scroll-target="#reset-pipeline"><span class="toc-section-number">6.6</span>  Reset Pipeline</a></li>
+  <li><a href="#change-module-information" id="toc-change-module-information" class="nav-link" data-scroll-target="#change-module-information"><span class="toc-section-number">6.7</span>  Change Module Information</a></li>
   </ul></li>
-  <li><a href="#sec-ExecuteTab" id="toc-sec-ExecuteTab" class="nav-link" data-scroll-target="#sec-ExecuteTab"><span class="header-section-number">8</span> Execute Tab</a>
+  <li><a href="#sec-ExecuteTab" id="toc-sec-ExecuteTab" class="nav-link" data-scroll-target="#sec-ExecuteTab"><span class="toc-section-number">7</span>  Execute Tab</a>
   <ul class="collapse">
-  <li><a href="#refresh" id="toc-refresh" class="nav-link" data-scroll-target="#refresh"><span class="header-section-number">8.1</span> Refresh</a></li>
-  <li><a href="#execute-loop" id="toc-execute-loop" class="nav-link" data-scroll-target="#execute-loop"><span class="header-section-number">8.2</span> Execute (Loop)</a></li>
-  <li><a href="#execute-parallel" id="toc-execute-parallel" class="nav-link" data-scroll-target="#execute-parallel"><span class="header-section-number">8.3</span> Execute (Parallel)</a></li>
-  <li><a href="#execute-file" id="toc-execute-file" class="nav-link" data-scroll-target="#execute-file"><span class="header-section-number">8.4</span> Execute (File)</a></li>
-  <li><a href="#open-import-folder" id="toc-open-import-folder" class="nav-link" data-scroll-target="#open-import-folder"><span class="header-section-number">8.5</span> Open Import Folder</a></li>
-  <li><a href="#open-export-folder" id="toc-open-export-folder" class="nav-link" data-scroll-target="#open-export-folder"><span class="header-section-number">8.6</span> Open Export Folder</a></li>
-  <li><a href="#open-in-eeglab" id="toc-open-in-eeglab" class="nav-link" data-scroll-target="#open-in-eeglab"><span class="header-section-number">8.7</span> Open in EEGLAB</a></li>
-  <li><a href="#plot-data" id="toc-plot-data" class="nav-link" data-scroll-target="#plot-data"><span class="header-section-number">8.8</span> Plot Data</a></li>
-  <li><a href="#view-electrode-map" id="toc-view-electrode-map" class="nav-link" data-scroll-target="#view-electrode-map"><span class="header-section-number">8.9</span> View Electrode Map</a></li>
-  <li><a href="#view-channel-spectra" id="toc-view-channel-spectra" class="nav-link" data-scroll-target="#view-channel-spectra"><span class="header-section-number">8.10</span> View Channel Spectra</a></li>
+  <li><a href="#refresh" id="toc-refresh" class="nav-link" data-scroll-target="#refresh"><span class="toc-section-number">7.1</span>  Refresh</a></li>
+  <li><a href="#execute-loop" id="toc-execute-loop" class="nav-link" data-scroll-target="#execute-loop"><span class="toc-section-number">7.2</span>  Execute (Loop)</a></li>
+  <li><a href="#execute-parallel" id="toc-execute-parallel" class="nav-link" data-scroll-target="#execute-parallel"><span class="toc-section-number">7.3</span>  Execute (Parallel)</a></li>
+  <li><a href="#execute-file" id="toc-execute-file" class="nav-link" data-scroll-target="#execute-file"><span class="toc-section-number">7.4</span>  Execute (File)</a></li>
+  <li><a href="#open-import-folder" id="toc-open-import-folder" class="nav-link" data-scroll-target="#open-import-folder"><span class="toc-section-number">7.5</span>  Open Import Folder</a></li>
+  <li><a href="#open-export-folder" id="toc-open-export-folder" class="nav-link" data-scroll-target="#open-export-folder"><span class="toc-section-number">7.6</span>  Open Export Folder</a></li>
+  <li><a href="#open-in-eeglab" id="toc-open-in-eeglab" class="nav-link" data-scroll-target="#open-in-eeglab"><span class="toc-section-number">7.7</span>  Open in EEGLAB</a></li>
+  <li><a href="#plot-data" id="toc-plot-data" class="nav-link" data-scroll-target="#plot-data"><span class="toc-section-number">7.8</span>  Plot Data</a></li>
+  <li><a href="#view-electrode-map" id="toc-view-electrode-map" class="nav-link" data-scroll-target="#view-electrode-map"><span class="toc-section-number">7.9</span>  View Electrode Map</a></li>
+  <li><a href="#view-channel-spectra" id="toc-view-channel-spectra" class="nav-link" data-scroll-target="#view-channel-spectra"><span class="toc-section-number">7.10</span>  View Channel Spectra</a></li>
   </ul></li>
-  <li><a href="#sec-BrowseTab" id="toc-sec-BrowseTab" class="nav-link" data-scroll-target="#sec-BrowseTab"><span class="header-section-number">9</span> Browse Tab</a>
+  <li><a href="#sec-BrowseTab" id="toc-sec-BrowseTab" class="nav-link" data-scroll-target="#sec-BrowseTab"><span class="toc-section-number">8</span>  Browse Tab</a>
   <ul class="collapse">
-  <li><a href="#select-project-folder" id="toc-select-project-folder" class="nav-link" data-scroll-target="#select-project-folder"><span class="header-section-number">9.1</span> Select Project Folder</a></li>
-  <li><a href="#refresh-1" id="toc-refresh-1" class="nav-link" data-scroll-target="#refresh-1"><span class="header-section-number">9.2</span> Refresh</a></li>
-  <li><a href="#open-selected-folder" id="toc-open-selected-folder" class="nav-link" data-scroll-target="#open-selected-folder"><span class="header-section-number">9.3</span> Open Selected Folder</a></li>
-  <li><a href="#open-in-eeglab-1" id="toc-open-in-eeglab-1" class="nav-link" data-scroll-target="#open-in-eeglab-1"><span class="header-section-number">9.4</span> Open in EEGLAB</a></li>
-  <li><a href="#plot-data-1" id="toc-plot-data-1" class="nav-link" data-scroll-target="#plot-data-1"><span class="header-section-number">9.5</span> Plot Data</a></li>
-  <li><a href="#view-electrode-map-1" id="toc-view-electrode-map-1" class="nav-link" data-scroll-target="#view-electrode-map-1"><span class="header-section-number">9.6</span> View Electrode Map</a></li>
-  <li><a href="#view-channel-spectra-1" id="toc-view-channel-spectra-1" class="nav-link" data-scroll-target="#view-channel-spectra-1"><span class="header-section-number">9.7</span> View Channel Spectra</a></li>
-  <li><a href="#close-windows" id="toc-close-windows" class="nav-link" data-scroll-target="#close-windows"><span class="header-section-number">9.8</span> Close Windows</a></li>
+  <li><a href="#select-project-folder" id="toc-select-project-folder" class="nav-link" data-scroll-target="#select-project-folder"><span class="toc-section-number">8.1</span>  Select Project Folder</a></li>
+  <li><a href="#refresh-1" id="toc-refresh-1" class="nav-link" data-scroll-target="#refresh-1"><span class="toc-section-number">8.2</span>  Refresh</a></li>
+  <li><a href="#open-selected-folder" id="toc-open-selected-folder" class="nav-link" data-scroll-target="#open-selected-folder"><span class="toc-section-number">8.3</span>  Open Selected Folder</a></li>
+  <li><a href="#open-in-eeglab-1" id="toc-open-in-eeglab-1" class="nav-link" data-scroll-target="#open-in-eeglab-1"><span class="toc-section-number">8.4</span>  Open in EEGLAB</a></li>
+  <li><a href="#plot-data-1" id="toc-plot-data-1" class="nav-link" data-scroll-target="#plot-data-1"><span class="toc-section-number">8.5</span>  Plot Data</a></li>
+  <li><a href="#view-electrode-map-1" id="toc-view-electrode-map-1" class="nav-link" data-scroll-target="#view-electrode-map-1"><span class="toc-section-number">8.6</span>  View Electrode Map</a></li>
+  <li><a href="#view-channel-spectra-1" id="toc-view-channel-spectra-1" class="nav-link" data-scroll-target="#view-channel-spectra-1"><span class="toc-section-number">8.7</span>  View Channel Spectra</a></li>
+  <li><a href="#close-windows" id="toc-close-windows" class="nav-link" data-scroll-target="#close-windows"><span class="toc-section-number">8.8</span>  Close Windows</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -167,6 +195,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="sflogo.png" class="img-fluid figure-img" style="width:30.0%"></p>
+</figure>
+</div>
 <section id="introduction" class="level1" data-number="1">
 <h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
 <section id="a-reproducible-eeg-processing-framework" class="level2" data-number="1.1">
@@ -207,10 +240,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li><p>Install SignalFlow and other toolkits. See <a href="#sec-InstallSignalFlow">Section&nbsp;2</a>.</p></li>
 <li><p>Organize EEG files. See <a href="#sec-OrganizeFiles">Section&nbsp;3</a>.</p></li>
-<li><p>Start the GUI. See <a href="#sec-StartGUI">Section&nbsp;5</a> for more details.</p></li>
-<li><p>Setup toolboxes, dependancies, folders, and project. See <a href="#sec-SetupTab">Section&nbsp;6</a> for more details.</p></li>
-<li><p>Navigate to the Builder tab. See <a href="#sec-BuilderTab">Section&nbsp;7</a> for more details.</p></li>
-<li><p>Add the following modules in order, for information on adding modules to the pipeline see <a href="#sec-AddingModules">Section&nbsp;7.2</a>.</p>
+<li><p>Start the GUI. See <a href="#sec-StartGUI">Section&nbsp;4</a> for more details.</p></li>
+<li><p>Setup toolboxes, dependancies, folders, and project. See <a href="#sec-SetupTab">Section&nbsp;5</a> for more details.</p></li>
+<li><p>Navigate to the Builder tab. See <a href="#sec-BuilderTab">Section&nbsp;6</a> for more details.</p></li>
+<li><p>Add the following modules in order, for information on adding modules to the pipeline see <a href="#sec-AddingModules">Section&nbsp;6.2</a>.</p>
 <ol type="1">
 <li>Import <strong>Insert EEG file type</strong> File</li>
 <li>Resample EEG data (500 Hz)</li>
@@ -222,10 +255,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>TODO Add ERP to SignalFlow</li>
 <li>Export Set</li>
 </ol></li>
-<li><p>Navigate to the Execute tab. See <a href="#sec-ExecuteTab">Section&nbsp;8</a> for more details.</p></li>
+<li><p>Navigate to the Execute tab. See <a href="#sec-ExecuteTab">Section&nbsp;7</a> for more details.</p></li>
 <li><p>Left-click the “Execute (Loop)” button.</p></li>
 <li><p>Wait for pipeline to complete. You should be able to watch the Matlab Command Window.</p></li>
-<li><p>Navigate to the Browse tab. See <a href="#sec-BrowseTab">Section&nbsp;9</a> for more details.</p></li>
+<li><p>Navigate to the Browse tab. See <a href="#sec-BrowseTab">Section&nbsp;8</a> for more details.</p></li>
 <li><p>View your data using the tools provided.</p></li>
 </ol>
 </section>
@@ -352,33 +385,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>Run the SignalFlow application.</strong> <img src="BasicQuiPictures/RunSignalFlow.png" class="img-fluid" alt="Run SignalFlow"></p>
 <p>Right-click on the “SignalFlowEEG.mlapp” file and select “Run” from the context menu.</p></li>
 <li><p><strong>Check SignalFlow Application.</strong></p>
-<img src="BasicQuiPictures/OpenSetupPage.png" class="img-fluid" alt="The SignalFlow Interface">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="BasicQuiPictures/OpenSetupPage.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">The SignalFlow Interface</figcaption><p></p>
+</figure>
+</div>
 <p>The SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the “SignalFlowEEG.mlapp” file is present.</p></li>
 </ol>
 <p>With these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB.</p>
 </section>
-<section id="sec-StartGUI" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Starting the GUI</h1>
-<ol type="1">
-<li>Open Matlab.</li>
-<li>Navigate to SignalFlow Directory.
-<ol type="i">
-<li>This is usually in the Documents/Github folder.
-<ol type="A">
-<li>For Windows: Go to C:\Users\<strong>YourUsername</strong>\Documents\GitHub\SignalFlow_Modules_Dev</li>
-<li>For Linux: Go to /home/<strong>YourUsername</strong>/Documents/GitHub/SignalFlow_Modules_Dev</li>
-</ol></li>
-</ol></li>
-<li>In MATLAB, locate the file viewer on the left side and scroll to the bottom.</li>
-<li>Find the file named “SignalFlowEEG.mlapp”, right-click on it, and select “Run”.</li>
-<li>The SignalFlow GUI should open up.</li>
-</ol>
-</section>
-<section id="sec-SetupTab" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Setup Tab</h1>
+<section id="sec-SetupTab" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Setup Tab</h1>
 <p><img src="BasicQuiPictures/SetupTab.png" class="img-fluid"> * The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline to their indidual needs.</p>
-<section id="adding-dependancies" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="adding-dependancies"><span class="header-section-number">6.1</span> Adding Dependancies</h2>
+<section id="adding-dependancies" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="adding-dependancies"><span class="header-section-number">5.1</span> Adding Dependancies</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Decide which toolbox/dependency you would like to add . A. A Red circle indicated the toolbox/dependency has not been added. B. A Green circle indicates that the toolbox/dependency has been added.</li>
@@ -388,8 +409,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The circle should turn from red to green, may take a second due to SignalFLow checking if it’s the right toolbox.</li>
 </ol>
 </section>
-<section id="adding-projct-folder-locations" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="adding-projct-folder-locations"><span class="header-section-number">6.2</span> Adding Projct Folder locations</h2>
+<section id="adding-projct-folder-locations" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="adding-projct-folder-locations"><span class="header-section-number">5.2</span> Adding Projct Folder locations</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Decide which folder you would like to add. A. A Red circle indicated the folder has not been added. B. A Green circle indicates that the folder has been added.</li>
@@ -399,8 +420,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The circle will turn from red to green.</li>
 </ol>
 </section>
-<section id="adding-custom-projct-folder-locations" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="adding-custom-projct-folder-locations"><span class="header-section-number">6.3</span> Adding Custom Projct Folder locations</h2>
+<section id="adding-custom-projct-folder-locations" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="adding-custom-projct-folder-locations"><span class="header-section-number">5.3</span> Adding Custom Projct Folder locations</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Left-click the “Add Custom Folder” button.</li>
@@ -412,8 +433,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>A new project foler will be added. The circle will turn from red to green.</li>
 </ol>
 </section>
-<section id="edit-project-information" class="level2" data-number="6.4">
-<h2 data-number="6.4" class="anchored" data-anchor-id="edit-project-information"><span class="header-section-number">6.4</span> Edit Project Information</h2>
+<section id="edit-project-information" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="edit-project-information"><span class="header-section-number">5.4</span> Edit Project Information</h2>
 <ol type="1">
 <li>Navigate to the “Setup” Tab.</li>
 <li>Enter a Title for your project.</li>
@@ -423,11 +444,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="sec-BuilderTab" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Builder Tab</h1>
+<section id="sec-BuilderTab" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Builder Tab</h1>
 <p><img src="BasicQuiPictures/BuilderTab.png" class="img-fluid"> * The Builder tab is used to create the pipeline and edit modules. Most work is done in this tab.</p>
-<section id="filter-modules" class="level2" data-number="7.1">
-<h2 data-number="7.1" class="anchored" data-anchor-id="filter-modules"><span class="header-section-number">7.1</span> Filter Modules</h2>
+<section id="filter-modules" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="filter-modules"><span class="header-section-number">6.1</span> Filter Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the filter dropdown.</li>
@@ -435,8 +456,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Module Libraries will only show modules that agree with your filter.</li>
 </ol>
 </section>
-<section id="sec-AddingModules" class="level2" data-number="7.2">
-<h2 data-number="7.2" class="anchored" data-anchor-id="sec-AddingModules"><span class="header-section-number">7.2</span> Adding Modules</h2>
+<section id="sec-AddingModules" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-AddingModules"><span class="header-section-number">6.2</span> Adding Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to use.
@@ -447,8 +468,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The module will the be added to the pipeline. It will show up in the Pipeline Builder.</li>
 </ol>
 </section>
-<section id="copy-and-edit-module-todo-this-might-have-a-bug" class="level2" data-number="7.3">
-<h2 data-number="7.3" class="anchored" data-anchor-id="copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">7.3</span> Copy and Edit Module TODO this might have a bug</h2>
+<section id="copy-and-edit-module-todo-this-might-have-a-bug" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="copy-and-edit-module-todo-this-might-have-a-bug"><span class="header-section-number">6.3</span> Copy and Edit Module TODO this might have a bug</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to use.
@@ -462,8 +483,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module file should show up in the User module library.</li>
 </ol>
 </section>
-<section id="delete-module" class="level2" data-number="7.4">
-<h2 data-number="7.4" class="anchored" data-anchor-id="delete-module"><span class="header-section-number">7.4</span> Delete Module</h2>
+<section id="delete-module" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="delete-module"><span class="header-section-number">6.4</span> Delete Module</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to delete.
@@ -474,8 +495,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module will be removed from the pipeline.</li>
 </ol>
 </section>
-<section id="reorder-modules" class="level2" data-number="7.5">
-<h2 data-number="7.5" class="anchored" data-anchor-id="reorder-modules"><span class="header-section-number">7.5</span> Reorder Modules</h2>
+<section id="reorder-modules" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="reorder-modules"><span class="header-section-number">6.5</span> Reorder Modules</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the module you would like to reorder.
@@ -487,16 +508,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The Module will be reordered in the pipeline.</li>
 </ol>
 </section>
-<section id="reset-pipeline" class="level2" data-number="7.6">
-<h2 data-number="7.6" class="anchored" data-anchor-id="reset-pipeline"><span class="header-section-number">7.6</span> Reset Pipeline</h2>
+<section id="reset-pipeline" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="reset-pipeline"><span class="header-section-number">6.6</span> Reset Pipeline</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Left-click the “Reset Pipeline” button.</li>
 <li>All Modules within the Pipeline Builder will be deleted.</li>
 </ol>
 </section>
-<section id="change-module-information" class="level2" data-number="7.7">
-<h2 data-number="7.7" class="anchored" data-anchor-id="change-module-information"><span class="header-section-number">7.7</span> Change Module Information</h2>
+<section id="change-module-information" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="change-module-information"><span class="header-section-number">6.7</span> Change Module Information</h2>
 <ol type="1">
 <li>Navigate to the “Builder” Tab.</li>
 <li>Enter the new Module Name.</li>
@@ -507,11 +528,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 </section>
 </section>
-<section id="sec-ExecuteTab" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Execute Tab</h1>
+<section id="sec-ExecuteTab" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Execute Tab</h1>
 <p><img src="BasicQuiPictures/ExecuteTab.png" class="img-fluid"> * The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.</p>
-<section id="refresh" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="refresh"><span class="header-section-number">8.1</span> Refresh</h2>
+<section id="refresh" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="refresh"><span class="header-section-number">7.1</span> Refresh</h2>
 <ul>
 <li>This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
 <ol type="A">
@@ -519,22 +540,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="execute-loop" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="execute-loop"><span class="header-section-number">8.2</span> Execute (Loop)</h2>
+<section id="execute-loop" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="execute-loop"><span class="header-section-number">7.2</span> Execute (Loop)</h2>
 <ul>
 <li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time.</li>
 <li>Use this if there are steps that require user input. A. Examples of this include: Remove channels, remove epochs, etc.</li>
 </ul>
 </section>
-<section id="execute-parallel" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="execute-parallel"><span class="header-section-number">8.3</span> Execute (Parallel)</h2>
+<section id="execute-parallel" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="execute-parallel"><span class="header-section-number">7.3</span> Execute (Parallel)</h2>
 <ul>
 <li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time.</li>
 <li>This should only be used when the follwoing are true. A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. B. You have a high performance computer. C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer. D. You have the Matlab Parralel Processing Toolbox</li>
 </ul>
 </section>
-<section id="execute-file" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="execute-file"><span class="header-section-number">8.4</span> Execute (File)</h2>
+<section id="execute-file" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="execute-file"><span class="header-section-number">7.4</span> Execute (File)</h2>
 <ul>
 <li>This button is used to execute the pipeline on a selected eeg file in the import directory.</li>
 <li>To use this button:
@@ -544,14 +565,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-import-folder" class="level2" data-number="8.5">
-<h2 data-number="8.5" class="anchored" data-anchor-id="open-import-folder"><span class="header-section-number">8.5</span> Open Import Folder</h2>
+<section id="open-import-folder" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="open-import-folder"><span class="header-section-number">7.5</span> Open Import Folder</h2>
 <ul>
 <li>This button is used to open the import directory in the computers file explorer.</li>
 </ul>
 </section>
-<section id="open-export-folder" class="level2" data-number="8.6">
-<h2 data-number="8.6" class="anchored" data-anchor-id="open-export-folder"><span class="header-section-number">8.6</span> Open Export Folder</h2>
+<section id="open-export-folder" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="open-export-folder"><span class="header-section-number">7.6</span> Open Export Folder</h2>
 <ul>
 <li>This button is used to open the selected directory in the computers file explorer.</li>
 <li>To use this button:
@@ -561,8 +582,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-in-eeglab" class="level2" data-number="8.7">
-<h2 data-number="8.7" class="anchored" data-anchor-id="open-in-eeglab"><span class="header-section-number">8.7</span> Open in EEGLAB</h2>
+<section id="open-in-eeglab" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="open-in-eeglab"><span class="header-section-number">7.7</span> Open in EEGLAB</h2>
 <ul>
 <li>This button is used to open a selected eeg file in the EEGLAB gui.</li>
 <li>To use this button:
@@ -572,8 +593,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="plot-data" class="level2" data-number="8.8">
-<h2 data-number="8.8" class="anchored" data-anchor-id="plot-data"><span class="header-section-number">8.8</span> Plot Data</h2>
+<section id="plot-data" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="plot-data"><span class="header-section-number">7.8</span> Plot Data</h2>
 <ul>
 <li>This button is used to plot data for a selected eeg file.</li>
 <li>To use this button:
@@ -583,8 +604,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-electrode-map" class="level2" data-number="8.9">
-<h2 data-number="8.9" class="anchored" data-anchor-id="view-electrode-map"><span class="header-section-number">8.9</span> View Electrode Map</h2>
+<section id="view-electrode-map" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="view-electrode-map"><span class="header-section-number">7.9</span> View Electrode Map</h2>
 <ul>
 <li>This button is used to view the electrode map for a selected eeg file.</li>
 <li>To use this button:
@@ -594,8 +615,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-channel-spectra" class="level2" data-number="8.10">
-<h2 data-number="8.10" class="anchored" data-anchor-id="view-channel-spectra"><span class="header-section-number">8.10</span> View Channel Spectra</h2>
+<section id="view-channel-spectra" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="view-channel-spectra"><span class="header-section-number">7.10</span> View Channel Spectra</h2>
 <ul>
 <li>This button is used to view the channel spectra for a selected eeg file.</li>
 <li>To use this button:
@@ -606,11 +627,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 </section>
-<section id="sec-BrowseTab" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Browse Tab</h1>
+<section id="sec-BrowseTab" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Browse Tab</h1>
 <p><img src="BasicQuiPictures/BrowseTab.png" class="img-fluid"> * The browse tab is used to analyze and look at data. The user has access to many tools to aid with this.</p>
-<section id="select-project-folder" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="select-project-folder"><span class="header-section-number">9.1</span> Select Project Folder</h2>
+<section id="select-project-folder" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="select-project-folder"><span class="header-section-number">8.1</span> Select Project Folder</h2>
 <ol type="1">
 <li>Navigate to the “Browse” Tab.</li>
 <li>Left-click the current folder dropdown.</li>
@@ -618,8 +639,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The file catalog will be updated based on your selection.</li>
 </ol>
 </section>
-<section id="refresh-1" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="refresh-1"><span class="header-section-number">9.2</span> Refresh</h2>
+<section id="refresh-1" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="refresh-1"><span class="header-section-number">8.2</span> Refresh</h2>
 <ul>
 <li>This button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.
 <ol type="A">
@@ -627,8 +648,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-selected-folder" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="open-selected-folder"><span class="header-section-number">9.3</span> Open Selected Folder</h2>
+<section id="open-selected-folder" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="open-selected-folder"><span class="header-section-number">8.3</span> Open Selected Folder</h2>
 <ul>
 <li>This button is used to open the selected directory in the computers file explorer.</li>
 <li>To use this button:
@@ -638,8 +659,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="open-in-eeglab-1" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="open-in-eeglab-1"><span class="header-section-number">9.4</span> Open in EEGLAB</h2>
+<section id="open-in-eeglab-1" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="open-in-eeglab-1"><span class="header-section-number">8.4</span> Open in EEGLAB</h2>
 <ul>
 <li>This button is used to open a selected eeg file in the EEGLAB gui.</li>
 <li>To use this button:
@@ -649,8 +670,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="plot-data-1" class="level2" data-number="9.5">
-<h2 data-number="9.5" class="anchored" data-anchor-id="plot-data-1"><span class="header-section-number">9.5</span> Plot Data</h2>
+<section id="plot-data-1" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="plot-data-1"><span class="header-section-number">8.5</span> Plot Data</h2>
 <ul>
 <li>This button is used to plot data for a selected eeg file.</li>
 <li>To use this button:
@@ -660,8 +681,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-electrode-map-1" class="level2" data-number="9.6">
-<h2 data-number="9.6" class="anchored" data-anchor-id="view-electrode-map-1"><span class="header-section-number">9.6</span> View Electrode Map</h2>
+<section id="view-electrode-map-1" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="view-electrode-map-1"><span class="header-section-number">8.6</span> View Electrode Map</h2>
 <ul>
 <li>This button is used to view the electrode map for a selected eeg file.</li>
 <li>To use this button:
@@ -671,8 +692,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="view-channel-spectra-1" class="level2" data-number="9.7">
-<h2 data-number="9.7" class="anchored" data-anchor-id="view-channel-spectra-1"><span class="header-section-number">9.7</span> View Channel Spectra</h2>
+<section id="view-channel-spectra-1" class="level2" data-number="8.7">
+<h2 data-number="8.7" class="anchored" data-anchor-id="view-channel-spectra-1"><span class="header-section-number">8.7</span> View Channel Spectra</h2>
 <ul>
 <li>This button is used to view the channel spectra for a selected eeg file.</li>
 <li>To use this button:
@@ -682,8 +703,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol></li>
 </ul>
 </section>
-<section id="close-windows" class="level2" data-number="9.8">
-<h2 data-number="9.8" class="anchored" data-anchor-id="close-windows"><span class="header-section-number">9.8</span> Close Windows</h2>
+<section id="close-windows" class="level2" data-number="8.8">
+<h2 data-number="8.8" class="anchored" data-anchor-id="close-windows"><span class="header-section-number">8.8</span> Close Windows</h2>
 <ul>
 <li>This button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed.</li>
 </ul>
@@ -719,23 +740,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
-      }
-    }
-    return false;
-  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
+    target: function(trigger) {
+      return trigger.previousElementSibling;
     }
   });
   clipboard.on('success', function(e) {
@@ -800,92 +807,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
