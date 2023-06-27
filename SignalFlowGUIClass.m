@@ -1270,6 +1270,8 @@ classdef SignalFlowGUIClass
 
             labelStruct = obj.sfControl.Project_GetFolderLabels;
 
+            sfdir = obj.sfControl.setup.sfdir;
+
             % user can select a path or cancel, if they cancel the loop is
             % broken but the path is still assigned missing
             directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'),'Select the Folder your plug-in is in:');
@@ -1277,6 +1279,13 @@ classdef SignalFlowGUIClass
                 obj.sfControl.proj.(labelStruct(i).tag) = missing;
             else
                 obj.sfControl.proj.(labelStruct(i).tag) = directoryPath;
+            end
+
+            % Check if directory exists
+            UserSavedFolders = fullfile(sfdir,'UserSavedFolders');
+            if ~exist(UserSavedFolders, 'dir')
+                % If directory does not exist, create it
+                mkdir(UserSavedFolders);
             end
 
             % if the user selects a directory, it is first checked for eing
