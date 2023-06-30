@@ -67,6 +67,8 @@ In the following sections, we will dive deeper into each of these steps:
 
 1. Setup toolboxes, dependancies, folders, and project. See @sec-SetupTab for more details.
 
+1. Importing data and setting up project folders
+
 4. Navigate to the Builder tab. See @sec-BuilderTab for more details.
 5. Add the following modules in order, for information on adding modules to the pipeline see @sec-AddingModules.
     1. Import **Insert EEG file type** File
