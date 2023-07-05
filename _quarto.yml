@@ -1,6 +1,6 @@
 project:
   type: book
-  output-dir: ../docs
+  output-dir: docs/
 
 book:
   title: "SignalFlow EEG"
@@ -13,20 +13,20 @@ book:
   sharing: [twitter, facebook]
   sidebar:
     title: " "
-    logo: sflogo_transparent.png
+    logo: book/sflogo_transparent.png
     style: docked
     background: light
     alignment: center
   comments:
     hypothesis: true
   chapters:
-    - index.qmd
-    - intro.qmd
-    - vep_walkthrough.qmd
-    - references.qmd
+    - book/index.qmd
+    - book/intro.qmd
+    - book/vep_walkthrough.qmd
+    - book/references.qmd
   
 
-bibliography: references.bib
+bibliography: book/references.bib
 
 format:
   html:
