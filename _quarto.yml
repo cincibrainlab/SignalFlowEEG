@@ -20,7 +20,7 @@ book:
   comments:
     hypothesis: true
   chapters:
-    - book/index.qmd
+    - index.qmd
     - book/intro.qmd
     - book/vep_walkthrough.qmd
     - book/references.qmd
