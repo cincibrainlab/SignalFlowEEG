@@ -3,22 +3,39 @@ project:
   output-dir: ../docs
 
 book:
-  title: "book"
-  author: "Norah Jones"
+  title: "SignalFlow EEG"
+  author: "E. Pedapati"
   date: "6/30/2023"
+  search: true
+  repo-url: https://github.com/cincibrainlab/SignalFlowEEG
+  repo-actions: [edit]
+  downloads: [pdf, epub]
+  sharing: [twitter, facebook]
+  sidebar:
+    title: " "
+    logo: sflogo_transparent.png
+    style: docked
+    background: light
+    alignment: center
+  comments:
+    hypothesis: true
   chapters:
     - index.qmd
     - intro.qmd
-    - summary.qmd
+    - vep_walkthrough.qmd
     - references.qmd
+  
 
 bibliography: references.bib
 
 format:
   html:
-    theme: cosmo
+    theme: flatly
+    number-offset: 1
   pdf:
     documentclass: scrreprt
+    number-offset: 1
+
 
 
 
