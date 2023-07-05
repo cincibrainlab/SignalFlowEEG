@@ -1,0 +1,435 @@
+
+## Walkthrough
+
+1. Install SignalFlow and other toolkits. See @sec-InstallSignalFlow. 
+
+1. Organize EEG files. See @sec-OrganizeFiles.
+
+1. Start the GUI. See @sec-StartGUI for more details. 
+
+1. Setup toolboxes, dependancies, folders, and project. See @sec-SetupTab for more details.
+
+1. Importing data and setting up project folders
+
+4. Navigate to the Builder tab. See @sec-BuilderTab for more details.
+5. Add the following modules in order, for information on adding modules to the pipeline see @sec-AddingModules.
+    1. Import **Insert EEG file type** File
+    2. Resample EEG data (500 Hz)
+    3. Highpass Filter (0.3 Hz)
+    4. Lowpass Filter (35 HZ)
+    5. Wavelet Denoise
+    6. Artifact Subspace Reconstruction
+    7. Channel Interpolation
+    8. TODO Add ERP to SignalFlow
+    9. Export Set
+6. Navigate to the Execute tab. See @sec-ExecuteTab for more details.
+7. Left-click the "Execute (Loop)" button.
+8. Wait for pipeline to complete. You should be able to watch the Matlab Command Window.
+9. Navigate to the Browse tab. See @sec-BrowseTab for more details.
+10. View your data using the tools provided. 
+
+
+## Downloading SignalFlow from GitHub {#sec-InstallSignalFlow}
+
+## Overview
+
+The source code for SignalFlow is hosted on GitHub. There are two primary methods to acquire the code - either through utilizing Git software or directly downloading from the website. However, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process.
+
+## Method 1: Using Git
+
+1. **Check if Git is installed:**
+
+   Open a terminal or command prompt and run the following command:
+
+   ```bash
+   git --version
+   ```
+
+   If Git is installed, you will see the version number. If not, proceed to the next step.
+
+2. **Install Git:**
+
+    Download the install from the official Git website for your operating system at [official Git website](https://git-scm.com).
+
+3. **Create a 'github' directory:**
+    Choose a location on your drive that will be used to store your toolboxes. 
+
+   Run use your file explorer or run following command to create a new directory called 'github' and navigate to it:
+
+   ```bash
+   mkdir github
+   cd github
+   ```
+
+4. **Clone the SignalFlow repository with submodules:**
+
+   Run the following command to clone the repository and its submodules:
+
+   ```bash
+   git clone --recurse-submodules https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+   ```
+
+   This will clone the repository and its submodules into the 'github' directory. The output will be displayed in the terminal or command prompt.
+
+5. **Clone other necessary toolkits:**
+In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:
+
+- **EEGLAB**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/sccn/eeglab.git
+    ```
+
+- **Brainstorm**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/brainstorm-tools/brainstorm3.git
+    ```
+
+- **HAPPE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/PINE-Lab/HAPPE.git
+    ```
+
+- **MADE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git
+    ```
+After cloning these repositories, you'll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:
+
+    ```bash
+    git pull --recurse-submodules
+    ```
+
+## Method 2: Downloading Toolkits as Zip Files 
+
+If you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.
+
+Here are the steps to download and organize the repositories:
+
+1. Navigate to each repository's GitHub page in your web browser.
+
+2. Click on the `Code` button and then click `Download ZIP`.
+
+3. Once the download is complete, extract the ZIP file.
+
+4. Create a new folder in your `github` directory for each extracted repository. The name of the folder should *match* the repository name.
+
+Here are the links to each repository:
+- **SignalFlow**: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+- **VHTP**: https://github.com/cincibrainlab/vhtp
+- **VHTP Dependencies**: https://github.com/cincibrainlab/vhtp_dependencies
+- **HAPPE Pipeline**: https://github.com/PINE-Lab/HAPPE
+- **MADE Pipeline**: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline
+
+Note: For the VHTP and VHTP Dependencies, make sure to place these folders in the `SignalFlowEEG_HBCD` folder, as they are necessary for certain SignalFlow operations. 
+
+EEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.
+
+- **EEGLAB**: https://sccn.ucsd.edu/eeglab/index.php
+- **Brainstorm**:https://neuroimage.usc.edu/brainstorm/Introduction
+
+After extraction, you will have the complete repository with all its files and folders available on your computer.
+
+# Preparing and Organizing Files {#sec-OrganizeFiles}
+
+## Overview
+
+When working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self). 
+
+Considering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: `data`, `temp`, and `results`. 
+
+These directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a `readme.txt` file in the main folder and  describing the contents and purpose of the project and folders.
+
+Here's a simple, recommended structure:
+
+- ProjectName/
+  - readme.txt
+  - data/
+  - temp/
+  - results/
+
+The `data` directory should contain all the raw data that will be processed. The `temp` directory will store any temporary files created during data processing, and the `results` directory will hold the output from your analyses.
+
+## Using the BIDS format
+
+The *Brain Imaging Data Structure (BIDS)* is a formal way to name and organize neuroimaging data and  metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.
+
+SignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.
+``` bash
+- ProjectName/
+  - readme.txt
+  - data/
+    - BIDS/
+      - sub-01/
+        - ses-01/
+          - eeg/
+            - sub-01_ses-01_task-mytask_eeg.edf
+            - sub-01_ses-01_task-mytask_channels.tsv
+            - sub-01_ses-01_task-mytask_electrodes.tsv
+            - sub-01_ses-01_task-mytask_events.tsv
+            - ...
+      - ...
+  - temp/
+  - results/
+```
+SignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility ([util_htpDirListing.m](https://github.com/cincibrainlab/vhtp/blob/main/util_htpDirListing.m)) can create a custom file list from a BIDS directory structure. 
+
+Remember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows.
+
+# Starting the SignalFlow Application {#sec-StartGUI}
+
+Follow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:
+
+1. **Open MATLAB.**
+
+    Launch the MATLAB software from your applications menu or desktop shortcut.
+
+2. **Navigate to the SignalFlow Directory.**
+
+    The SignalFlow directory is typically located within the `GitHub` folder in your `Documents`. This might vary depending on where you cloned the repository. The paths are generally as follows:
+
+    - For Windows: 
+    `C:\\Users\\**YourUsername**\\Documents\\github\\SignalFlow_HBCD`
+      
+    - For Linux or macOS: 
+    `/home/**YourUsername**/Documents/github/SignalFlow_HBCD`
+
+    Replace `**YourUsername**` with your actual username on your computer.
+
+    To navigate to this directory in MATLAB, you can use the `cd` (change directory) command in MATLAB's Command Window:
+
+    ```matlab
+    cd('path-to-directory')
+    ```
+
+    Replace `'path-to-directory'` with the appropriate path above.
+
+3. **Find the SignalFlow application file.**
+
+    In MATLAB's Current Folder pane (typically located on the left side of the interface), scroll to locate the SignalFlow application file named "SignalFlowEEG.mlapp".
+
+4. **Run the SignalFlow application.**
+    ![Run SignalFlow](assets/images/RunSignalFlow.png)
+
+    Right-click on the "SignalFlowEEG.mlapp" file and select "Run" from the context menu.
+
+5. **Check SignalFlow Application.**
+
+    ![The SignalFlow Interface](assets/images/OpenSetupPage.png)
+
+
+    The SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the "SignalFlowEEG.mlapp" file is present.
+
+With these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB.
+
+
+
+
+# Setup Tab {#sec-SetupTab}
+![](assets/images/SetupTab.png)
+*  The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline to their indidual needs.
+
+## Adding Dependancies 
+1. Navigate to the "Setup" Tab.
+2. Decide which toolbox/dependency you would like to add .
+    A. A Red circle indicated the toolbox/dependency has not been added.
+    B. A Green circle indicates that the toolbox/dependency has been added.
+3. Left-click on the "Click to Fix: *Insert Toolbox*".
+4. File Explorer will open.
+5. Select the directory that contains your toolbox. Click "Open" in the file explorer.
+    A. This can vary based on the toolbox, contact us if you have issues .
+6. The circle should turn from red to green, may take a second due to SignalFLow checking if it's the right toolbox.
+
+## Adding Projct Folder locations
+1. Navigate to the "Setup" Tab.
+2. Decide which folder you would like to add.
+    A. A Red circle indicated the folder has not been added.
+    B. A Green circle indicates that the folder has been added.
+3. Left-click on the "Click to Fix: *Insert folder*".
+4. File Explorer will open.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. The circle will turn from red to green.
+
+## Adding Custom Projct Folder locations
+1. Navigate to the "Setup" Tab.
+2. Left-click the "Add Custom Folder" button.
+3. A Matlab figure will open.
+4. Left-click the "Select Directory" button.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. Enter a tag. A tag is an easily recognizable name used for selecting this Projct Folder later.
+7. Left-click the "Confirm" button.
+8. A new project foler will be added. The circle will turn from red to green.
+
+## Edit Project Information
+1. Navigate to the "Setup" Tab.
+2. Enter a Title for your project.
+3. Enter a Description for you project.
+4. Enter an Author for your project. 
+5. Left-click the "Save" button.
+
+# Builder Tab {#sec-BuilderTab}
+![](assets/images/BuilderTab.png)
+*  The Builder tab is used to create the pipeline and edit modules. Most work is done in this tab.
+
+## Filter Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the filter dropdown.
+3. Select the filter you would like to use.
+4. Module Libraries will only show modules that agree with your filter.
+
+## Adding Modules {#sec-AddingModules}
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will the be added to the pipeline. It will show up in the Pipeline Builder.
+
+## Copy and Edit Module TODO this might have a bug
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will then be opened in Matlab.
+5. Edit any parameters or code.
+6. Save the Module file. 
+7. The Module file should show up in the User module library.
+
+## Delete Module 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to delete.
+    A.  This can only be from the Pipeline Builder
+3. Below the Pipeline Builder, there is an "Delete Module" button, left-click it.
+4. The Module will be removed from the pipeline.
+
+## Reorder Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to reorder.
+    A.  This can only be from the Pipeline Builder.
+3. To the right of the Pipeline Builder, there are 2 arrows.
+4. Left-click the arrow that corresponds with the direction you would like to move the module.
+5. The Module will be reordered in the pipeline.
+
+## Reset Pipeline 
+1. Navigate to the "Builder" Tab.
+2. Left-click the "Reset Pipeline" button.
+3. All Modules within the Pipeline Builder will be deleted.
+
+## Change Module Information
+1. Navigate to the "Builder" Tab.
+2. Enter the new Module Name.
+3. If the module is an outflow module.
+    A. Select the needed output folder tag in the dropdown.
+4. Left-click the "Update" button.
+5. Your changes will be saved. 
+6. If you would like to return to default name and folder tag
+    A. Left-click the "Default" button.
+
+# Execute Tab {#sec-ExecuteTab}
+![](assets/images/ExecuteTab.png)
+*  The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.
+
+## Refresh
+* This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Execute (Loop)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time. 
+* Use this if there are steps that require user input.
+    A. Examples of this include: Remove channels, remove epochs, etc.
+
+## Execute (Parallel)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time. 
+* This should only be used when the follwoing are true.
+    A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. 
+    B. You have a high performance computer.
+    C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer.
+    D. You have the Matlab Parralel Processing Toolbox  
+
+## Execute (File)
+* This button is used to execute the pipeline on a selected eeg file in the import directory.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Execute (File)" button.
+
+## Open Import Folder 
+* This button is used to open the import directory in the computers file explorer.
+
+## Open Export Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
+
+# Browse Tab {#sec-BrowseTab}
+![](assets/images/BrowseTab.png)
+*  The browse tab is used to analyze and look at data. The user has access to many tools to aid with this. 
+
+## Select Project Folder 
+1. Navigate to the "Browse" Tab.
+2. Left-click the current folder dropdown.
+3. Select the folder you would like to see.
+4. The file catalog will be updated based on your selection.
+
+## Refresh
+* This button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Open Selected Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
+
+## Close Windows
+* This button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed. 

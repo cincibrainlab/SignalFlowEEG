@@ -1,0 +1,29 @@
+# Visual Evoked Potentials (VEP) Tutorial
+
+In this tutorial, we will guide you on how to use **SignalFlowEEG** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
+
+## Overview
+In this walkthrough, we will guide you on how to use **SignalFlowEEG** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
+
+In the following sections, we will dive deeper into each of these steps:
+
+1. **Setting up SignalFlowEEG and its Dependencies:** 
+    Learn how to install and configure SignalFlowEEG and its dependencies.
+
+1. **Arrange Files for Optimized Processing:** 
+    We'll begin by organizing our files in a way that optimizes SignalFlowEEG's processing capabilities.
+
+1. **Preprocess Files Using HAPPE Pipeline:** 
+    Next, we'll utilize the popular HAPPE pipeline to preprocess our VEP dataset.
+
+1. **Output Data Tables:** 
+    After preprocessing, we will output three data tables:
+    - **EEG Characteristics Table:** This table will present the EEG characteristics of our VEP data, such as original length.
+    - **Preprocessing Results Table:** This table will showcase the results of our preprocessing steps, including the number of epochs.
+    - **Amplitude Table for ERPs:** This table will contain the amplitudes necessary to generate ERPs from our VEP dataset.
+
+1. **Modify Preprocessing Step to Observe Effect on ERPs:** 
+    Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.
+
+Let's get started!
+

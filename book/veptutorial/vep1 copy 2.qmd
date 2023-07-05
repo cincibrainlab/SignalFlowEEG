@@ -1,10 +1,6 @@
-![](sflogo.png){width=30% fig-align="center"}
+# Getting Started: VEP Walkthrough (using HAPPE)
 
-# Introduction
-
-## Getting Started: VEP Tutorial (using HAPPE)
-
-### Overview
+## Overview
 In this walkthrough, we will guide you on how to use **SignalFlowEEG** to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.
 
 In the following sections, we will dive deeper into each of these steps:
@@ -28,7 +24,7 @@ In the following sections, we will dive deeper into each of these steps:
     Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.
 
 
-### Walkthrough
+## Walkthrough
 
 1. Install SignalFlow and other toolkits. See @sec-InstallSignalFlow. 
 
@@ -58,13 +54,13 @@ In the following sections, we will dive deeper into each of these steps:
 10. View your data using the tools provided. 
 
 
-# Downloading SignalFlow from GitHub {#sec-InstallSignalFlow}
+## Downloading SignalFlow from GitHub {#sec-InstallSignalFlow}
 
 ## Overview
 
 The source code for SignalFlow is hosted on GitHub. There are two primary methods to acquire the code - either through utilizing Git software or directly downloading from the website. However, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process.
 
-### Method 1: Using Git
+## Method 1: Using Git
 
 1. **Check if Git is installed:**
 

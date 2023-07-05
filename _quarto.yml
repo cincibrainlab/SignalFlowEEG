@@ -19,12 +19,27 @@ book:
     alignment: center
   comments:
     hypothesis: true
+  page-footer:
+    left: |
+      Guide to Using SignalFlow EEG. ernest.pedapati@cchmc.org
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  site-url: https://cincibrainlab.github.io/SignalFlowEEG/
+
   chapters:
     - index.qmd
-    - book/intro.qmd
-    - book/vep_walkthrough.qmd
-    - book/references.qmd
-  
+
+    - part: book/lets-get-started.qmd
+      chapters:
+        - book/intro.qmd
+        - book/references.qmd
+
+    - part: book/vep-tutorial.qmd
+      chapters:
+        - book/veptutorial/vep1.qmd
+        - book/veptutorial/vep2.qmd
+      
+
 
 bibliography: book/references.bib
 

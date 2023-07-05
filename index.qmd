@@ -1,4 +1,4 @@
-## A Reproducible EEG Processing Framework
+# Welcome {.unnumbered}
 
 **SignalFlowEEG (SF)** is a comprehensive and versatile framework designed to streamline the processing of Electroencephalograms (EEG). Utilizing an array of different pipelines, SF aims to ensure reproducibility and consistency across EEG studies.
 
