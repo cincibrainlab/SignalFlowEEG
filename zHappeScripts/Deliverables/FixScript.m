@@ -88,16 +88,7 @@ function boolOutput = containsFunctionOrVariable(expr)
     boolOutput = hasFunctionOrVariable;
 end
 
-
-
-
-
-
 function createNewScript(scriptData, userVars, userExpr, newName)
-%     % Sort userVars and userExpr together
-%     [~, sortedIndices] = sort(lower(userVars));
-%     userVars = userVars(sortedIndices);
-%     userExpr = userExpr(sortedIndices);
 
     % Remove duplicates from userVars and userExpr
     uniqueVars = {};
@@ -115,13 +106,31 @@ function createNewScript(scriptData, userVars, userExpr, newName)
     newScript = ['%%user variables', newline];
     % Add user-specified variables
     for i = 1:length(uniqueVars)
-        newScript = [newScript, 'args.' ,uniqueVars{i}, ' = ',uniqueExpr{i},';', newline];
+        newScript = [newScript, 'args.', uniqueVars{i}, ' = ', uniqueExpr{i},';', newline];
     end
 
-    % Add the rest of the script
-    newScript = [newScript, newline];
+    % Replace variable assignments
+    replacedVars = {}; % Track the replaced variables
     for i = 1:length(scriptData{1})
-        newScript = [newScript, scriptData{1}{i}, newline];
+        line = scriptData{1}{i};
+        
+        % Search for variable assignments
+        [tokens, matches] = regexp(line, '(\w+)\s*=\s*([^=;]*)', 'tokens', 'match');
+        
+        if ~isempty(matches)
+            for j = 1:length(tokens)
+                var = tokens{j}{1};
+                expr = tokens{j}{2};
+                
+                if any(strcmp(uniqueVars, var)) && ~any(strcmp(replacedVars, var))
+                    line = regexprep(line, ['\b', expr, '\b'], ['args.', var]);
+                    replacedVars{end+1} = var; % Add the replaced variable to the list
+                    break;
+                end
+            end
+        end
+        
+        newScript = [newScript, line, newline];
     end
 
     % Write the new script to a file, overwriting if it already exists
@@ -129,3 +138,7 @@ function createNewScript(scriptData, userVars, userExpr, newName)
     fprintf(fid, '%s', newScript);
     fclose(fid);
 end
+
+
+
+
