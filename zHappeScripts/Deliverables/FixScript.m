@@ -1,26 +1,16 @@
-% Here is a MATLAB function that parses for user-specified variables 
-% and variables that have not been specified in the provided script:
-
-parseScript("HAPPE_v3_BC_W_HBCD_VEP_DIN.m","VEP_DIM.m")
+% parseScript("HAPPE_v3_BC_W_HBCD_VEP_DIN.m","VEP_DIM.m")
 
 parseScript("HBCD_MADE_edit1_11_2023.m","MADE.m")
 
-function parseScript(script1,newName)
-    % Load the scripts
-    script1Data = readScript(script1);
-%     script2Data = readScript(script2);
-%     script3Data = readScript(script3);
+function parseScript(script1, newName)
+    % Load the script
+    scriptData = readScript(script1);
     
     % Find user-specified variables
-    userVars = findUserVars(script1Data);
-    
-    % Find variables that have not been specified
-    newVars = findNewVars(script1Data);
-    
+    [userVars, userExpr] = findUserVars(scriptData);
     
     % Create the new script with the specified variables at the top
-%     createNewScript(script1Data, userVars, newVars, script2Data, script3Data);
-    createNewScript(script1Data, userVars, newVars,newName);
+    createNewScript(scriptData, userVars, userExpr, newName);
 end
 
 function scriptData = readScript(script)
@@ -30,109 +20,92 @@ function scriptData = readScript(script)
     fclose(fid);
 end
 
-function userVars = findUserVars(scriptData)
+function [userVars, userExpr] = findUserVars(scriptData)
     % Find user-specified variables
     userVars = {};
-    userVarPattern = '(\w+)\s*=\s*([^=]*)$';
+    userExpr = {};
     for i = 1:length(scriptData{1})
         line = scriptData{1}{i};
-        matches = regexp(line, userVarPattern, 'tokens');
-        if ~isempty(matches)
-            var = matches{1}{1};
-            expr = matches{1}{2};
-            if ~contains(expr, '+') && ~contains(expr, '-') && ~contains(expr, '*') && ~contains(expr, '/') && ~contains(expr, '^')
-                InFileFlag = false;
-                if contains(expr,'.')
-                    InFileFlag = true;
-                end
-                if (ismember(var,userVars))
-                    InFileFlag = true;
-                end
-                if InFileFlag == false
+        [tokens, ~] = regexp(line, '(\w+)\s*=\s*([^=]*)$', 'tokens', 'match');
+        if ~isempty(tokens)
+            var = tokens{1}{1};
+            expr = tokens{1}{2};
+            if isBasicType(expr) && ~containsFunctionOrVariable(expr)
+                if isvarname(var) && ~strcmp(var, '0') && ~strcmp(var, '1') % Check for valid variable name
                     userVars{end+1} = var;
+                    userExpr{end+1} = expr;
                 end
             end
         end
     end
 end
 
-
-function newVars = findNewVars(scriptData)
-    % Find variables that have not been specified in the script
-    newVars = {};
-    varPattern = '^\s*(\w+)\s*=\s*';
-    vars = {};
-    for i = 1:length(scriptData{1})
-        line = scriptData{1}{i};
-        matches = regexp(line, varPattern, 'tokens');
-        if ~isempty(matches)
-            var = matches{1}{1};
-            vars{end+1} = var;
-        end
-    end
-
-    for i = 1:length(scriptData{1})
-        line = scriptData{1}{i};
-        if isempty(line)
-            continue;
-        end
-        if line(1) == '%' || line(1) == ' '
-            continue;
-        end
-        matches = regexp(line, '(\w+)', 'match');
-        if ~isempty(matches)
-            for j = 1:length(matches)
-                var = matches{j};
-                if ~ismember(var, vars) && ~ismember(var, newVars)
-                    if isVariableDefinedBefore(scriptData, i, var)
-                        newVars{end+1} = var;
-                    end
-                end
-            end
-        end
-    end
+function isBasic = isBasicType(expr)
+    % Check if the expression is of basic type (int, string, long, bool)
+    basicTypes = {'double', 'single', 'int8', 'uint8', 'int16', 'uint16', ...
+                  'int32', 'uint32', 'int64', 'uint64', 'char', 'logical'};
+    exprType = class(expr);
+    isBasic = any(strcmp(basicTypes, exprType));
 end
 
-function isDefined = isVariableDefinedBefore(scriptData, currentIndex, var)
-    isDefined = false;
-    for i = currentIndex-1:-1:1
-        line = scriptData{1}{i};
-        if isempty(line)
-            continue;
-        end
-        if line(1) == '%' || line(1) == ' '
-            continue;
-        end
-        if contains(line, [var '='])
-            isDefined = true;
-            break;
-        end
+function boolOutput = containsFunctionOrVariable(expr)
+    % Check if the expression contains a function call or variable
+    try
+        [~, ~] = evalc(expr);
+        hasFunctionOrVariable = false;
+    catch
+        hasFunctionOrVariable = true;
     end
+    % Check if the expression contains text outside of quotes
+    matches = regexp(expr, '''[^'']*''', 'match');  % Find all text inside single quotes
+    textInsideQuotes = '';
+    if ~isempty(matches)
+        textInsideQuotes = [matches{:}];  % Concatenate the matches into a single string
+    end
+    textInsideQuotes = regexprep(textInsideQuotes, '''[^'']*''', '');  % Remove the text inside single quotes
+    hasTextOutsideQuotes = ~isempty(regexp(textInsideQuotes, '\w', 'once'));  % Check if there is any text outside of quotes
+    boolOutput = hasTextOutsideQuotes || hasFunctionOrVariable;
 end
 
 
-function createNewScript(scriptData, userVars, newVars,newName)
+function createNewScript(scriptData, userVars, userExpr, newName)
+    % Sort userVars and userExpr together
+    [~, sortedIndices] = sort(lower(userVars));
+    userVars = userVars(sortedIndices);
+    userExpr = userExpr(sortedIndices);
+
+    % Remove duplicates from userVars and userExpr
+    [uniqueVars, ~, uniqueIndices] = unique(userVars, 'stable');
+    userExpr = userExpr(uniqueIndices);
+
     % Create the new script
-    newScript = [];
-    newScript = [newScript, newline,'%%user variables',newline];
+    newScript = ['%%user variables', newline];
     % Add user-specified variables
-    for i = 1:length(userVars)
-        newScript = [newScript, sprintf('%s = "TODO Please Provide"\n', userVars{i})];
+    for i = 1:length(uniqueVars)
+        newScript = [newScript, getUserVariableLine(scriptData, uniqueVars{i}, userExpr{i}), newline];
     end
-    newScript = [newScript, newline,'%%new variables',newline];
-    % Add new variables
-    for i = 1:length(newVars)
-        newScript = [newScript, sprintf('%s = "TODO Please Provide"\n', newVars{i})];
-    end
-    
+
     % Add the rest of the script
     newScript = [newScript, newline];
     for i = 1:length(scriptData{1})
         newScript = [newScript, scriptData{1}{i}, newline];
     end
 
-    % Write the new script to a file
+    % Write the new script to a file, overwriting if it already exists
     fid = fopen(newName, 'w');
-    fprintf(fid, newScript);
+    fprintf(fid, '%s', newScript);
     fclose(fid);
+end
+
+
+
+function variableLine = getUserVariableLine(scriptData, variableName, variableExpression)
+    for i = 1:length(scriptData{1})
+        line = scriptData{1}{i};
+        if contains(line, variableName) && ~startsWith(line, '%')
+            variableLine = line;
+            return;
+        end
+    end
+    variableLine = ['% ', variableName, ' = ', variableExpression];
 end
