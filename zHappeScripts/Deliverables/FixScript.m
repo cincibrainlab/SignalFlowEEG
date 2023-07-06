@@ -1,4 +1,4 @@
-% parseScript("HAPPE_v3_BC_W_HBCD_VEP_DIN.m","VEP_DIM.m")
+parseScript("HAPPE_v3_BC_W_HBCD_VEP_DIN.m","VEP_DIM.m")
 
 parseScript("HBCD_MADE_edit1_11_2023.m","MADE.m")
 
@@ -26,14 +26,42 @@ function [userVars, userExpr] = findUserVars(scriptData)
     userExpr = {};
     for i = 1:length(scriptData{1})
         line = scriptData{1}{i};
-        [tokens, ~] = regexp(line, '(\w+)\s*=\s*([^=]*)$', 'tokens', 'match');
+        
+        % Search for variable assignments
+        [tokens, ~] = regexp(line, '(\w+)\s*=\s*([^=;]*)', 'tokens', 'match');
+        
         if ~isempty(tokens)
             var = tokens{1}{1};
             expr = tokens{1}{2};
+            
             if isBasicType(expr) && ~containsFunctionOrVariable(expr)
                 if isvarname(var) && ~strcmp(var, '0') && ~strcmp(var, '1') % Check for valid variable name
                     userVars{end+1} = var;
                     userExpr{end+1} = expr;
+                end
+            end
+        end
+        
+        % Search for variables after semicolon (;)
+        semicolonIdx = strfind(line, ';');
+        
+        if ~isempty(semicolonIdx)
+            semicolonIdx = semicolonIdx(1); % Consider only the first semicolon
+            
+            if semicolonIdx < length(line)
+                remainingLine = line(semicolonIdx+1:end);
+                [tokens, ~] = regexp(remainingLine, '(\w+)\s*=\s*([^;]*)', 'tokens', 'match');
+                
+                if ~isempty(tokens)
+                    var = tokens{1}{1};
+                    expr = tokens{1}{2};
+                    
+                    if isBasicType(expr) && ~containsFunctionOrVariable(expr)
+                        if isvarname(var) && ~strcmp(var, '0') && ~strcmp(var, '1') % Check for valid variable name
+                            userVars{end+1} = var;
+                            userExpr{end+1} = expr;
+                        end
+                    end
                 end
             end
         end
@@ -56,33 +84,38 @@ function boolOutput = containsFunctionOrVariable(expr)
     catch
         hasFunctionOrVariable = true;
     end
-    % Check if the expression contains text outside of quotes
-    matches = regexp(expr, '''[^'']*''', 'match');  % Find all text inside single quotes
-    textInsideQuotes = '';
-    if ~isempty(matches)
-        textInsideQuotes = [matches{:}];  % Concatenate the matches into a single string
-    end
-    textInsideQuotes = regexprep(textInsideQuotes, '''[^'']*''', '');  % Remove the text inside single quotes
-    hasTextOutsideQuotes = ~isempty(regexp(textInsideQuotes, '\w', 'once'));  % Check if there is any text outside of quotes
-    boolOutput = hasTextOutsideQuotes || hasFunctionOrVariable;
+    
+    boolOutput = hasFunctionOrVariable;
 end
 
 
+
+
+
+
 function createNewScript(scriptData, userVars, userExpr, newName)
-    % Sort userVars and userExpr together
-    [~, sortedIndices] = sort(lower(userVars));
-    userVars = userVars(sortedIndices);
-    userExpr = userExpr(sortedIndices);
+%     % Sort userVars and userExpr together
+%     [~, sortedIndices] = sort(lower(userVars));
+%     userVars = userVars(sortedIndices);
+%     userExpr = userExpr(sortedIndices);
 
     % Remove duplicates from userVars and userExpr
-    [uniqueVars, ~, uniqueIndices] = unique(userVars, 'stable');
-    userExpr = userExpr(uniqueIndices);
+    uniqueVars = {};
+    uniqueExpr = {};
+    for i = 1:length(userVars)
+        var = userVars{i};
+        expr = userExpr{i};
+        if ~any(strcmp(uniqueVars, var))
+            uniqueVars{end+1} = var;
+            uniqueExpr{end+1} = expr;
+        end
+    end
 
     % Create the new script
     newScript = ['%%user variables', newline];
     % Add user-specified variables
     for i = 1:length(uniqueVars)
-        newScript = [newScript, getUserVariableLine(scriptData, uniqueVars{i}, userExpr{i}), newline];
+        newScript = [newScript, 'args.' ,uniqueVars{i}, ' = ',uniqueExpr{i},';', newline];
     end
 
     % Add the rest of the script
@@ -95,17 +128,4 @@ function createNewScript(scriptData, userVars, userExpr, newName)
     fid = fopen(newName, 'w');
     fprintf(fid, '%s', newScript);
     fclose(fid);
-end
-
-
-
-function variableLine = getUserVariableLine(scriptData, variableName, variableExpression)
-    for i = 1:length(scriptData{1})
-        line = scriptData{1}{i};
-        if contains(line, variableName) && ~startsWith(line, '%')
-            variableLine = line;
-            return;
-        end
-    end
-    variableLine = ['% ', variableName, ' = ', variableExpression];
 end
