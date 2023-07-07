@@ -7,10 +7,10 @@ function parseScript(script1, newName)
     scriptData = readScript(script1);
     
     % Find user-specified variables
-    [userVars, userExpr] = findUserVars(scriptData);
+    [userVars, userExpr, replaceScript] = findUserVars(scriptData);
     
     % Create the new script with the specified variables at the top
-    createNewScript(scriptData, userVars, userExpr, newName);
+    createNewScript(userVars, userExpr, newName,replaceScript);
 end
 
 function scriptData = readScript(script)
@@ -20,12 +20,19 @@ function scriptData = readScript(script)
     fclose(fid);
 end
 
-function [userVars, userExpr] = findUserVars(scriptData)
+function [userVars, userExpr, replaceScript] = findUserVars(scriptData)
     % Find user-specified variables
     userVars = {};
     userExpr = {};
+    replaceScript = ['%%File has been run through SignalFLowEEG script converter',newline];
     for i = 1:length(scriptData{1})
         line = scriptData{1}{i};
+
+        % Skip line if it starts with "%" (including preceding spaces)
+        if ~isempty(regexp(line, '^\s*%', 'once'))
+            replaceScript = [replaceScript, line, newline];
+            continue;
+        end
         
         % Search for variable assignments
         [tokens, ~] = regexp(line, '(\w+)\s*=\s*([^=;]*)', 'tokens', 'match');
@@ -34,10 +41,11 @@ function [userVars, userExpr] = findUserVars(scriptData)
             var = tokens{1}{1};
             expr = tokens{1}{2};
             
-            if isBasicType(expr) && ~containsFunctionOrVariable(expr)
+            if isBasicType(expr) && ~containsFunctionOrVariable(expr) && ~any(strcmp(userVars, var))
                 if isvarname(var) && ~strcmp(var, '0') && ~strcmp(var, '1') % Check for valid variable name
                     userVars{end+1} = var;
                     userExpr{end+1} = expr;
+                    line = [ var, ' = ', 'args.', var,';'];
                 end
             end
         end
@@ -56,15 +64,17 @@ function [userVars, userExpr] = findUserVars(scriptData)
                     var = tokens{1}{1};
                     expr = tokens{1}{2};
                     
-                    if isBasicType(expr) && ~containsFunctionOrVariable(expr)
+                    if isBasicType(expr) && ~containsFunctionOrVariable(expr) && ~any(strcmp(userVars, var))
                         if isvarname(var) && ~strcmp(var, '0') && ~strcmp(var, '1') % Check for valid variable name
                             userVars{end+1} = var;
                             userExpr{end+1} = expr;
+                            line = [ var, ' = ', 'args.', var,';'];
                         end
                     end
                 end
             end
         end
+        replaceScript = [replaceScript, line, newline];
     end
 end
 
@@ -88,51 +98,18 @@ function boolOutput = containsFunctionOrVariable(expr)
     boolOutput = hasFunctionOrVariable;
 end
 
-function createNewScript(scriptData, userVars, userExpr, newName)
-
-    % Remove duplicates from userVars and userExpr
-    uniqueVars = {};
-    uniqueExpr = {};
-    for i = 1:length(userVars)
-        var = userVars{i};
-        expr = userExpr{i};
-        if ~any(strcmp(uniqueVars, var))
-            uniqueVars{end+1} = var;
-            uniqueExpr{end+1} = expr;
-        end
-    end
+function createNewScript(userVars, userExpr, newName,replaceScript)
 
     % Create the new script
     newScript = ['%%user variables', newline];
     % Add user-specified variables
-    for i = 1:length(uniqueVars)
-        newScript = [newScript, 'args.', uniqueVars{i}, ' = ', uniqueExpr{i},';', newline];
+    for i = 1:length(userVars)
+        newScript = [newScript, 'args.', userVars{i}, ' = ', userExpr{i},';', newline];
     end
-
-    % Replace variable assignments
-    replacedVars = {}; % Track the replaced variables
-    for i = 1:length(scriptData{1})
-        line = scriptData{1}{i};
-        
-        % Search for variable assignments
-        [tokens, matches] = regexp(line, '(\w+)\s*=\s*([^=;]*)', 'tokens', 'match');
-        
-        if ~isempty(matches)
-            for j = 1:length(tokens)
-                var = tokens{j}{1};
-                expr = tokens{j}{2};
-                
-                if any(strcmp(uniqueVars, var)) && ~any(strcmp(replacedVars, var))
-                    line = regexprep(line, ['\b', expr, '\b'], ['args.', var]);
-                    replacedVars{end+1} = var; % Add the replaced variable to the list
-                    break;
-                end
-            end
-        end
-        
-        newScript = [newScript, line, newline];
-    end
-
+    
+    %Combine the 2 scripts
+    newScript = [newScript, replaceScript];
+    
     % Write the new script to a file, overwriting if it already exists
     fid = fopen(newName, 'w');
     fprintf(fid, '%s', newScript);
