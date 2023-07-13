@@ -21,7 +21,6 @@ classdef Inflow_ImportMeaXDAT < SignalFlowSuperClass
             % run() - Process the EEG data.           
             % Signal Processing Code Below
             args.char_filepath = obj.fileIoVar;
-            args.char_netType = 'EGI32';
             args.char_netType = 'MEAXDAT';
 
             % Get the folder path, file name, and file extension

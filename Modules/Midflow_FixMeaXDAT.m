@@ -55,37 +55,6 @@ classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
             args.myDict(28) = 7;
             args.myDict(29) = 5;
             args.myDict(30) = 3;
-             % Correct location : Current location
-            % 1, 23
-            % 2, 22
-            % 3, 30
-            % 4, 21
-            % 5, 29
-            % 6, 20
-            % 7, 28
-            % 8, 19
-            % 9, 27
-            % 10, 18
-            % 11, 26
-            % 12, 17
-            % 13, 25
-            % 14, 16
-            % 15, 24
-            % 16, 15
-            % 17, 7
-            % 18, 14
-            % 19, 6
-            % 20, 13
-            % 21, 5
-            % 22, 12
-            % 23, 4
-            % 24, 11
-            % 25, 3
-            % 26, 10
-            % 27, 2
-            % 28, 9
-            % 29, 1
-            % 30, 8
 
             %Remapping the data to correct locations 
             EEG.data
@@ -98,12 +67,6 @@ classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
                 correctIdx = mapping(currentIdx);
                 reorderedArray{correctIdx} = EEG.data{currentIdx};
             end
-            
-            %Making sure the Channel locations are correct 
-            
-           
-
-            
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);
