@@ -35,6 +35,7 @@ classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
             else 
                 EEG = [];
             end
+            EEG = obj.HistoryTable(EEG, args);
         end
     end
 end
