@@ -191,7 +191,7 @@ classdef SignalFlowGUIClass
             % Find the index of the 'path_results' label in the labelStruct array.
             for i =1 : numel(labelStruct)
                 if ~ismissing(labelStruct(i).folder)
-                    module = uitreenode(app.SetupFileListTree, 'Text', labelStruct(i).tag);
+                    module = uitreenode(app.SetupFileListTree, 'Text', sprintf("%s: %s", labelStruct(i).tag, obj.sfControl.proj.(labelStruct(i).tag)));
                     createFileModules(obj.sfControl.proj.(labelStruct(i).tag), module);
                 end
             end
@@ -1124,7 +1124,7 @@ classdef SignalFlowGUIClass
 
                 app.PathLamps{i} = uilamp(app.PathSetupPanel);
                 % Calculate the button's bottom position for vertical stacking
-                bottomPosition = 450 - (i - 1) * (buttonHeight + buttonSpacing);
+                bottomPosition = 400 - (i - 1) * (buttonHeight + buttonSpacing);
 
                 % Set the button's position
                 app.PathButtons{i}.Position = [40, bottomPosition, 180, buttonHeight];
