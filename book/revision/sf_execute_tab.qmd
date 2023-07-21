@@ -1,5 +1,5 @@
 
-# Execute Tab {#sec-ExecuteTab}
+# SignalFlow: Execute Tab {#sec-ExecuteTab}
 ![](../assets/images/ExecuteTab.png)
 *  The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.
 
