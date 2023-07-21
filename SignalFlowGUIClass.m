@@ -1021,7 +1021,7 @@ classdef SignalFlowGUIClass
                 value = missing;
             end
 
-            if isempty(app.BrowseFileCatalog.SelectedModules)
+            if isempty(app.BrowseFileCatalog.SelectedNodes.NodeData)
                 obj.sfControl.msgWarning('No file selected for action.')
             end
 
