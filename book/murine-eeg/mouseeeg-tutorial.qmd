@@ -99,4 +99,36 @@ Step 5. Select the new output folder for the power results and select "Update".
 
 8. Now return to the builder tab and click on the "Execute (Loop)" button to run the analysis. The results will be stored in the 'results_custombands' folder.
 
+## Calculating Connectivity {#sec-connectivity}
 
+The vHTP function eeg_htpGraphPhaseBcm (Brain connectivity matrix) is a comprehensive function that conducts phase-based connectivity analysis on an EEG dataset. It calculates several common phase-based connectivity measures like DWPLI, IPSC, etc between all pairs of EEG channels.
+
+It takes the input EEG data, which is expected to be epoched into trials. It loops through all channel pairs, extracts the signal for those pairs, and calculates the connectivity measures over a range of frequencies.
+
+The output is the connectivity matrices for each measure and frequency, as well as graph theory measures calculated on the connectivity matrices.
+
+Let's run a custom version of this connectivity function to calculate only gamma connectivity and perform the operation on parallel processing to speed it up.
+
+1. You can start right at the builder tab. Remove the power module but keep the import SET module.
+
+2. Find the "Calculate Connectivity" module and click on "Copy and Edit Module". This will create a copy of the connectivity module that you can edit.
+
+3. Adjust the bands to only include gamma bands. If you do not have a GPU, change the gpuOn parameter to 0. If you do have a GPU, you can leave it at 1.
+
+4. This time we will also edit the fname to change the module name in list boxes. This is optional but can be helpful to distinguish between different connectivity modules.
+
+![Custom Module Name](../assets/images/mouseeg_customfname.png)
+
+4. Save and close the editor and return to the SignalFlow application.
+
+5. At this point, you could update the description and pick an alternative results folder. Make sure to press "Update" to save your changes.
+
+6. Now return to the execute tab and click on the "Execute (Parallel)" button to run the analysis. The results will be stored in the 'results' folder.
+
+## Summary: {#sec-summary}
+
+In this tutorial, we have shown how to use **SignalFlowEEG** to analyze mouse EEG data. We have shown how to import SET files, calculate spectral power, and calculate connectivity.
+
+The raw data files containing the values of the results can be opened across most statistical software including MATLAB. 
+
+We will next work on loading and visualizing this data in R.

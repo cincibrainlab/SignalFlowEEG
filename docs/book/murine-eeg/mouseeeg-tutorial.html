@@ -222,6 +222,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#sec-overview" id="toc-sec-overview" class="nav-link active" data-scroll-target="#sec-overview"><span class="header-section-number">8.1</span> Overview</a></li>
   <li><a href="#sec-loadingdata" id="toc-sec-loadingdata" class="nav-link" data-scroll-target="#sec-loadingdata"><span class="header-section-number">8.2</span> Loading Data</a></li>
   <li><a href="#sec-customizebands" id="toc-sec-customizebands" class="nav-link" data-scroll-target="#sec-customizebands"><span class="header-section-number">8.3</span> Optional: Customize Power Bands</a></li>
+  <li><a href="#sec-connectivity" id="toc-sec-connectivity" class="nav-link" data-scroll-target="#sec-connectivity"><span class="header-section-number">8.4</span> Calculating Connectivity</a></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/cincibrainlab/SignalFlowEEG/edit/main/book/murine-eeg/mouseeeg-tutorial.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
@@ -354,6 +355,37 @@ ul.task-list li input[type="checkbox"] {
 <p>Save and close the editor and return to the SignalFlow application.</p>
 <ol start="7" type="1">
 <li>Let’s activate our new power module with custom bands. There are several steps to do this. <img src="../assets/images/mouseeg_custombands2.png" class="img-fluid" alt="Steps to Activate Custom Band Module"></li>
+</ol>
+<p>Step 1. Click on <code>Refresh</code> to user modules. This will load the new custom power module.</p>
+<p>Step 2. Next, select the new module and add it to the pipeline builder by clicking on <code>Add Module</code>.</p>
+<p>Step 3. Select the new power module so we can add a custom name.</p>
+<p>Step 4. Add a custom name to the module that is more descriptive.</p>
+<p>Step 5. Select the new output folder for the power results and select “Update”.</p>
+<ol start="8" type="1">
+<li>Now return to the builder tab and click on the “Execute (Loop)” button to run the analysis. The results will be stored in the ‘results_custombands’ folder.</li>
+</ol>
+</section>
+<section id="sec-connectivity" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-connectivity"><span class="header-section-number">8.4</span> Calculating Connectivity</h2>
+<p>The vHTP function eeg_htpGraphPhaseBcm (Brain connectivity matrix) is a comprehensive function that conducts phase-based connectivity analysis on an EEG dataset. It calculates several common phase-based connectivity measures like DWPLI, IPSC, etc between all pairs of EEG channels.</p>
+<p>It takes the input EEG data, which is expected to be epoched into trials. It loops through all channel pairs, extracts the signal for those pairs, and calculates the connectivity measures over a range of frequencies.</p>
+<p>The output is the connectivity matrices for each measure and frequency, as well as graph theory measures calculated on the connectivity matrices.</p>
+<p>Let’s run a custom version of this connectivity function to calculate only gamma connectivity and perform the operation on parallel processing to speed it up.</p>
+<ol type="1">
+<li><p>You can start right at the builder tab. Remove the power module but keep the import SET module.</p></li>
+<li><p>Find the “Calculate Connectivity” module and click on “Copy and Edit Module”. This will create a copy of the connectivity module that you can edit.</p></li>
+<li><p>Adjust the bands to only include gamma bands. If you do not have a GPU, change the gpuOn parameter to 0. If you do have a GPU, you can leave it at 1.</p></li>
+<li><p>This time we will also edit the fname to change the module name in list boxes. This is optional but can be helpful to distinguish between different connectivity modules.</p></li>
+</ol>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../assets/images/mouseeg_customfname.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Custom Module Name</figcaption>
+</figure>
+</div>
+<ol start="4" type="1">
+<li><p>Save and close the editor and return to the SignalFlow application.</p></li>
+<li></li>
 </ol>
 
 
