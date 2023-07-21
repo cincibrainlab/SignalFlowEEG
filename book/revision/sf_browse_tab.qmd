@@ -1,5 +1,4 @@
-
-# Browse Tab {#sec-BrowseTab}
+# SignalFlow: Browse Tab {#sec-BrowseTab}
 ![](../assets/images/BrowseTab.png)
 *  The browse tab is used to analyze and look at data. The user has access to many tools to aid with this. 
 

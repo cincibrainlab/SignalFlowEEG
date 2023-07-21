@@ -1,5 +1,4 @@
-
-# Builder Tab {#sec-BuilderTab}
+# SignalFlow: Builder Tab {#sec-BuilderTab}
 
 The Builder Tab is where you can build your pipeline. You can add, delete, reorder, and edit modules. You can also filter modules to make it easier to find the module you are looking for.
 

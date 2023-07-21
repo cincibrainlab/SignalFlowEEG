@@ -283,7 +283,10 @@ end
             case 'iclabel'
                 name = 'ICLabel';
             case 'viewprops'
+                zip = 'http://sccn.ucsd.edu/eeglab/plugins/viewprops_1.5.4.zip';
                 name = 'viewprops';
+                version = '1.5.4';
+                pluginsize = .19;
             case 'firfilt'
                 zip =  'http://sccn.ucsd.edu/eeglab/plugins/firfilt2.4.zip';
                 name = 'firfilt';
@@ -306,6 +309,7 @@ end
                     assert( ToolIsAvailable );
                     successnote(action);
                     res = ToolIsAvailable;
+                    paths = [];
                 catch
                     try
                         note(sprintf('Failed by name %s, trying more details.', action ));

@@ -100,49 +100,49 @@
   {
     "objectID": "book/revision/sf_builder_tab.html#filter-modules",
     "href": "book/revision/sf_builder_tab.html#filter-modules",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.1 Filter Modules",
     "text": "5.1 Filter Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the filter dropdown.\nSelect the filter you would like to use.\nModule Libraries will only show modules that agree with your filter."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#sec-AddingModules",
     "href": "book/revision/sf_builder_tab.html#sec-AddingModules",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.2 Adding Modules",
     "text": "5.2 Adding Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will the be added to the pipeline. It will show up in the Pipeline Builder."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#copy-and-edit-module-todo-this-might-have-a-bug",
     "href": "book/revision/sf_builder_tab.html#copy-and-edit-module-todo-this-might-have-a-bug",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.3 Copy and Edit Module TODO this might have a bug",
     "text": "5.3 Copy and Edit Module TODO this might have a bug\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will then be opened in Matlab.\nEdit any parameters or code.\nSave the Module file.\nThe Module file should show up in the User module library."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#delete-module",
     "href": "book/revision/sf_builder_tab.html#delete-module",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.4 Delete Module",
     "text": "5.4 Delete Module\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to delete.\n\nThis can only be from the Pipeline Builder\n\nBelow the Pipeline Builder, there is an “Delete Module” button, left-click it.\nThe Module will be removed from the pipeline."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#reorder-modules",
     "href": "book/revision/sf_builder_tab.html#reorder-modules",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.5 Reorder Modules",
     "text": "5.5 Reorder Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to reorder.\n\nThis can only be from the Pipeline Builder.\n\nTo the right of the Pipeline Builder, there are 2 arrows.\nLeft-click the arrow that corresponds with the direction you would like to move the module.\nThe Module will be reordered in the pipeline."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#reset-pipeline",
     "href": "book/revision/sf_builder_tab.html#reset-pipeline",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.6 Reset Pipeline",
     "text": "5.6 Reset Pipeline\n\nNavigate to the “Builder” Tab.\nLeft-click the “Reset Pipeline” button.\nAll Modules within the Pipeline Builder will be deleted."
   },
   {
     "objectID": "book/revision/sf_builder_tab.html#change-module-information",
     "href": "book/revision/sf_builder_tab.html#change-module-information",
-    "title": "5  Builder Tab",
+    "title": "5  SignalFlow: Builder Tab",
     "section": "5.7 Change Module Information",
     "text": "5.7 Change Module Information\n\nNavigate to the “Builder” Tab.\nEnter the new Module Name.\nIf the module is an outflow module. A. Select the needed output folder tag in the dropdown.\nLeft-click the “Update” button.\nYour changes will be saved.\nIf you would like to return to default name and folder tag A. Left-click the “Default” button."
   },
@@ -219,56 +219,56 @@
   {
     "objectID": "book/revision/sf_browse_tab.html#select-project-folder",
     "href": "book/revision/sf_browse_tab.html#select-project-folder",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.1 Select Project Folder",
     "text": "7.1 Select Project Folder\n\nNavigate to the “Browse” Tab.\nLeft-click the current folder dropdown.\nSelect the folder you would like to see.\nThe file catalog will be updated based on your selection."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#refresh",
     "href": "book/revision/sf_browse_tab.html#refresh",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.2 Refresh",
     "text": "7.2 Refresh\n\nThis button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.\n\nAn example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#open-selected-folder",
     "href": "book/revision/sf_browse_tab.html#open-selected-folder",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.3 Open Selected Folder",
     "text": "7.3 Open Selected Folder\n\nThis button is used to open the selected directory in the computers file explorer.\nTo use this button:\n\nLeft-click your desired directory in the File Catalog.\nLeft-click the “Open Export Folder” button."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#open-in-eeglab",
     "href": "book/revision/sf_browse_tab.html#open-in-eeglab",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.4 Open in EEGLAB",
     "text": "7.4 Open in EEGLAB\n\nThis button is used to open a selected eeg file in the EEGLAB gui.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Open in EEGLAB” button."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#plot-data",
     "href": "book/revision/sf_browse_tab.html#plot-data",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.5 Plot Data",
     "text": "7.5 Plot Data\n\nThis button is used to plot data for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Plot Data” button."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#view-electrode-map",
     "href": "book/revision/sf_browse_tab.html#view-electrode-map",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.6 View Electrode Map",
     "text": "7.6 View Electrode Map\n\nThis button is used to view the electrode map for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Electrode Map” button."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#view-channel-spectra",
     "href": "book/revision/sf_browse_tab.html#view-channel-spectra",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.7 View Channel Spectra",
     "text": "7.7 View Channel Spectra\n\nThis button is used to view the channel spectra for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Channel Spectra” button."
   },
   {
     "objectID": "book/revision/sf_browse_tab.html#close-windows",
     "href": "book/revision/sf_browse_tab.html#close-windows",
-    "title": "7  Browse Tab",
+    "title": "7  SignalFlow: Browse Tab",
     "section": "7.8 Close Windows",
     "text": "7.8 Close Windows\n\nThis button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed."
   },
