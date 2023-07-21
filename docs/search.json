@@ -70,20 +70,6 @@
     "text": "Follow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:\n\nOpen MATLAB.\nLaunch the MATLAB software from your applications menu or desktop shortcut.\nNavigate to the SignalFlow Directory.\nThe SignalFlow directory is typically located within the GitHub folder in your Documents. This might vary depending on where you cloned the repository. The paths are generally as follows:\n\nFor Windows: C:\\\\Users\\\\**YourUsername**\\\\Documents\\\\github\\\\SignalFlow_HBCD\nFor Linux or macOS: /home/**YourUsername**/Documents/github/SignalFlow_HBCD\n\nReplace **YourUsername** with your actual username on your computer.\nTo navigate to this directory in MATLAB, you can use the cd (change directory) command in MATLAB’s Command Window:\ncd('path-to-directory')\nReplace 'path-to-directory' with the appropriate path above.\nFind the SignalFlow application file.\nIn MATLAB’s Current Folder pane (typically located on the left side of the interface), scroll to locate the SignalFlow application file named “SignalFlowEEG.mlapp”.\nRun the SignalFlow application. \nRight-click on the “SignalFlowEEG.mlapp” file and select “Run” from the context menu.\nCheck SignalFlow Application.\n\nThe SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the “SignalFlowEEG.mlapp” file is present.\nCheck dependencies\n\nIf you check the command window, you will see that SignalFlow will do a careful check for any missing dependencies. If you encounter any errors, revist the Chapter 1 section to ensure that you have installed all the necessary dependencies.\nThe command SignalFlowDoctor will do a careful check for missing toolkits and also have options for repair. Restart SignalFlow after installing any missing dependencies.\n\n\n\nSignalFlowDoctor\n\n\nIn this case, SignalFlowDoctor identifies two issues as missing EEGLAB toolkits. Running the recommended commands in the command window will install the missing toolkits. If a plugin cannot be installed automatically, you may need to open EEGLAB and install it though the plugin manager.\nWith these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB."
   },
   {
-    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
-    "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
-    "title": "8  Mouse EEG Tutorial",
-    "section": "8.1 Overview",
-    "text": "8.1 Overview\nThis tutorial assumes that you have already installed SignalFlowEEG (Chapter 1) and are familiar with the SignalFlow interface (Chapter 4).\nDuring this tutorial we will calculate spectral power and run a connectivity analysis."
-  },
-  {
-    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#setting-up-your-environment",
-    "href": "book/murine-eeg/mouseeeg-tutorial.html#setting-up-your-environment",
-    "title": "8  Mouse EEG Tutorial",
-    "section": "8.2 Setting up your environment",
-    "text": "8.2 Setting up your environment\n\n8.2.1 Installing SignalFlowEEG\nSee Chapter 1."
-  },
-  {
     "objectID": "book/revision/sf_setup_tab.html#adding-toolboxes-to-the-matlab-path",
     "href": "book/revision/sf_setup_tab.html#adding-toolboxes-to-the-matlab-path",
     "title": "4  SignalFlow: Setup Tab",
@@ -287,6 +273,13 @@
     "text": "7.8 Close Windows\n\nThis button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed."
   },
   {
+    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
+    "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
+    "title": "8  Mouse EEG Tutorial",
+    "section": "8.1 Overview",
+    "text": "8.1 Overview\nThis tutorial assumes that you have already installed SignalFlowEEG (Chapter 1) and are familiar with the SignalFlow interface (Chapter 4).\nDuring this tutorial we will calculate spectral power and run a connectivity analysis."
+  },
+  {
     "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-loadingdata",
     "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-loadingdata",
     "title": "8  Mouse EEG Tutorial",
@@ -305,6 +298,13 @@
     "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-connectivity",
     "title": "8  Mouse EEG Tutorial",
     "section": "8.4 Calculating Connectivity",
-    "text": "8.4 Calculating Connectivity\nThe vHTP function eeg_htpGraphPhaseBcm (Brain connectivity matrix) is a comprehensive function that conducts phase-based connectivity analysis on an EEG dataset. It calculates several common phase-based connectivity measures like DWPLI, IPSC, etc between all pairs of EEG channels.\nIt takes the input EEG data, which is expected to be epoched into trials. It loops through all channel pairs, extracts the signal for those pairs, and calculates the connectivity measures over a range of frequencies.\nThe output is the connectivity matrices for each measure and frequency, as well as graph theory measures calculated on the connectivity matrices.\nLet’s run a custom version of this connectivity function to calculate only gamma connectivity and perform the operation on parallel processing to speed it up.\n\nYou can start right at the builder tab. Remove the power module but keep the import SET module.\nFind the “Calculate Connectivity” module and click on “Copy and Edit Module”. This will create a copy of the connectivity module that you can edit.\nAdjust the bands to only include gamma bands. If you do not have a GPU, change the gpuOn parameter to 0. If you do have a GPU, you can leave it at 1.\nThis time we will also edit the fname to change the module name in list boxes. This is optional but can be helpful to distinguish between different connectivity modules.\n\n\n\n\nCustom Module Name\n\n\n\nSave and close the editor and return to the SignalFlow application."
+    "text": "8.4 Calculating Connectivity\nThe vHTP function eeg_htpGraphPhaseBcm (Brain connectivity matrix) is a comprehensive function that conducts phase-based connectivity analysis on an EEG dataset. It calculates several common phase-based connectivity measures like DWPLI, IPSC, etc between all pairs of EEG channels.\nIt takes the input EEG data, which is expected to be epoched into trials. It loops through all channel pairs, extracts the signal for those pairs, and calculates the connectivity measures over a range of frequencies.\nThe output is the connectivity matrices for each measure and frequency, as well as graph theory measures calculated on the connectivity matrices.\nLet’s run a custom version of this connectivity function to calculate only gamma connectivity and perform the operation on parallel processing to speed it up.\n\nYou can start right at the builder tab. Remove the power module but keep the import SET module.\nFind the “Calculate Connectivity” module and click on “Copy and Edit Module”. This will create a copy of the connectivity module that you can edit.\nAdjust the bands to only include gamma bands. If you do not have a GPU, change the gpuOn parameter to 0. If you do have a GPU, you can leave it at 1.\nThis time we will also edit the fname to change the module name in list boxes. This is optional but can be helpful to distinguish between different connectivity modules.\n\n\n\n\nCustom Module Name\n\n\n\nSave and close the editor and return to the SignalFlow application.\nAt this point, you could update the description and pick an alternative results folder. Make sure to press “Update” to save your changes.\nNow return to the execute tab and click on the “Execute (Parallel)” button to run the analysis. The results will be stored in the ‘results’ folder."
+  },
+  {
+    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-summary",
+    "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-summary",
+    "title": "8  Mouse EEG Tutorial",
+    "section": "8.5 Summary:",
+    "text": "8.5 Summary:\nIn this tutorial, we have shown how to use SignalFlowEEG to analyze mouse EEG data. We have shown how to import SET files, calculate spectral power, and calculate connectivity.\nThe raw data files containing the values of the results can be opened across most statistical software including MATLAB.\nWe will next work on loading and visualizing this data in R."
   }
 ]

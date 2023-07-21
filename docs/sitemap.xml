@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/index.html</loc>
-    <lastmod>2023-07-21T01:05:16.116Z</lastmod>
+    <lastmod>2023-07-21T01:11:30.100Z</lastmod>
   </url>
   <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_lets-get-started.html</loc>
@@ -21,14 +21,6 @@
     <lastmod>2023-07-21T01:00:09.222Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/murine-eeg/mouseeeg-tutorial.html</loc>
-    <lastmod>2023-07-21T03:53:15.956Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/SignalFlow-EEG.pdf</loc>
-    <lastmod>2023-07-21T00:54:40.008Z</lastmod>
-  </url>
-  <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_setup_tab.html</loc>
     <lastmod>2023-07-21T01:08:23.987Z</lastmod>
   </url>
@@ -43,5 +35,13 @@
   <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_browse_tab.html</loc>
     <lastmod>2023-07-21T01:11:21.310Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/murine-eeg/mouseeeg-tutorial.html</loc>
+    <lastmod>2023-07-21T04:05:58.669Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/SignalFlow-EEG.pdf</loc>
+    <lastmod>2023-07-21T04:06:23.611Z</lastmod>
   </url>
 </urlset>
