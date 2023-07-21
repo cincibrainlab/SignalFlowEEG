@@ -35,6 +35,7 @@ classdef inflow_ImportEGI128 < SignalFlowSuperClass
             else 
                 EEG = [];
             end    
+            EEG = obj.HistoryTable(EEG, args);
         end
     end
 end

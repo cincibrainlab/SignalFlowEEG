@@ -1,4 +1,4 @@
-classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
+classdef Inflow_ImportMeaXDAT < SignalFlowSuperClass
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
 %  
@@ -7,10 +7,10 @@ classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
 %% Contact:
 %  https://github.com/cincibrainlab/SignalFlowEEG/issues
     methods
-        function obj = inflow_ImportNeuroNexusH32MEA(varargin)
+        function obj = Inflow_ImportMeaXDAT(varargin)
            
             % Define Custom Flow Function
-            setup.flabel = 'Import NeuroNexusH32MEA File';
+            setup.flabel = 'Import MEA XDAT File';
             setup.flowMode = 'inflow';
 
             % Construction Function
@@ -21,15 +21,15 @@ classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
             % run() - Process the EEG data.           
             % Signal Processing Code Below
             args.char_filepath = obj.fileIoVar;
-            args.char_netType = 'NeuroNexusH32MEA';
+            args.char_netType = 'MEAXDAT';
 
             % Get the folder path, file name, and file extension
             [folderPath, ~, fileExtension] = fileparts(args.char_filepath);        
             % Add the folder path to the search path
             addpath(folderPath);
             % Load the file using pop_loadset if it has a .set extension
-            if strcmp(fileExtension, '.edf')
-                EEG = util_sfImportEegFile(args.char_filepath,'nettype',args.char_netType);
+            if strcmp(fileExtension, '.xdat')
+                EEG = util_htpImportAndRemapMea(args.char_filepath);
                 %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
                 EEG = obj.HistoryTable(EEG, args);
             else 
