@@ -249,7 +249,8 @@ classdef SignalFlowGUIClass
         end
 
         function refreshUserModuleFiles(obj, app)
-            obj.sfControl.Module_RefreshUserModuleFiles();
+           % obj.sfControl.Module_RefreshUserModuleFiles();
+            obj.sfControl.Modules_LoadAvailable();
             obj.refreshTrees(app);
         end
 

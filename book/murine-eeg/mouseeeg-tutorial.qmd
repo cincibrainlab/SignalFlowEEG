@@ -82,3 +82,21 @@ Published mouse EEG bands differ in exact frequencies from human EEG bands. You 
 
 ![Modified bands based on Jonak et al.](../assets/images/mouseeeg_modifiedbands.png)
 
+Save and close the editor and return to the SignalFlow application.
+
+7. Let's activate our new power module with custom bands. There are several steps to do this.
+![Steps to Activate Custom Band Module](../assets/images/mouseeg_custombands2.png)
+
+Step 1. Click on `Refresh` to user modules. This will load the new custom power module.
+
+Step 2. Next, select the new module and add it to the pipeline builder by clicking on `Add Module`.
+
+Step 3. Select the new power module so we can add a custom name.
+
+Step 4. Add a custom name to the module that is more descriptive.
+
+Step 5. Select the new output folder for the power results and select "Update".
+
+8. Now return to the builder tab and click on the "Execute (Loop)" button to run the analysis. The results will be stored in the 'results_custombands' folder.
+
+
