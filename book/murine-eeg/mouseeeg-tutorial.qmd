@@ -41,3 +41,44 @@ After you have selected the SET files and the destination folder, click the 'Imp
 Details regarding the import will be in the command window:
 
 ![Import Details](../assets/images/mouseeeg_import_status.png)
+
+Following the import, you should see the SET files in the 'import' folder:
+
+![Contents of Import Folder](../assets/images/mouseeeg_import_folder.png)
+
+6. Return to the SignalFlow Application and fill in any Project Details you would like to include. These details will be included in the analysis report.
+
+![Project Details](../assets/images/mouseeg_project_details.png)
+
+7. Next move to the Builder tab to start our analysis workflow. 
+
+    From the inflow modules select "Import SET"
+    From the outflow modules select "Calculate Rest Power"
+
+8. Confirm the module outflow path where the power results will be saved. In this example, we will save the results to the 'results' folder in our project folder.
+
+9. Switch to the Execute Tab and click the "Execute (Loop)" Button to import each SET file sequentially and calculate the power. The results will be stored in table format in the 'results' folder.
+
+## Optional: Customize Power Bands {#sec-customizebands}
+
+Published mouse EEG bands differ in exact frequencies from human EEG bands. You can customize the power bands by making a copy of the 'Calculate Rest Power' module and editing the 'Power Bands' parameter.
+
+1. To start, go back to the setup tab. In your file system, create a new results folder called "results_custombands" to distinguish it from your other results folder. 
+
+2. Next, in the Setup tab select "Add Custom Folder" and select the "results_custombands" folder you just created. Add a easy to remember tag so you can identify it later.
+
+![Adding a custom folder](../assets/images/SignalFlowDoctor.png)
+
+3. Switch to the Builder tab. Click on "Calculate Rest Power" and press the "Delete Module" Button. This will remove the default power module.
+
+4. Find "Calculate Rest Power" in the outflow modules and click on "Copy and Edit Module". This will create a copy of the power module that you can edit.
+
+5. The MATLAB editor will open up with a copy of the power module. Here the parameters can be clearly seen, including the power band definitions. 
+
+![Power Band Definitions](../assets/images/mouseeeg_pbdefs.png)
+
+6. Let's edit the power band definitions based on Jonak et al. 2020:
+"Power was then further binned into standard frequency bands: Delta (1–4 Hz), Theta (4–10 Hz), Alpha (10–13 Hz), Beta (13–30 Hz), and Gamma was divided into “Low Gamma” (30–55 Hz), and “High Gamma” (65–100 Hz)."
+
+![Modified bands based on Jonak et al.](../assets/images/mouseeeg_modifiedbands.png)
+
