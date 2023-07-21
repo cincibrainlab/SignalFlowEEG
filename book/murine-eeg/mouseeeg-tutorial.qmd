@@ -12,6 +12,32 @@ During this tutorial we will calculate spectral power and run a connectivity ana
 
 ## Loading Data {#sec-loadingdata}
 
+1. Create a new project folder in your filesystem to store the data and analysis results. For example, `~/Documents/mouseEEG`.
 
+2. Create three subfolders in the project folder: 'import', 'temp', and 'results'.
 
+3. On the SignalFlow GUI select the 'Setup' tab and setup your project folders by assigning them to each of the three folders you just created.
 
+![Setup Folders](../assets/images/mouseeeg_setupfolders.png)
+
+4. Let's import our mouse EEG files. In this example, we will be assuming you have already preprocessed the data into SET format. We will use the import tool to copy over the SET files to our project folder.
+
+Select "Open the VHTP Import Tool"  button underneath the Setup Project Folders pane:
+
+![Setup Folders](../assets/images/mouseeeg_importtool.png)
+
+5. The vHTP import tool is a multipurpose utility to import data from a variety of formats into EEGLAB SET format. It also can copy SET files directly. The Import tool has the ability to select SET files across subfolders and perform keyword filtering which has advantages compared to a manual file copy.
+
+Please refer to the vHTP import tool documentation and follow the instructions for copy SET files to your project folder (*Example Workflow 2*).
+
+[Link to vHTP import tool documentation](https://cincibrainlab.github.io/devblog/posts/docs_htpimport/)
+
+Here is example of the import tool with the SET files selected and the destination folder set to the 'import' folder in your project folder:
+
+![Ready to Import!](../assets/images/mouseeeg_vhtpimport_filledin.png)
+
+After you have selected the SET files and the destination folder, click the 'Import to SET' button to copy the files over. You will notice in the terminal window that each file will be loaded into EEGLAB and a channel montage graphic will be exported to confirm channel locations.
+
+Details regarding the import will be in the command window:
+
+![Import Details](../assets/images/mouseeeg_import_status.png)

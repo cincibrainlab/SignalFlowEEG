@@ -74,7 +74,7 @@
     "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
     "title": "8  Mouse EEG Tutorial",
     "section": "8.1 Overview",
-    "text": "8.1 Overview\nThis tutorial assumes that you have already installed SignalFlowEEG (Chapter 1) and are familiar with the SignalFlow interface (Chapter 4).\nIn this walkthrough, we will cover the following topics:\n\nSetting up your environment\nLoading data\nOutputting data\nVisualize data\nStatistical Analysis\nReporting"
+    "text": "8.1 Overview\nThis tutorial assumes that you have already installed SignalFlowEEG (Chapter 1) and are familiar with the SignalFlow interface (Chapter 4).\nDuring this tutorial we will calculate spectral power and run a connectivity analysis."
   },
   {
     "objectID": "book/murine-eeg/mouseeeg-tutorial.html#setting-up-your-environment",
@@ -285,5 +285,12 @@
     "title": "7  Browse Tab",
     "section": "7.8 Close Windows",
     "text": "7.8 Close Windows\n\nThis button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed."
+  },
+  {
+    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-loadingdata",
+    "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-loadingdata",
+    "title": "8  Mouse EEG Tutorial",
+    "section": "8.2 Loading Data",
+    "text": "8.2 Loading Data\n\nCreate a new project folder in your filesystem to store the data and analysis results. For example, ~/Documents/mouseEEG.\nCreate three subfolders in the project folder: ‘import’, ‘temp’, and ‘results’.\nOn the SignalFlow GUI select the ‘Setup’ tab and setup your project folders by assigning them to each of the three folders you just created.\n\n\n\n\nSetup Folders\n\n\n\nLet’s import our mouse EEG files. In this example, we will be assuming you have already preprocessed the data into SET format. We will use the import tool to copy over the SET files to our project folder.\n\nSelect “Open the VHTP Import Tool” button underneath the Setup Project Folders pane:\n\n\n\nSetup Folders\n\n\n\nThe vHTP import tool is a multipurpose utility to import data from a variety of formats into EEGLAB SET format. It also can copy SET files directly. The Import tool has the ability to select SET files across subfolders and perform keyword filtering which has advantages compared to a manual file copy.\n\nPlease refer to the vHTP import tool documentation and follow the instructions for copy SET files to your project folder (Example Workflow 2).\nLink to vHTP import tool documentation\nHere is example of the import tool with the SET files selected and the destination folder set to the ‘import’ folder in your project folder:\n\n\n\nReady to Import!\n\n\nAfter you have selected the SET files and the destination folder, click the ‘Import to SET’ button to copy the files over. You will notice in the terminal window that each file will be loaded into EEGLAB and a channel montage graphic will be exported to confirm channel locations.\nDetails regarding the import will be in the command window:\n\n\n\nImport Details"
   }
 ]
