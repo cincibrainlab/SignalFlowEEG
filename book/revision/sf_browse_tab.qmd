@@ -1,0 +1,47 @@
+
+# Browse Tab {#sec-BrowseTab}
+![](../assets/images/BrowseTab.png)
+*  The browse tab is used to analyze and look at data. The user has access to many tools to aid with this. 
+
+## Select Project Folder 
+1. Navigate to the "Browse" Tab.
+2. Left-click the current folder dropdown.
+3. Select the folder you would like to see.
+4. The file catalog will be updated based on your selection.
+
+## Refresh
+* This button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Open Selected Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
+
+## Close Windows
+* This button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed. 

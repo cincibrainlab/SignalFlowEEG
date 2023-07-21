@@ -1,0 +1,17 @@
+## Mouse EEG Tutorial {#sec-mouseeg}
+
+In this tutorial, we will guide you on how to use **SignalFlowEEG** analyze EEG tracings from mouse multielectrode array (MEA).
+
+Specifically, we will analzying data from the Neuronexus Mouse EEG v2 H32 probe is a 32-channel EEG MEA specifically designed for mice. Combined with the Omnetics Amplifier Adapter, it provides a complete system for acquiring high-fidelity EEG data from the mouse brain. 
+
+## Overview {#sec-overview}
+
+This tutorial assumes that you have already installed **SignalFlowEEG** (@sec-InstallSignalFlow) and are familiar with the SignalFlow interface (@sec-SetupTab).
+
+During this tutorial we will calculate spectral power and run a connectivity analysis. 
+
+## Loading Data {#sec-loadingdata}
+
+
+
+

@@ -2,34 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/index.html</loc>
-    <lastmod>2023-07-05T13:32:53.664Z</lastmod>
+    <lastmod>2023-07-21T01:05:16.116Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/lets-get-started.html</loc>
-    <lastmod>2023-07-05T13:34:07.791Z</lastmod>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_lets-get-started.html</loc>
+    <lastmod>2023-07-21T00:25:09.287Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/intro.html</loc>
-    <lastmod>2023-06-30T12:56:52.000Z</lastmod>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_installing_signalflow.html</loc>
+    <lastmod>2023-07-21T00:27:14.366Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/references.html</loc>
-    <lastmod>2023-06-30T12:33:42.013Z</lastmod>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_organizing_files.html</loc>
+    <lastmod>2023-07-21T00:29:52.131Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/vep-tutorial.html</loc>
-    <lastmod>2023-07-05T12:41:17.821Z</lastmod>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_starting_signalflow.html</loc>
+    <lastmod>2023-07-21T01:00:09.222Z</lastmod>
   </url>
   <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/veptutorial/vep1.html</loc>
-    <lastmod>2023-07-12T19:09:53.023Z</lastmod>
-  </url>
-  <url>
-    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/veptutorial/vep2.html</loc>
-    <lastmod>2023-07-05T12:26:38.231Z</lastmod>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/murine-eeg/mouseeeg-tutorial.html</loc>
+    <lastmod>2023-07-21T01:14:16.096Z</lastmod>
   </url>
   <url>
     <loc>https://cincibrainlab.github.io/SignalFlowEEG/SignalFlow-EEG.pdf</loc>
-    <lastmod>2023-07-05T13:44:21.713Z</lastmod>
+    <lastmod>2023-07-21T00:54:40.008Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_setup_tab.html</loc>
+    <lastmod>2023-07-21T01:08:23.987Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_builder_tab.html</loc>
+    <lastmod>2023-07-21T01:09:46.381Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_execute_tab.html</loc>
+    <lastmod>2023-07-21T01:11:27.627Z</lastmod>
+  </url>
+  <url>
+    <loc>https://cincibrainlab.github.io/SignalFlowEEG/book/revision/sf_browse_tab.html</loc>
+    <lastmod>2023-07-21T01:11:21.310Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,59 @@
+
+# Builder Tab {#sec-BuilderTab}
+
+The Builder Tab is where you can build your pipeline. You can add, delete, reorder, and edit modules. You can also filter modules to make it easier to find the module you are looking for.
+
+![](../assets/images/BuilderTab.png)
+
+## Filter Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the filter dropdown.
+3. Select the filter you would like to use.
+4. Module Libraries will only show modules that agree with your filter.
+
+## Adding Modules {#sec-AddingModules}
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will the be added to the pipeline. It will show up in the Pipeline Builder.
+
+## Copy and Edit Module TODO this might have a bug
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to use.
+    A.  This can be from the both the Base and User module libraries.
+3. Below the Base and User module libraries, there is an "Add Module" button, left-click it.
+4. The module will then be opened in Matlab.
+5. Edit any parameters or code.
+6. Save the Module file. 
+7. The Module file should show up in the User module library.
+
+## Delete Module 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to delete.
+    A.  This can only be from the Pipeline Builder
+3. Below the Pipeline Builder, there is an "Delete Module" button, left-click it.
+4. The Module will be removed from the pipeline.
+
+## Reorder Modules 
+1. Navigate to the "Builder" Tab.
+2. Left-click the module you would like to reorder.
+    A.  This can only be from the Pipeline Builder.
+3. To the right of the Pipeline Builder, there are 2 arrows.
+4. Left-click the arrow that corresponds with the direction you would like to move the module.
+5. The Module will be reordered in the pipeline.
+
+## Reset Pipeline 
+1. Navigate to the "Builder" Tab.
+2. Left-click the "Reset Pipeline" button.
+3. All Modules within the Pipeline Builder will be deleted.
+
+## Change Module Information
+1. Navigate to the "Builder" Tab.
+2. Enter the new Module Name.
+3. If the module is an outflow module.
+    A. Select the needed output folder tag in the dropdown.
+4. Left-click the "Update" button.
+5. Your changes will be saved. 
+6. If you would like to return to default name and folder tag
+    A. Left-click the "Default" button.

@@ -1,12 +1,10 @@
 # Let's Get Started {#sec-getting-started .unnumbered}
 
-Before getting invested in a new workflow, I think it's important to understand if the results are a good fit for your laboratory. 
-
 In these introductory chapter we will give you a rapid overview of examples of some of the capabilities of SignalFlow and how they can be used to process your EEG data.
 
 ## SignalFlow in a Nutshell
 
-At it's essense, SignalFlow is a MATLAB toolbox provides a unified wrapper around opensource EEG toolkits (e.g., EEGLAB, FieldTrip, MNE, etc.) to process data and generate uniform outputs (tables and figures).
+At it's essense, SignalFlow is a MATLAB toolbox and provides a unified wrapper around opensource EEG toolkits (e.g., EEGLAB, FieldTrip, MNE, etc.) to process data and generate uniform outputs (tables and figures). Signalflow can handle EEG data from human recordings but also from other signal sources such as @sec-mouse-eeg.
 
 This flexibility should allow you to chose the best toolkit for a specific task, while still providing uniform outputs that can be analyzed similarly. 
 
@@ -22,7 +20,7 @@ Let's give a prototype example of a SignalFlow workflow that might be difficult 
 
 4. MATLAB: Following preprocessing, use EEGLAB to save the files as SET files in a BIDS compatible format and save preprocessing details as a CSV file.
 
-5. Use the artifact-free SET to perform analyzses across toolkits but create R-statistics compatible tables.
+5. Use the artifact-free SET to perform analyzses across toolkits but create R-statistics (CSV) compatible tables.
     a. Use MATLAB to generate band power tables
     b. Use Python to generate connectivity tables
     c. Use R to import the tables and run statistics and perform visualization.

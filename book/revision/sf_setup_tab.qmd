@@ -1,0 +1,46 @@
+
+# SignalFlow: Setup Tab {#sec-SetupTab}
+
+The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline. This includes adding the correct paths to toolboxes and also adding folder locations for data.
+
+In SignalFlow, assigned folders are given tags. These tags are used to reference the folder locations in the pipeline. This allows the user to change the folder location without having to hardcode a foldername into their code. This is useful when sharing code with other users.
+
+![SetupTab](../assets/images/SetupTab.png)
+
+## Adding toolboxes to the MATLAB path
+1. Navigate to the "Setup" Tab.
+2. Decide which toolbox/dependency you would like to add to the MATLAB path.
+    A. A Red circle indicated the toolbox/dependency has not been added.
+    B. A Green circle indicates that the toolbox/dependency has been added.
+3. Left-click on the "Click to Fix: *Insert Toolbox*".
+4. File Explorer will open.
+5. Select the directory that contains your toolbox. Click "Open" in the file explorer.
+    A. This can vary based on the toolbox, contact us if you have issues .
+6. The circle should turn from red to green, may take a second due to SignalFLow checking if it's the right toolbox.
+
+## Adding Project Folder locations
+1. Navigate to the "Setup" Tab.
+2. Decide which folder you would like to add.
+    A. A Red circle indicated the folder has not been added.
+    B. A Green circle indicates that the folder has been added.
+3. Left-click on the "Click to Fix: *Insert folder*".
+4. File Explorer will open.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. The circle will turn from red to green.
+
+## Adding Custom Projct Folder locations
+1. Navigate to the "Setup" Tab.
+2. Left-click the "Add Custom Folder" button.
+3. A Matlab figure will open.
+4. Left-click the "Select Directory" button.
+5. Select the directory you would like to add. Left-click "Open" in the file explorer.
+6. Enter a tag. A tag is an easily recognizable name used for selecting this Projct Folder later.
+7. Left-click the "Confirm" button.
+8. A new project foler will be added. The circle will turn from red to green.
+
+## Edit Project Information
+1. Navigate to the "Setup" Tab.
+2. Enter a Title for your project.
+3. Enter a Description for you project.
+4. Enter an Author for your project. 
+5. Left-click the "Save" button.

@@ -1,0 +1,108 @@
+# Installing SignalFlow {#sec-InstallSignalFlow}
+
+## Overview
+
+The source code for SignalFlow is hosted on GitHub. There are two primary methods to install SignalFlow:
+
+1. Using Git software to directly download the code
+1. Downloading the code as a zip file from the GitHub website
+
+ However, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process.
+
+## Method 1: Using Git
+
+1. **Check if Git is installed:**
+
+   Open a terminal or command prompt and run the following command:
+
+   ```bash
+   git --version
+   ```
+
+   If Git is installed, you will see the version number. If not, proceed to the next step.
+
+2. **Install Git:**
+
+    Download the install from the official Git website for your operating system at [official Git website](https://git-scm.com).
+
+3. **Create a 'github' directory:**
+    Choose a location on your drive that will be used to store your toolboxes. 
+
+   Run use your file explorer or run following command to create a new directory called 'github' and navigate to it:
+
+   ```bash
+   mkdir github
+   cd github
+   ```
+
+4. **Clone the SignalFlow repository with submodules:**
+
+   Run the following command to clone the repository and its submodules:
+
+   ```bash
+   git clone --recurse-submodules https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+   ```
+
+   This will clone the repository and its submodules into the 'github' directory. The output will be displayed in the terminal or command prompt.
+
+5. **Clone other necessary toolkits:**
+In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:
+
+- **EEGLAB**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/sccn/eeglab.git
+    ```
+
+- **Brainstorm**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/brainstorm-tools/brainstorm3.git
+    ```
+
+- **HAPPE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/PINE-Lab/HAPPE.git
+    ```
+
+- **MADE Pipeline**: 
+
+    ```bash
+    git clone --recurse-submodules https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git
+    ```
+After cloning these repositories, you'll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:
+
+    ```bash
+    git pull --recurse-submodules
+    ```
+
+## Method 2: Downloading Toolkits as Zip Files 
+
+If you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.
+
+Here are the steps to download and organize the repositories:
+
+1. Navigate to each repository's GitHub page in your web browser.
+
+2. Click on the `Code` button and then click `Download ZIP`.
+
+3. Once the download is complete, extract the ZIP file.
+
+4. Create a new folder in your `github` directory for each extracted repository. The name of the folder should *match* the repository name.
+
+Here are the links to each repository:
+- **SignalFlow**: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git
+- **VHTP**: https://github.com/cincibrainlab/vhtp
+- **VHTP Dependencies**: https://github.com/cincibrainlab/vhtp_dependencies
+- **HAPPE Pipeline**: https://github.com/PINE-Lab/HAPPE
+- **MADE Pipeline**: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline
+
+Note: For the VHTP and VHTP Dependencies, make sure to place these folders in the `SignalFlowEEG_HBCD` folder, as they are necessary for certain SignalFlow operations. 
+
+EEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.
+
+- **EEGLAB**: https://sccn.ucsd.edu/eeglab/index.php
+- **Brainstorm**:https://neuroimage.usc.edu/brainstorm/Introduction
+
+After extraction, you will have the complete repository with all its files and folders available on your computer.

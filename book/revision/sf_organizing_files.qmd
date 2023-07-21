@@ -1,0 +1,46 @@
+
+# Preparing Data Files {#sec-OrganizeFiles}
+
+## Overview
+
+When working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self). 
+
+Considering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: `data`, `temp`, and `results`. 
+
+These directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a `readme.txt` file in the main folder and  describing the contents and purpose of the project and folders.
+
+Here's a simple, recommended structure:
+
+- ProjectName/
+  - readme.txt
+  - data/
+  - temp/
+  - results/
+
+The `data` directory should contain all the raw data that will be processed. The `temp` directory will store any temporary files created during data processing, and the `results` directory will hold the output from your analyses.
+
+## Using the BIDS format
+
+The *Brain Imaging Data Structure (BIDS)* is a formal way to name and organize neuroimaging data and  metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.
+
+SignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.
+``` bash
+- ProjectName/
+  - readme.txt
+  - data/
+    - BIDS/
+      - sub-01/
+        - ses-01/
+          - eeg/
+            - sub-01_ses-01_task-mytask_eeg.edf
+            - sub-01_ses-01_task-mytask_channels.tsv
+            - sub-01_ses-01_task-mytask_electrodes.tsv
+            - sub-01_ses-01_task-mytask_events.tsv
+            - ...
+      - ...
+  - temp/
+  - results/
+```
+SignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility ([util_htpDirListing.m](https://github.com/cincibrainlab/vhtp/blob/main/util_htpDirListing.m)) can create a custom file list from a BIDS directory structure. 
+
+Remember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows.

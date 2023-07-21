@@ -26,19 +26,36 @@ book:
       This book was built with <a href="https://quarto.org/">Quarto</a>.
   site-url: https://cincibrainlab.github.io/SignalFlowEEG/
 
+  # chapters:
+  #   - index.qmd
+
+  #   - part: book/lets-get-started.qmd
+  #     chapters:
+  #       - book/intro.qmd
+  #       - book/references.qmd
+
+  #   - part: book/vep-tutorial.qmd
+  #     chapters:
+  #       - book/veptutorial/vep1.qmd
+  #       - book/veptutorial/vep2.qmd
+
+  #   - part: book/murine-eeg.qmd
+  #     chapters:
+  #       - book/murine-eeg/murine1.qmd
+  #       - book/murine-eeg/murine2.qmd  
+
   chapters:
     - index.qmd
-
-    - part: book/lets-get-started.qmd
-      chapters:
-        - book/intro.qmd
-        - book/references.qmd
-
-    - part: book/vep-tutorial.qmd
-      chapters:
-        - book/veptutorial/vep1.qmd
-        - book/veptutorial/vep2.qmd
-      
+    - book/revision/sf_lets-get-started.qmd
+    - book/revision/sf_installing_signalflow.qmd
+    - book/revision/sf_organizing_files.qmd
+    - book/revision/sf_starting_signalflow.qmd
+    - book/revision/sf_setup_tab.qmd
+    - book/revision/sf_builder_tab.qmd
+    - book/revision/sf_execute_tab.qmd
+    - book/revision/sf_browse_tab.qmd
+    - book/murine-eeg/mouseeeg-tutorial.qmd
+    
 
 
 bibliography: book/references.bib

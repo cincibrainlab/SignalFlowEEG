@@ -14,290 +14,276 @@
     "text": "Core Features\n\nFocus on Data Tables: SignalFlowEEG generates tables encapsulating diverse aspects of EEG research, including EEG characteristics, preprocessing procedures, and comprehensive analysis.\nEEGLAB SET Format Compatibility: SF employs the universally accepted EEGLAB SET format, providing an efficient data structure for EEG processing and encouraging interoperability with other tools.\nAudit Capabilities: To maintain transparency and accountability, SF provides the ability to perform audits on logged actions. This feature allows researchers to trace back and review the sequence of operations applied on the EEG data.\nHigh-Performance File Formats: For handling high-dimensional data such as connectivity matrices, SignalFlowEEG adopts high-performance file formats like Apache Parquet. This approach not only ensures data integrity but also facilitates speedy retrieval and efficient storage."
   },
   {
-    "objectID": "book/lets-get-started.html#signalflow-in-a-nutshell",
-    "href": "book/lets-get-started.html#signalflow-in-a-nutshell",
+    "objectID": "book/revision/sf_lets-get-started.html#signalflow-in-a-nutshell",
+    "href": "book/revision/sf_lets-get-started.html#signalflow-in-a-nutshell",
     "title": "Let’s Get Started",
     "section": "SignalFlow in a Nutshell",
-    "text": "SignalFlow in a Nutshell\nAt it’s essense, SignalFlow is a MATLAB toolbox provides a unified wrapper around opensource EEG toolkits (e.g., EEGLAB, FieldTrip, MNE, etc.) to process data and generate uniform outputs (tables and figures).\nThis flexibility should allow you to chose the best toolkit for a specific task, while still providing uniform outputs that can be analyzed similarly."
+    "text": "SignalFlow in a Nutshell\nAt it’s essense, SignalFlow is a MATLAB toolbox and provides a unified wrapper around opensource EEG toolkits (e.g., EEGLAB, FieldTrip, MNE, etc.) to process data and generate uniform outputs (tables and figures). Signalflow can handle EEG data from human recordings but also from other signal sources such as ?sec-mouse-eeg.\nThis flexibility should allow you to chose the best toolkit for a specific task, while still providing uniform outputs that can be analyzed similarly."
   },
   {
-    "objectID": "book/lets-get-started.html#an-brief-example-workflow",
-    "href": "book/lets-get-started.html#an-brief-example-workflow",
+    "objectID": "book/revision/sf_lets-get-started.html#an-brief-example-workflow",
+    "href": "book/revision/sf_lets-get-started.html#an-brief-example-workflow",
     "title": "Let’s Get Started",
     "section": "An Brief Example Workflow",
-    "text": "An Brief Example Workflow\nLet’s give a prototype example of a SignalFlow workflow that might be difficult in any single EEG toolkit.\n\nMATLAB: Use the EEGLAB import functions to properly import an Magstim/EGI .mff file.\nMATLAB: Use a visual pipeline to preprocess several subjects using EEGLAB’s preprocessing functions including using Artifact Subspace Reconstruction (ASR) to remove artifacts.\nMATLAB: Use an optimized parallel ICA function to run ICA on all subjects in parallel using a custom ICA binary that is optimized for your operating system.\nMATLAB: Following preprocessing, use EEGLAB to save the files as SET files in a BIDS compatible format and save preprocessing details as a CSV file.\nUse the artifact-free SET to perform analyzses across toolkits but create R-statistics compatible tables.\n\nUse MATLAB to generate band power tables\nUse Python to generate connectivity tables\nUse R to import the tables and run statistics and perform visualization.\n\n\nWe will go through variations of this workflow in the following sections to give a broad overview of the capabilities of SignalFlow."
+    "text": "An Brief Example Workflow\nLet’s give a prototype example of a SignalFlow workflow that might be difficult in any single EEG toolkit.\n\nMATLAB: Use the EEGLAB import functions to properly import an Magstim/EGI .mff file.\nMATLAB: Use a visual pipeline to preprocess several subjects using EEGLAB’s preprocessing functions including using Artifact Subspace Reconstruction (ASR) to remove artifacts.\nMATLAB: Use an optimized parallel ICA function to run ICA on all subjects in parallel using a custom ICA binary that is optimized for your operating system.\nMATLAB: Following preprocessing, use EEGLAB to save the files as SET files in a BIDS compatible format and save preprocessing details as a CSV file.\nUse the artifact-free SET to perform analyzses across toolkits but create R-statistics (CSV) compatible tables.\n\nUse MATLAB to generate band power tables\nUse Python to generate connectivity tables\nUse R to import the tables and run statistics and perform visualization.\n\n\nWe will go through variations of this workflow in the following sections to give a broad overview of the capabilities of SignalFlow."
   },
   {
-    "objectID": "book/intro.html#a-reproducible-eeg-processing-framework",
-    "href": "book/intro.html#a-reproducible-eeg-processing-framework",
-    "title": "1  Introduction",
-    "section": "1.1 A Reproducible EEG Processing Framework",
-    "text": "1.1 A Reproducible EEG Processing Framework\nSignalFlowEEG (SF) is a comprehensive and versatile framework designed to streamline the processing of Electroencephalograms (EEG). Utilizing an array of different pipelines, SF aims to ensure reproducibility and consistency across EEG studies.\nThe overarching objective of SF is to generate robust data tables that facilitate summary generation and statistical analysis. These tables can encompass a wide range of EEG features, from intrinsic characteristics to preprocessing steps and sophisticated analysis."
+    "objectID": "book/revision/sf_installing_signalflow.html#overview",
+    "href": "book/revision/sf_installing_signalflow.html#overview",
+    "title": "1  Installing SignalFlow",
+    "section": "1.1 Overview",
+    "text": "1.1 Overview\nThe source code for SignalFlow is hosted on GitHub. There are two primary methods to install SignalFlow:\n\nUsing Git software to directly download the code\nDownloading the code as a zip file from the GitHub website\n\nHowever, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process."
   },
   {
-    "objectID": "book/intro.html#core-features",
-    "href": "book/intro.html#core-features",
-    "title": "1  Introduction",
-    "section": "1.2 Core Features",
-    "text": "1.2 Core Features\n\nFocus on Data Tables: SignalFlowEEG generates tables encapsulating diverse aspects of EEG research, including EEG characteristics, preprocessing procedures, and comprehensive analysis.\nEEGLAB SET Format Compatibility: SF employs the universally accepted EEGLAB SET format, providing an efficient data structure for EEG processing and encouraging interoperability with other tools.\nAudit Capabilities: To maintain transparency and accountability, SF provides the ability to perform audits on logged actions. This feature allows researchers to trace back and review the sequence of operations applied on the EEG data.\nHigh-Performance File Formats: For handling high-dimensional data such as connectivity matrices, SignalFlowEEG adopts high-performance file formats like Apache Parquet. This approach not only ensures data integrity but also facilitates speedy retrieval and efficient storage."
+    "objectID": "book/revision/sf_installing_signalflow.html#method-1-using-git",
+    "href": "book/revision/sf_installing_signalflow.html#method-1-using-git",
+    "title": "1  Installing SignalFlow",
+    "section": "1.2 Method 1: Using Git",
+    "text": "1.2 Method 1: Using Git\n\nCheck if Git is installed:\nOpen a terminal or command prompt and run the following command:\ngit --version\nIf Git is installed, you will see the version number. If not, proceed to the next step.\nInstall Git:\nDownload the install from the official Git website for your operating system at official Git website.\nCreate a ‘github’ directory: Choose a location on your drive that will be used to store your toolboxes.\nRun use your file explorer or run following command to create a new directory called ‘github’ and navigate to it:\nmkdir github\ncd github\nClone the SignalFlow repository with submodules:\nRun the following command to clone the repository and its submodules:\ngit clone --recurse-submodules https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git\nThis will clone the repository and its submodules into the ‘github’ directory. The output will be displayed in the terminal or command prompt.\nClone other necessary toolkits: In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:\n\n\nEEGLAB:\ngit clone --recurse-submodules https://github.com/sccn/eeglab.git\nBrainstorm:\ngit clone --recurse-submodules https://github.com/brainstorm-tools/brainstorm3.git\nHAPPE Pipeline:\ngit clone --recurse-submodules https://github.com/PINE-Lab/HAPPE.git\nMADE Pipeline:\ngit clone --recurse-submodules https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git\nAfter cloning these repositories, you’ll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:\ngit pull --recurse-submodules"
   },
   {
-    "objectID": "book/veptutorial/vep1.html#overview",
-    "href": "book/veptutorial/vep1.html#overview",
-    "title": "2  Visual Evoked Potentials (VEP) Tutorial",
+    "objectID": "book/revision/sf_installing_signalflow.html#method-2-downloading-toolkits-as-zip-files",
+    "href": "book/revision/sf_installing_signalflow.html#method-2-downloading-toolkits-as-zip-files",
+    "title": "1  Installing SignalFlow",
+    "section": "1.3 Method 2: Downloading Toolkits as Zip Files",
+    "text": "1.3 Method 2: Downloading Toolkits as Zip Files\nIf you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.\nHere are the steps to download and organize the repositories:\n\nNavigate to each repository’s GitHub page in your web browser.\nClick on the Code button and then click Download ZIP.\nOnce the download is complete, extract the ZIP file.\nCreate a new folder in your github directory for each extracted repository. The name of the folder should match the repository name.\n\nHere are the links to each repository: - SignalFlow: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git - VHTP: https://github.com/cincibrainlab/vhtp - VHTP Dependencies: https://github.com/cincibrainlab/vhtp_dependencies - HAPPE Pipeline: https://github.com/PINE-Lab/HAPPE - MADE Pipeline: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline\nNote: For the VHTP and VHTP Dependencies, make sure to place these folders in the SignalFlowEEG_HBCD folder, as they are necessary for certain SignalFlow operations.\nEEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.\n\nEEGLAB: https://sccn.ucsd.edu/eeglab/index.php\nBrainstorm:https://neuroimage.usc.edu/brainstorm/Introduction\n\nAfter extraction, you will have the complete repository with all its files and folders available on your computer."
+  },
+  {
+    "objectID": "book/revision/sf_organizing_files.html#overview",
+    "href": "book/revision/sf_organizing_files.html#overview",
+    "title": "2  Preparing Data Files",
     "section": "2.1 Overview",
-    "text": "2.1 Overview\nIn this walkthrough, we will guide you on how to use SignalFlowEEG to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.\nIn the following sections, we will dive deeper into each of these steps:\n\nSetting up SignalFlowEEG and its Dependencies: Learn how to install and configure SignalFlowEEG and its dependencies.\nArrange Files for Optimized Processing: We’ll begin by organizing our files in a way that optimizes SignalFlowEEG’s processing capabilities.\nPreprocess Files Using HAPPE Pipeline: Next, we’ll utilize the popular HAPPE pipeline to preprocess our VEP dataset.\nOutput Data Tables: After preprocessing, we will output three data tables:\n\nEEG Characteristics Table: This table will present the EEG characteristics of our VEP data, such as original length.\nPreprocessing Results Table: This table will showcase the results of our preprocessing steps, including the number of epochs.\nAmplitude Table for ERPs: This table will contain the amplitudes necessary to generate ERPs from our VEP dataset.\n\nModify Preprocessing Step to Observe Effect on ERPs: Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.\n\nLet’s get started!"
+    "text": "2.1 Overview\nWhen working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self).\nConsidering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: data, temp, and results.\nThese directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a readme.txt file in the main folder and describing the contents and purpose of the project and folders.\nHere’s a simple, recommended structure:\n\nProjectName/\n\nreadme.txt\ndata/\ntemp/\nresults/\n\n\nThe data directory should contain all the raw data that will be processed. The temp directory will store any temporary files created during data processing, and the results directory will hold the output from your analyses."
   },
   {
-    "objectID": "book/veptutorial/vep2.html",
-    "href": "book/veptutorial/vep2.html",
-    "title": "3  Walkthrough",
+    "objectID": "book/revision/sf_organizing_files.html#using-the-bids-format",
+    "href": "book/revision/sf_organizing_files.html#using-the-bids-format",
+    "title": "2  Preparing Data Files",
+    "section": "2.2 Using the BIDS format",
+    "text": "2.2 Using the BIDS format\nThe Brain Imaging Data Structure (BIDS) is a formal way to name and organize neuroimaging data and metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.\nSignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.\n- ProjectName/\n  - readme.txt\n  - data/\n    - BIDS/\n      - sub-01/\n        - ses-01/\n          - eeg/\n            - sub-01_ses-01_task-mytask_eeg.edf\n            - sub-01_ses-01_task-mytask_channels.tsv\n            - sub-01_ses-01_task-mytask_electrodes.tsv\n            - sub-01_ses-01_task-mytask_events.tsv\n            - ...\n      - ...\n  - temp/\n  - results/\nSignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility (util_htpDirListing.m) can create a custom file list from a BIDS directory structure.\nRemember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows."
+  },
+  {
+    "objectID": "book/revision/sf_starting_signalflow.html",
+    "href": "book/revision/sf_starting_signalflow.html",
+    "title": "3  Starting SignalFlow",
     "section": "",
-    "text": "4 Preparing and Organizing Files\nFollow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:\nWith these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB.\n* The setup tab is the starting page for every user. It allows the user to configure their workstation and pipeline to their indidual needs.\n* The Builder tab is used to create the pipeline and edit modules. Most work is done in this tab.\n* The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.\n* The browse tab is used to analyze and look at data. The user has access to many tools to aid with this."
+    "text": "Follow the steps below to launch the SignalFlow graphical user interface (GUI) or APplication via MATLAB:\n\nOpen MATLAB.\nLaunch the MATLAB software from your applications menu or desktop shortcut.\nNavigate to the SignalFlow Directory.\nThe SignalFlow directory is typically located within the GitHub folder in your Documents. This might vary depending on where you cloned the repository. The paths are generally as follows:\n\nFor Windows: C:\\\\Users\\\\**YourUsername**\\\\Documents\\\\github\\\\SignalFlow_HBCD\nFor Linux or macOS: /home/**YourUsername**/Documents/github/SignalFlow_HBCD\n\nReplace **YourUsername** with your actual username on your computer.\nTo navigate to this directory in MATLAB, you can use the cd (change directory) command in MATLAB’s Command Window:\ncd('path-to-directory')\nReplace 'path-to-directory' with the appropriate path above.\nFind the SignalFlow application file.\nIn MATLAB’s Current Folder pane (typically located on the left side of the interface), scroll to locate the SignalFlow application file named “SignalFlowEEG.mlapp”.\nRun the SignalFlow application. \nRight-click on the “SignalFlowEEG.mlapp” file and select “Run” from the context menu.\nCheck SignalFlow Application.\n\nThe SignalFlow Application should now open. If the GUI does not open or you encounter an error, ensure that you have the correct directory and the “SignalFlowEEG.mlapp” file is present.\nCheck dependencies\n\nIf you check the command window, you will see that SignalFlow will do a careful check for any missing dependencies. If you encounter any errors, revist the Chapter 1 section to ensure that you have installed all the necessary dependencies.\nThe command SignalFlowDoctor will do a careful check for missing toolkits and also have options for repair. Restart SignalFlow after installing any missing dependencies.\n\n\n\nSignalFlowDoctor\n\n\nIn this case, SignalFlowDoctor identifies two issues as missing EEGLAB toolkits. Running the recommended commands in the command window will install the missing toolkits. If a plugin cannot be installed automatically, you may need to open EEGLAB and install it though the plugin manager.\nWith these steps, you should be able to successfully launch the SignalFlow EEG Application in MATLAB."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#sec-InstallSignalFlow",
-    "href": "book/veptutorial/vep2.html#sec-InstallSignalFlow",
-    "title": "3  Walkthrough",
-    "section": "3.1 Downloading SignalFlow from GitHub",
-    "text": "3.1 Downloading SignalFlow from GitHub"
+    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
+    "href": "book/murine-eeg/mouseeeg-tutorial.html#sec-overview",
+    "title": "8  Mouse EEG Tutorial",
+    "section": "8.1 Overview",
+    "text": "8.1 Overview\nThis tutorial assumes that you have already installed SignalFlowEEG (Chapter 1) and are familiar with the SignalFlow interface (Chapter 4).\nIn this walkthrough, we will cover the following topics:\n\nSetting up your environment\nLoading data\nOutputting data\nVisualize data\nStatistical Analysis\nReporting"
   },
   {
-    "objectID": "book/veptutorial/vep2.html#overview",
-    "href": "book/veptutorial/vep2.html#overview",
-    "title": "3  Walkthrough",
-    "section": "3.2 Overview",
-    "text": "3.2 Overview\nThe source code for SignalFlow is hosted on GitHub. There are two primary methods to acquire the code - either through utilizing Git software or directly downloading from the website. However, due to the inclusion of submodules pertaining to other necessary programs, we highly recommend the use of Git for downloading SignalFlow. The direct web download approach requires manual downloading and arrangement of each piece of software within the source code directory, which could prove to be a more time-consuming process."
+    "objectID": "book/murine-eeg/mouseeeg-tutorial.html#setting-up-your-environment",
+    "href": "book/murine-eeg/mouseeeg-tutorial.html#setting-up-your-environment",
+    "title": "8  Mouse EEG Tutorial",
+    "section": "8.2 Setting up your environment",
+    "text": "8.2 Setting up your environment\n\n8.2.1 Installing SignalFlowEEG\nSee Chapter 1."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#method-1-using-git",
-    "href": "book/veptutorial/vep2.html#method-1-using-git",
-    "title": "3  Walkthrough",
-    "section": "3.3 Method 1: Using Git",
-    "text": "3.3 Method 1: Using Git\n\nCheck if Git is installed:\nOpen a terminal or command prompt and run the following command:\ngit --version\nIf Git is installed, you will see the version number. If not, proceed to the next step.\nInstall Git:\nDownload the install from the official Git website for your operating system at official Git website.\nCreate a ‘github’ directory: Choose a location on your drive that will be used to store your toolboxes.\nRun use your file explorer or run following command to create a new directory called ‘github’ and navigate to it:\nmkdir github\ncd github\nClone the SignalFlow repository with submodules:\nRun the following command to clone the repository and its submodules:\ngit clone --recurse-submodules https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git\nThis will clone the repository and its submodules into the ‘github’ directory. The output will be displayed in the terminal or command prompt.\nClone other necessary toolkits: In addition to SignalFlowEEG, you may need to clone several other toolkits. Here are the necessary commands:\n\n\nEEGLAB:\ngit clone --recurse-submodules https://github.com/sccn/eeglab.git\nBrainstorm:\ngit clone --recurse-submodules https://github.com/brainstorm-tools/brainstorm3.git\nHAPPE Pipeline:\ngit clone --recurse-submodules https://github.com/PINE-Lab/HAPPE.git\nMADE Pipeline:\ngit clone --recurse-submodules https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline.git\nAfter cloning these repositories, you’ll have all the necessary toolkits for your EEG data analysis. Make sure to keep these repositories up-to-date by pulling the latest changes regularly by using the command:\ngit pull --recurse-submodules"
+    "objectID": "book/revision/sf_setup_tab.html#adding-toolboxes-to-the-matlab-path",
+    "href": "book/revision/sf_setup_tab.html#adding-toolboxes-to-the-matlab-path",
+    "title": "4  SignalFlow: Setup Tab",
+    "section": "4.1 Adding toolboxes to the MATLAB path",
+    "text": "4.1 Adding toolboxes to the MATLAB path\n\nNavigate to the “Setup” Tab.\nDecide which toolbox/dependency you would like to add to the MATLAB path. A. A Red circle indicated the toolbox/dependency has not been added. B. A Green circle indicates that the toolbox/dependency has been added.\nLeft-click on the “Click to Fix: Insert Toolbox”.\nFile Explorer will open.\nSelect the directory that contains your toolbox. Click “Open” in the file explorer. A. This can vary based on the toolbox, contact us if you have issues .\nThe circle should turn from red to green, may take a second due to SignalFLow checking if it’s the right toolbox."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#method-2-downloading-toolkits-as-zip-files",
-    "href": "book/veptutorial/vep2.html#method-2-downloading-toolkits-as-zip-files",
-    "title": "3  Walkthrough",
-    "section": "3.4 Method 2: Downloading Toolkits as Zip Files",
-    "text": "3.4 Method 2: Downloading Toolkits as Zip Files\nIf you prefer, you can download each repository individually as a zip file. This can be done from the main page of each repository on GitHub. Note that this method will require additional steps to organize the downloaded content.\nHere are the steps to download and organize the repositories:\n\nNavigate to each repository’s GitHub page in your web browser.\nClick on the Code button and then click Download ZIP.\nOnce the download is complete, extract the ZIP file.\nCreate a new folder in your github directory for each extracted repository. The name of the folder should match the repository name.\n\nHere are the links to each repository: - SignalFlow: https://github.com/cincibrainlab/SignalFlowEEG_HBCD.git - VHTP: https://github.com/cincibrainlab/vhtp - VHTP Dependencies: https://github.com/cincibrainlab/vhtp_dependencies - HAPPE Pipeline: https://github.com/PINE-Lab/HAPPE - MADE Pipeline: https://github.com/ChildDevLab/MADE-EEG-preprocessing-pipeline\nNote: For the VHTP and VHTP Dependencies, make sure to place these folders in the SignalFlowEEG_HBCD folder, as they are necessary for certain SignalFlow operations.\nEEGLAB and Brainstorm must be downloaded through their respective non-github websites. This is because any submodules cannot be downloaded through the github website without git.\n\nEEGLAB: https://sccn.ucsd.edu/eeglab/index.php\nBrainstorm:https://neuroimage.usc.edu/brainstorm/Introduction\n\nAfter extraction, you will have the complete repository with all its files and folders available on your computer."
+    "objectID": "book/revision/sf_setup_tab.html#adding-project-folder-locations",
+    "href": "book/revision/sf_setup_tab.html#adding-project-folder-locations",
+    "title": "4  SignalFlow: Setup Tab",
+    "section": "4.2 Adding Project Folder locations",
+    "text": "4.2 Adding Project Folder locations\n\nNavigate to the “Setup” Tab.\nDecide which folder you would like to add. A. A Red circle indicated the folder has not been added. B. A Green circle indicates that the folder has been added.\nLeft-click on the “Click to Fix: Insert folder”.\nFile Explorer will open.\nSelect the directory you would like to add. Left-click “Open” in the file explorer.\nThe circle will turn from red to green."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#overview-1",
-    "href": "book/veptutorial/vep2.html#overview-1",
-    "title": "3  Walkthrough",
-    "section": "4.1 Overview",
-    "text": "4.1 Overview\nWhen working with complex data like EEG datasets, a clear and concise directory structure is essential for efficient data management and processing. A well-organized file structure improves reproducibility and ease of understanding for others (and your future self).\nConsidering the diverse storage requirements of different processes, we suggest splitting up your directories to increase versatility. Our recommendation includes creating three main directories: data, temp, and results.\nThese directories should be nested within a project-specific folder to separate and manage multiple projects effortlessly. We also advise creating a readme.txt file in the main folder and describing the contents and purpose of the project and folders.\nHere’s a simple, recommended structure:\n\nProjectName/\n\nreadme.txt\ndata/\ntemp/\nresults/\n\n\nThe data directory should contain all the raw data that will be processed. The temp directory will store any temporary files created during data processing, and the results directory will hold the output from your analyses."
+    "objectID": "book/revision/sf_setup_tab.html#adding-custom-projct-folder-locations",
+    "href": "book/revision/sf_setup_tab.html#adding-custom-projct-folder-locations",
+    "title": "4  SignalFlow: Setup Tab",
+    "section": "4.3 Adding Custom Projct Folder locations",
+    "text": "4.3 Adding Custom Projct Folder locations\n\nNavigate to the “Setup” Tab.\nLeft-click the “Add Custom Folder” button.\nA Matlab figure will open.\nLeft-click the “Select Directory” button.\nSelect the directory you would like to add. Left-click “Open” in the file explorer.\nEnter a tag. A tag is an easily recognizable name used for selecting this Projct Folder later.\nLeft-click the “Confirm” button.\nA new project foler will be added. The circle will turn from red to green."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#using-the-bids-format",
-    "href": "book/veptutorial/vep2.html#using-the-bids-format",
-    "title": "3  Walkthrough",
-    "section": "4.2 Using the BIDS format",
-    "text": "4.2 Using the BIDS format\nThe Brain Imaging Data Structure (BIDS) is a formal way to name and organize neuroimaging data and metadata in a file system. The goal is to simplify communication and collaboration among users. The format enables easier data validation and software development through consistent paths and naming for data files.\nSignalFlow does not require the use of BIDS, but it maybe useful for certain projects. You can incorporate the BIDS structure into the project organization strategy described above by placing a BIDS-compliant data folder inside the data directory.\n- ProjectName/\n  - readme.txt\n  - data/\n    - BIDS/\n      - sub-01/\n        - ses-01/\n          - eeg/\n            - sub-01_ses-01_task-mytask_eeg.edf\n            - sub-01_ses-01_task-mytask_channels.tsv\n            - sub-01_ses-01_task-mytask_electrodes.tsv\n            - sub-01_ses-01_task-mytask_events.tsv\n            - ...\n      - ...\n  - temp/\n  - results/\nSignalFlow relies on helper functions from the Cincinnati Visual High Throughput Pipeline (vHTP). The standard file list utility (util_htpDirListing.m) can create a custom file list from a BIDS directory structure.\nRemember, a well-planned and maintained directory structure can save time and prevent confusion as your project grows."
+    "objectID": "book/revision/sf_setup_tab.html#edit-project-information",
+    "href": "book/revision/sf_setup_tab.html#edit-project-information",
+    "title": "4  SignalFlow: Setup Tab",
+    "section": "4.4 Edit Project Information",
+    "text": "4.4 Edit Project Information\n\nNavigate to the “Setup” Tab.\nEnter a Title for your project.\nEnter a Description for you project.\nEnter an Author for your project.\nLeft-click the “Save” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#adding-dependancies",
-    "href": "book/veptutorial/vep2.html#adding-dependancies",
-    "title": "3  Walkthrough",
-    "section": "6.1 Adding Dependancies",
-    "text": "6.1 Adding Dependancies\n\nNavigate to the “Setup” Tab.\nDecide which toolbox/dependency you would like to add . A. A Red circle indicated the toolbox/dependency has not been added. B. A Green circle indicates that the toolbox/dependency has been added.\nLeft-click on the “Click to Fix: Insert Toolbox”.\nFile Explorer will open.\nSelect the directory that contains your toolbox. Click “Open” in the file explorer. A. This can vary based on the toolbox, contact us if you have issues .\nThe circle should turn from red to green, may take a second due to SignalFLow checking if it’s the right toolbox."
+    "objectID": "book/revision/sf_builder_tab.html#filter-modules",
+    "href": "book/revision/sf_builder_tab.html#filter-modules",
+    "title": "5  Builder Tab",
+    "section": "5.1 Filter Modules",
+    "text": "5.1 Filter Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the filter dropdown.\nSelect the filter you would like to use.\nModule Libraries will only show modules that agree with your filter."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#adding-projct-folder-locations",
-    "href": "book/veptutorial/vep2.html#adding-projct-folder-locations",
-    "title": "3  Walkthrough",
-    "section": "6.2 Adding Projct Folder locations",
-    "text": "6.2 Adding Projct Folder locations\n\nNavigate to the “Setup” Tab.\nDecide which folder you would like to add. A. A Red circle indicated the folder has not been added. B. A Green circle indicates that the folder has been added.\nLeft-click on the “Click to Fix: Insert folder”.\nFile Explorer will open.\nSelect the directory you would like to add. Left-click “Open” in the file explorer.\nThe circle will turn from red to green."
+    "objectID": "book/revision/sf_builder_tab.html#sec-AddingModules",
+    "href": "book/revision/sf_builder_tab.html#sec-AddingModules",
+    "title": "5  Builder Tab",
+    "section": "5.2 Adding Modules",
+    "text": "5.2 Adding Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will the be added to the pipeline. It will show up in the Pipeline Builder."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#adding-custom-projct-folder-locations",
-    "href": "book/veptutorial/vep2.html#adding-custom-projct-folder-locations",
-    "title": "3  Walkthrough",
-    "section": "6.3 Adding Custom Projct Folder locations",
-    "text": "6.3 Adding Custom Projct Folder locations\n\nNavigate to the “Setup” Tab.\nLeft-click the “Add Custom Folder” button.\nA Matlab figure will open.\nLeft-click the “Select Directory” button.\nSelect the directory you would like to add. Left-click “Open” in the file explorer.\nEnter a tag. A tag is an easily recognizable name used for selecting this Projct Folder later.\nLeft-click the “Confirm” button.\nA new project foler will be added. The circle will turn from red to green."
+    "objectID": "book/revision/sf_builder_tab.html#copy-and-edit-module-todo-this-might-have-a-bug",
+    "href": "book/revision/sf_builder_tab.html#copy-and-edit-module-todo-this-might-have-a-bug",
+    "title": "5  Builder Tab",
+    "section": "5.3 Copy and Edit Module TODO this might have a bug",
+    "text": "5.3 Copy and Edit Module TODO this might have a bug\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will then be opened in Matlab.\nEdit any parameters or code.\nSave the Module file.\nThe Module file should show up in the User module library."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#edit-project-information",
-    "href": "book/veptutorial/vep2.html#edit-project-information",
-    "title": "3  Walkthrough",
-    "section": "6.4 Edit Project Information",
-    "text": "6.4 Edit Project Information\n\nNavigate to the “Setup” Tab.\nEnter a Title for your project.\nEnter a Description for you project.\nEnter an Author for your project.\nLeft-click the “Save” button."
+    "objectID": "book/revision/sf_builder_tab.html#delete-module",
+    "href": "book/revision/sf_builder_tab.html#delete-module",
+    "title": "5  Builder Tab",
+    "section": "5.4 Delete Module",
+    "text": "5.4 Delete Module\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to delete.\n\nThis can only be from the Pipeline Builder\n\nBelow the Pipeline Builder, there is an “Delete Module” button, left-click it.\nThe Module will be removed from the pipeline."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#filter-modules",
-    "href": "book/veptutorial/vep2.html#filter-modules",
-    "title": "3  Walkthrough",
-    "section": "7.1 Filter Modules",
-    "text": "7.1 Filter Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the filter dropdown.\nSelect the filter you would like to use.\nModule Libraries will only show modules that agree with your filter."
+    "objectID": "book/revision/sf_builder_tab.html#reorder-modules",
+    "href": "book/revision/sf_builder_tab.html#reorder-modules",
+    "title": "5  Builder Tab",
+    "section": "5.5 Reorder Modules",
+    "text": "5.5 Reorder Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to reorder.\n\nThis can only be from the Pipeline Builder.\n\nTo the right of the Pipeline Builder, there are 2 arrows.\nLeft-click the arrow that corresponds with the direction you would like to move the module.\nThe Module will be reordered in the pipeline."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#sec-AddingModules",
-    "href": "book/veptutorial/vep2.html#sec-AddingModules",
-    "title": "3  Walkthrough",
-    "section": "7.2 Adding Modules",
-    "text": "7.2 Adding Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will the be added to the pipeline. It will show up in the Pipeline Builder."
+    "objectID": "book/revision/sf_builder_tab.html#reset-pipeline",
+    "href": "book/revision/sf_builder_tab.html#reset-pipeline",
+    "title": "5  Builder Tab",
+    "section": "5.6 Reset Pipeline",
+    "text": "5.6 Reset Pipeline\n\nNavigate to the “Builder” Tab.\nLeft-click the “Reset Pipeline” button.\nAll Modules within the Pipeline Builder will be deleted."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#copy-and-edit-module-todo-this-might-have-a-bug",
-    "href": "book/veptutorial/vep2.html#copy-and-edit-module-todo-this-might-have-a-bug",
-    "title": "3  Walkthrough",
-    "section": "7.3 Copy and Edit Module TODO this might have a bug",
-    "text": "7.3 Copy and Edit Module TODO this might have a bug\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to use.\n\nThis can be from the both the Base and User module libraries.\n\nBelow the Base and User module libraries, there is an “Add Module” button, left-click it.\nThe module will then be opened in Matlab.\nEdit any parameters or code.\nSave the Module file.\nThe Module file should show up in the User module library."
+    "objectID": "book/revision/sf_builder_tab.html#change-module-information",
+    "href": "book/revision/sf_builder_tab.html#change-module-information",
+    "title": "5  Builder Tab",
+    "section": "5.7 Change Module Information",
+    "text": "5.7 Change Module Information\n\nNavigate to the “Builder” Tab.\nEnter the new Module Name.\nIf the module is an outflow module. A. Select the needed output folder tag in the dropdown.\nLeft-click the “Update” button.\nYour changes will be saved.\nIf you would like to return to default name and folder tag A. Left-click the “Default” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#delete-module",
-    "href": "book/veptutorial/vep2.html#delete-module",
-    "title": "3  Walkthrough",
-    "section": "7.4 Delete Module",
-    "text": "7.4 Delete Module\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to delete.\n\nThis can only be from the Pipeline Builder\n\nBelow the Pipeline Builder, there is an “Delete Module” button, left-click it.\nThe Module will be removed from the pipeline."
+    "objectID": "book/revision/sf_execute_tab.html#refresh",
+    "href": "book/revision/sf_execute_tab.html#refresh",
+    "title": "6  Execute Tab",
+    "section": "6.1 Refresh",
+    "text": "6.1 Refresh\n\nThis button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.\n\nAn example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#reorder-modules",
-    "href": "book/veptutorial/vep2.html#reorder-modules",
-    "title": "3  Walkthrough",
-    "section": "7.5 Reorder Modules",
-    "text": "7.5 Reorder Modules\n\nNavigate to the “Builder” Tab.\nLeft-click the module you would like to reorder.\n\nThis can only be from the Pipeline Builder.\n\nTo the right of the Pipeline Builder, there are 2 arrows.\nLeft-click the arrow that corresponds with the direction you would like to move the module.\nThe Module will be reordered in the pipeline."
+    "objectID": "book/revision/sf_execute_tab.html#execute-loop",
+    "href": "book/revision/sf_execute_tab.html#execute-loop",
+    "title": "6  Execute Tab",
+    "section": "6.2 Execute (Loop)",
+    "text": "6.2 Execute (Loop)\n\nThis button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time.\nUse this if there are steps that require user input. A. Examples of this include: Remove channels, remove epochs, etc."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#reset-pipeline",
-    "href": "book/veptutorial/vep2.html#reset-pipeline",
-    "title": "3  Walkthrough",
-    "section": "7.6 Reset Pipeline",
-    "text": "7.6 Reset Pipeline\n\nNavigate to the “Builder” Tab.\nLeft-click the “Reset Pipeline” button.\nAll Modules within the Pipeline Builder will be deleted."
+    "objectID": "book/revision/sf_execute_tab.html#execute-parallel",
+    "href": "book/revision/sf_execute_tab.html#execute-parallel",
+    "title": "6  Execute Tab",
+    "section": "6.3 Execute (Parallel)",
+    "text": "6.3 Execute (Parallel)\n\nThis button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time.\nThis should only be used when the follwoing are true. A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. B. You have a high performance computer. C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer. D. You have the Matlab Parralel Processing Toolbox"
   },
   {
-    "objectID": "book/veptutorial/vep2.html#change-module-information",
-    "href": "book/veptutorial/vep2.html#change-module-information",
-    "title": "3  Walkthrough",
-    "section": "7.7 Change Module Information",
-    "text": "7.7 Change Module Information\n\nNavigate to the “Builder” Tab.\nEnter the new Module Name.\nIf the module is an outflow module. A. Select the needed output folder tag in the dropdown.\nLeft-click the “Update” button.\nYour changes will be saved.\nIf you would like to return to default name and folder tag A. Left-click the “Default” button."
+    "objectID": "book/revision/sf_execute_tab.html#execute-file",
+    "href": "book/revision/sf_execute_tab.html#execute-file",
+    "title": "6  Execute Tab",
+    "section": "6.4 Execute (File)",
+    "text": "6.4 Execute (File)\n\nThis button is used to execute the pipeline on a selected eeg file in the import directory.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Execute (File)” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#refresh",
-    "href": "book/veptutorial/vep2.html#refresh",
-    "title": "3  Walkthrough",
-    "section": "8.1 Refresh",
-    "text": "8.1 Refresh\n\nThis button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.\n\nAn example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog."
+    "objectID": "book/revision/sf_execute_tab.html#open-import-folder",
+    "href": "book/revision/sf_execute_tab.html#open-import-folder",
+    "title": "6  Execute Tab",
+    "section": "6.5 Open Import Folder",
+    "text": "6.5 Open Import Folder\n\nThis button is used to open the import directory in the computers file explorer."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#execute-loop",
-    "href": "book/veptutorial/vep2.html#execute-loop",
-    "title": "3  Walkthrough",
-    "section": "8.2 Execute (Loop)",
-    "text": "8.2 Execute (Loop)\n\nThis button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time.\nUse this if there are steps that require user input. A. Examples of this include: Remove channels, remove epochs, etc."
+    "objectID": "book/revision/sf_execute_tab.html#open-export-folder",
+    "href": "book/revision/sf_execute_tab.html#open-export-folder",
+    "title": "6  Execute Tab",
+    "section": "6.6 Open Export Folder",
+    "text": "6.6 Open Export Folder\n\nThis button is used to open the selected directory in the computers file explorer.\nTo use this button:\n\nLeft-click your desired directory in the File Catalog.\nLeft-click the “Open Export Folder” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#execute-parallel",
-    "href": "book/veptutorial/vep2.html#execute-parallel",
-    "title": "3  Walkthrough",
-    "section": "8.3 Execute (Parallel)",
-    "text": "8.3 Execute (Parallel)\n\nThis button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time.\nThis should only be used when the follwoing are true. A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. B. You have a high performance computer. C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer. D. You have the Matlab Parralel Processing Toolbox"
+    "objectID": "book/revision/sf_execute_tab.html#open-in-eeglab",
+    "href": "book/revision/sf_execute_tab.html#open-in-eeglab",
+    "title": "6  Execute Tab",
+    "section": "6.7 Open in EEGLAB",
+    "text": "6.7 Open in EEGLAB\n\nThis button is used to open a selected eeg file in the EEGLAB gui.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Open in EEGLAB” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#execute-file",
-    "href": "book/veptutorial/vep2.html#execute-file",
-    "title": "3  Walkthrough",
-    "section": "8.4 Execute (File)",
-    "text": "8.4 Execute (File)\n\nThis button is used to execute the pipeline on a selected eeg file in the import directory.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Execute (File)” button."
+    "objectID": "book/revision/sf_execute_tab.html#plot-data",
+    "href": "book/revision/sf_execute_tab.html#plot-data",
+    "title": "6  Execute Tab",
+    "section": "6.8 Plot Data",
+    "text": "6.8 Plot Data\n\nThis button is used to plot data for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Plot Data” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#open-import-folder",
-    "href": "book/veptutorial/vep2.html#open-import-folder",
-    "title": "3  Walkthrough",
-    "section": "8.5 Open Import Folder",
-    "text": "8.5 Open Import Folder\n\nThis button is used to open the import directory in the computers file explorer."
+    "objectID": "book/revision/sf_execute_tab.html#view-electrode-map",
+    "href": "book/revision/sf_execute_tab.html#view-electrode-map",
+    "title": "6  Execute Tab",
+    "section": "6.9 View Electrode Map",
+    "text": "6.9 View Electrode Map\n\nThis button is used to view the electrode map for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Electrode Map” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#open-export-folder",
-    "href": "book/veptutorial/vep2.html#open-export-folder",
-    "title": "3  Walkthrough",
-    "section": "8.6 Open Export Folder",
-    "text": "8.6 Open Export Folder\n\nThis button is used to open the selected directory in the computers file explorer.\nTo use this button:\n\nLeft-click your desired directory in the File Catalog.\nLeft-click the “Open Export Folder” button."
+    "objectID": "book/revision/sf_execute_tab.html#view-channel-spectra",
+    "href": "book/revision/sf_execute_tab.html#view-channel-spectra",
+    "title": "6  Execute Tab",
+    "section": "6.10 View Channel Spectra",
+    "text": "6.10 View Channel Spectra\n\nThis button is used to view the channel spectra for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Channel Spectra” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#open-in-eeglab",
-    "href": "book/veptutorial/vep2.html#open-in-eeglab",
-    "title": "3  Walkthrough",
-    "section": "8.7 Open in EEGLAB",
-    "text": "8.7 Open in EEGLAB\n\nThis button is used to open a selected eeg file in the EEGLAB gui.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Open in EEGLAB” button."
+    "objectID": "book/revision/sf_browse_tab.html#select-project-folder",
+    "href": "book/revision/sf_browse_tab.html#select-project-folder",
+    "title": "7  Browse Tab",
+    "section": "7.1 Select Project Folder",
+    "text": "7.1 Select Project Folder\n\nNavigate to the “Browse” Tab.\nLeft-click the current folder dropdown.\nSelect the folder you would like to see.\nThe file catalog will be updated based on your selection."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#plot-data",
-    "href": "book/veptutorial/vep2.html#plot-data",
-    "title": "3  Walkthrough",
-    "section": "8.8 Plot Data",
-    "text": "8.8 Plot Data\n\nThis button is used to plot data for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Plot Data” button."
+    "objectID": "book/revision/sf_browse_tab.html#refresh",
+    "href": "book/revision/sf_browse_tab.html#refresh",
+    "title": "7  Browse Tab",
+    "section": "7.2 Refresh",
+    "text": "7.2 Refresh\n\nThis button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.\n\nAn example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#view-electrode-map",
-    "href": "book/veptutorial/vep2.html#view-electrode-map",
-    "title": "3  Walkthrough",
-    "section": "8.9 View Electrode Map",
-    "text": "8.9 View Electrode Map\n\nThis button is used to view the electrode map for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Electrode Map” button."
+    "objectID": "book/revision/sf_browse_tab.html#open-selected-folder",
+    "href": "book/revision/sf_browse_tab.html#open-selected-folder",
+    "title": "7  Browse Tab",
+    "section": "7.3 Open Selected Folder",
+    "text": "7.3 Open Selected Folder\n\nThis button is used to open the selected directory in the computers file explorer.\nTo use this button:\n\nLeft-click your desired directory in the File Catalog.\nLeft-click the “Open Export Folder” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#view-channel-spectra",
-    "href": "book/veptutorial/vep2.html#view-channel-spectra",
-    "title": "3  Walkthrough",
-    "section": "8.10 View Channel Spectra",
-    "text": "8.10 View Channel Spectra\n\nThis button is used to view the channel spectra for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Channel Spectra” button."
+    "objectID": "book/revision/sf_browse_tab.html#open-in-eeglab",
+    "href": "book/revision/sf_browse_tab.html#open-in-eeglab",
+    "title": "7  Browse Tab",
+    "section": "7.4 Open in EEGLAB",
+    "text": "7.4 Open in EEGLAB\n\nThis button is used to open a selected eeg file in the EEGLAB gui.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Open in EEGLAB” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#select-project-folder",
-    "href": "book/veptutorial/vep2.html#select-project-folder",
-    "title": "3  Walkthrough",
-    "section": "9.1 Select Project Folder",
-    "text": "9.1 Select Project Folder\n\nNavigate to the “Browse” Tab.\nLeft-click the current folder dropdown.\nSelect the folder you would like to see.\nThe file catalog will be updated based on your selection."
+    "objectID": "book/revision/sf_browse_tab.html#plot-data",
+    "href": "book/revision/sf_browse_tab.html#plot-data",
+    "title": "7  Browse Tab",
+    "section": "7.5 Plot Data",
+    "text": "7.5 Plot Data\n\nThis button is used to plot data for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Plot Data” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#refresh-1",
-    "href": "book/veptutorial/vep2.html#refresh-1",
-    "title": "3  Walkthrough",
-    "section": "9.2 Refresh",
-    "text": "9.2 Refresh\n\nThis button is used to refresh the file catalog when a change to the file sytem or pipeline has occured.\n\nAn example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog."
+    "objectID": "book/revision/sf_browse_tab.html#view-electrode-map",
+    "href": "book/revision/sf_browse_tab.html#view-electrode-map",
+    "title": "7  Browse Tab",
+    "section": "7.6 View Electrode Map",
+    "text": "7.6 View Electrode Map\n\nThis button is used to view the electrode map for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Electrode Map” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#open-selected-folder",
-    "href": "book/veptutorial/vep2.html#open-selected-folder",
-    "title": "3  Walkthrough",
-    "section": "9.3 Open Selected Folder",
-    "text": "9.3 Open Selected Folder\n\nThis button is used to open the selected directory in the computers file explorer.\nTo use this button:\n\nLeft-click your desired directory in the File Catalog.\nLeft-click the “Open Export Folder” button."
+    "objectID": "book/revision/sf_browse_tab.html#view-channel-spectra",
+    "href": "book/revision/sf_browse_tab.html#view-channel-spectra",
+    "title": "7  Browse Tab",
+    "section": "7.7 View Channel Spectra",
+    "text": "7.7 View Channel Spectra\n\nThis button is used to view the channel spectra for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Channel Spectra” button."
   },
   {
-    "objectID": "book/veptutorial/vep2.html#open-in-eeglab-1",
-    "href": "book/veptutorial/vep2.html#open-in-eeglab-1",
-    "title": "3  Walkthrough",
-    "section": "9.4 Open in EEGLAB",
-    "text": "9.4 Open in EEGLAB\n\nThis button is used to open a selected eeg file in the EEGLAB gui.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Open in EEGLAB” button."
-  },
-  {
-    "objectID": "book/veptutorial/vep2.html#plot-data-1",
-    "href": "book/veptutorial/vep2.html#plot-data-1",
-    "title": "3  Walkthrough",
-    "section": "9.5 Plot Data",
-    "text": "9.5 Plot Data\n\nThis button is used to plot data for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “Plot Data” button."
-  },
-  {
-    "objectID": "book/veptutorial/vep2.html#view-electrode-map-1",
-    "href": "book/veptutorial/vep2.html#view-electrode-map-1",
-    "title": "3  Walkthrough",
-    "section": "9.6 View Electrode Map",
-    "text": "9.6 View Electrode Map\n\nThis button is used to view the electrode map for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Electrode Map” button."
-  },
-  {
-    "objectID": "book/veptutorial/vep2.html#view-channel-spectra-1",
-    "href": "book/veptutorial/vep2.html#view-channel-spectra-1",
-    "title": "3  Walkthrough",
-    "section": "9.7 View Channel Spectra",
-    "text": "9.7 View Channel Spectra\n\nThis button is used to view the channel spectra for a selected eeg file.\nTo use this button:\n\nLeft-click your desired file in the File Catalog.\nLeft-click the “View Channel Spectra” button."
-  },
-  {
-    "objectID": "book/veptutorial/vep2.html#close-windows",
-    "href": "book/veptutorial/vep2.html#close-windows",
-    "title": "3  Walkthrough",
-    "section": "9.8 Close Windows",
-    "text": "9.8 Close Windows\n\nThis button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed."
+    "objectID": "book/revision/sf_browse_tab.html#close-windows",
+    "href": "book/revision/sf_browse_tab.html#close-windows",
+    "title": "7  Browse Tab",
+    "section": "7.8 Close Windows",
+    "text": "7.8 Close Windows\n\nThis button is used to close all matlab figures/windows. Matlab and the SignalFlowEEG GUi will not be closed."
   }
 ]

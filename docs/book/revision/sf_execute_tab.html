@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.176">
+<meta name="generator" content="quarto-1.4.226">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>SignalFlow EEG - 2&nbsp; Visual Evoked Potentials (VEP) Tutorial</title>
+<title>SignalFlow EEG - 6&nbsp; Execute Tab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../book/veptutorial/vep2.html" rel="next">
-<link href="../../book/vep-tutorial.html" rel="prev">
+<link href="../../book/revision/sf_browse_tab.html" rel="next">
+<link href="../../book/revision/sf_builder_tab.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -85,7 +85,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/vep-tutorial.html">vep-tutorial.html</a></li><li class="breadcrumb-item"><a href="../../book/veptutorial/vep1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Visual Evoked Potentials (VEP) Tutorial</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/revision/sf_execute_tab.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Execute Tab</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -156,52 +156,60 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../../book/lets-get-started.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Let's Get Started</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  <a href="../../book/revision/sf_lets-get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Let’s Get Started</span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
+  <a href="../../book/revision/sf_installing_signalflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Installing SignalFlow</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../../book/vep-tutorial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">vep-tutorial.html</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/veptutorial/vep1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Visual Evoked Potentials (VEP) Tutorial</span></span></a>
+  <a href="../../book/revision/sf_organizing_files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Preparing Data Files</span></span></a>
   </div>
 </li>
-          <li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../book/veptutorial/vep2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Walkthrough</span></span></a>
+  <a href="../../book/revision/sf_starting_signalflow.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Starting SignalFlow</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../book/revision/sf_setup_tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Setup Tab</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../book/revision/sf_builder_tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Builder Tab</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../book/revision/sf_execute_tab.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Execute Tab</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../book/revision/sf_browse_tab.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Browse Tab</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../book/murine-eeg/mouseeeg-tutorial.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Mouse EEG Tutorial</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -212,16 +220,25 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">2.1</span> Overview</a></li>
+  <li><a href="#refresh" id="toc-refresh" class="nav-link active" data-scroll-target="#refresh"><span class="header-section-number">6.1</span> Refresh</a></li>
+  <li><a href="#execute-loop" id="toc-execute-loop" class="nav-link" data-scroll-target="#execute-loop"><span class="header-section-number">6.2</span> Execute (Loop)</a></li>
+  <li><a href="#execute-parallel" id="toc-execute-parallel" class="nav-link" data-scroll-target="#execute-parallel"><span class="header-section-number">6.3</span> Execute (Parallel)</a></li>
+  <li><a href="#execute-file" id="toc-execute-file" class="nav-link" data-scroll-target="#execute-file"><span class="header-section-number">6.4</span> Execute (File)</a></li>
+  <li><a href="#open-import-folder" id="toc-open-import-folder" class="nav-link" data-scroll-target="#open-import-folder"><span class="header-section-number">6.5</span> Open Import Folder</a></li>
+  <li><a href="#open-export-folder" id="toc-open-export-folder" class="nav-link" data-scroll-target="#open-export-folder"><span class="header-section-number">6.6</span> Open Export Folder</a></li>
+  <li><a href="#open-in-eeglab" id="toc-open-in-eeglab" class="nav-link" data-scroll-target="#open-in-eeglab"><span class="header-section-number">6.7</span> Open in EEGLAB</a></li>
+  <li><a href="#plot-data" id="toc-plot-data" class="nav-link" data-scroll-target="#plot-data"><span class="header-section-number">6.8</span> Plot Data</a></li>
+  <li><a href="#view-electrode-map" id="toc-view-electrode-map" class="nav-link" data-scroll-target="#view-electrode-map"><span class="header-section-number">6.9</span> View Electrode Map</a></li>
+  <li><a href="#view-channel-spectra" id="toc-view-channel-spectra" class="nav-link" data-scroll-target="#view-channel-spectra"><span class="header-section-number">6.10</span> View Channel Spectra</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/cincibrainlab/SignalFlowEEG/edit/main/book/veptutorial/vep1.qmd" class="toc-action">Edit this page</a></p></div></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/cincibrainlab/SignalFlowEEG/edit/main/book/revision/sf_execute_tab.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../book/vep-tutorial.html">vep-tutorial.html</a></li><li class="breadcrumb-item"><a href="../../book/veptutorial/vep1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Visual Evoked Potentials (VEP) Tutorial</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Visual Evoked Potentials (VEP) Tutorial</span></h1>
+<h1 class="title"><span id="sec-ExecuteTab" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Execute Tab</span></span></h1>
 </div>
 
 
@@ -236,24 +253,101 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>In this tutorial, we will guide you on how to use <strong>SignalFlowEEG</strong> to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.</p>
-<section id="overview" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">2.1</span> Overview</h2>
-<p>In this walkthrough, we will guide you on how to use <strong>SignalFlowEEG</strong> to preprocess and generate ERP (Event-Related Potential) tracings from a VEP (Visual Evoked Potential) dataset using the HAPPE pipeline.</p>
-<p>In the following sections, we will dive deeper into each of these steps:</p>
-<ol type="1">
-<li><p><strong>Setting up SignalFlowEEG and its Dependencies:</strong> Learn how to install and configure SignalFlowEEG and its dependencies.</p></li>
-<li><p><strong>Arrange Files for Optimized Processing:</strong> We’ll begin by organizing our files in a way that optimizes SignalFlowEEG’s processing capabilities.</p></li>
-<li><p><strong>Preprocess Files Using HAPPE Pipeline:</strong> Next, we’ll utilize the popular HAPPE pipeline to preprocess our VEP dataset.</p></li>
-<li><p><strong>Output Data Tables:</strong> After preprocessing, we will output three data tables:</p>
+<p><img src="../assets/images/ExecuteTab.png" class="img-fluid"> * The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.</p>
+<section id="refresh" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="refresh"><span class="header-section-number">6.1</span> Refresh</h2>
 <ul>
-<li><strong>EEG Characteristics Table:</strong> This table will present the EEG characteristics of our VEP data, such as original length.</li>
-<li><strong>Preprocessing Results Table:</strong> This table will showcase the results of our preprocessing steps, including the number of epochs.</li>
-<li><strong>Amplitude Table for ERPs:</strong> This table will contain the amplitudes necessary to generate ERPs from our VEP dataset.</li>
-</ul></li>
-<li><p><strong>Modify Preprocessing Step to Observe Effect on ERPs:</strong> Lastly, we will modify one of our preprocessing steps and examine its impact on the resulting ERPs.</p></li>
-</ol>
-<p>Let’s get started!</p>
+<li>This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
+<ol type="A">
+<li>An example of this would be adding a file to the import directory. The user must click the “Refresh” button in order to see it in the File Catalog.</li>
+</ol></li>
+</ul>
+</section>
+<section id="execute-loop" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="execute-loop"><span class="header-section-number">6.2</span> Execute (Loop)</h2>
+<ul>
+<li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time.</li>
+<li>Use this if there are steps that require user input. A. Examples of this include: Remove channels, remove epochs, etc.</li>
+</ul>
+</section>
+<section id="execute-parallel" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="execute-parallel"><span class="header-section-number">6.3</span> Execute (Parallel)</h2>
+<ul>
+<li>This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time.</li>
+<li>This should only be used when the follwoing are true. A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. B. You have a high performance computer. C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer. D. You have the Matlab Parralel Processing Toolbox</li>
+</ul>
+</section>
+<section id="execute-file" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="execute-file"><span class="header-section-number">6.4</span> Execute (File)</h2>
+<ul>
+<li>This button is used to execute the pipeline on a selected eeg file in the import directory.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired file in the File Catalog.</li>
+<li>Left-click the “Execute (File)” button.</li>
+</ol></li>
+</ul>
+</section>
+<section id="open-import-folder" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="open-import-folder"><span class="header-section-number">6.5</span> Open Import Folder</h2>
+<ul>
+<li>This button is used to open the import directory in the computers file explorer.</li>
+</ul>
+</section>
+<section id="open-export-folder" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="open-export-folder"><span class="header-section-number">6.6</span> Open Export Folder</h2>
+<ul>
+<li>This button is used to open the selected directory in the computers file explorer.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired directory in the File Catalog.</li>
+<li>Left-click the “Open Export Folder” button.</li>
+</ol></li>
+</ul>
+</section>
+<section id="open-in-eeglab" class="level2" data-number="6.7">
+<h2 data-number="6.7" class="anchored" data-anchor-id="open-in-eeglab"><span class="header-section-number">6.7</span> Open in EEGLAB</h2>
+<ul>
+<li>This button is used to open a selected eeg file in the EEGLAB gui.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired file in the File Catalog.</li>
+<li>Left-click the “Open in EEGLAB” button.</li>
+</ol></li>
+</ul>
+</section>
+<section id="plot-data" class="level2" data-number="6.8">
+<h2 data-number="6.8" class="anchored" data-anchor-id="plot-data"><span class="header-section-number">6.8</span> Plot Data</h2>
+<ul>
+<li>This button is used to plot data for a selected eeg file.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired file in the File Catalog.</li>
+<li>Left-click the “Plot Data” button.</li>
+</ol></li>
+</ul>
+</section>
+<section id="view-electrode-map" class="level2" data-number="6.9">
+<h2 data-number="6.9" class="anchored" data-anchor-id="view-electrode-map"><span class="header-section-number">6.9</span> View Electrode Map</h2>
+<ul>
+<li>This button is used to view the electrode map for a selected eeg file.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired file in the File Catalog.</li>
+<li>Left-click the “View Electrode Map” button.</li>
+</ol></li>
+</ul>
+</section>
+<section id="view-channel-spectra" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="view-channel-spectra"><span class="header-section-number">6.10</span> View Channel Spectra</h2>
+<ul>
+<li>This button is used to view the channel spectra for a selected eeg file.</li>
+<li>To use this button:
+<ol type="1">
+<li>Left-click your desired file in the File Catalog.</li>
+<li>Left-click the “View Channel Spectra” button.</li>
+</ol></li>
+</ul>
 
 
 </section>
@@ -557,13 +651,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../book/vep-tutorial.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">vep-tutorial.html</span>
+      <a href="../../book/revision/sf_builder_tab.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Builder Tab</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../book/veptutorial/vep2.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Walkthrough</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../book/revision/sf_browse_tab.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Browse Tab</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

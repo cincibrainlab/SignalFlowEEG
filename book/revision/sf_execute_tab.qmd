@@ -1,0 +1,60 @@
+
+# Execute Tab {#sec-ExecuteTab}
+![](../assets/images/ExecuteTab.png)
+*  The execute tab is used to execute the pipeline on EEG files. Users also have buttons that serve as helpful tools.
+
+## Refresh
+* This button is used to refresh the workflow status and file catalog when a change to the file sytem or pipeline has occured.
+    A.  An example of this would be adding a file to the import directory. The user must click the "Refresh" button in order to see it in the File Catalog.
+
+## Execute (Loop)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done one at a time. 
+* Use this if there are steps that require user input.
+    A. Examples of this include: Remove channels, remove epochs, etc.
+
+## Execute (Parallel)
+* This button is used to execute the pipeline on all eeg files in the import directory. These will be done all at the same time. 
+* This should only be used when the follwoing are true.
+    A. Use this if there are no steps that require user input. Examples of this include: Remove channels, remove epochs, etc. 
+    B. You have a high performance computer.
+    C. The pipeline takes longer than 1 minutes to run on a single eeg file. The setup and tear down of workers may take some time. inefficient use could make the processing time longer.
+    D. You have the Matlab Parralel Processing Toolbox  
+
+## Execute (File)
+* This button is used to execute the pipeline on a selected eeg file in the import directory.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Execute (File)" button.
+
+## Open Import Folder 
+* This button is used to open the import directory in the computers file explorer.
+
+## Open Export Folder
+* This button is used to open the selected directory in the computers file explorer.
+* To use this button:
+    1. Left-click your desired directory in the File Catalog.
+    2. Left-click the "Open Export Folder" button.
+
+## Open in EEGLAB
+* This button is used to open a selected eeg file in the EEGLAB gui.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Open in EEGLAB" button.
+
+## Plot Data
+* This button is used to plot data for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "Plot Data" button.
+
+## View Electrode Map
+* This button is used to view the electrode map for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Electrode Map" button.
+
+## View Channel Spectra 
+* This button is used to view the channel spectra for a selected eeg file.
+* To use this button:
+    1. Left-click your desired file in the File Catalog.
+    2. Left-click the "View Channel Spectra" button.
