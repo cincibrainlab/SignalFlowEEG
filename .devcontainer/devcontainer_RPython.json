@@ -1,0 +1,84 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/rocker-org/devcontainer-templates/tree/main/src/r-ver
+{
+	"name": "R (rocker/r-ver base)",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "ghcr.io/rocker-org/devcontainer/r-ver:4",
+	"features": {
+		"ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
+            "version": "prerelease"
+        },
+        "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
+            "packages": "github::rstudio/renv,tidyverse,here,httpgd,cli,rlang"
+        },
+		"ghcr.io/devcontainers/features/desktop-lite:1": {},
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "libudunits2-dev,libxtst6,libxt6,libmagick++-dev,nala,curl,nano,software-properties-common,htop"
+		},
+		"ghcr.io/devcontainers/features/python:1": {
+            "version": "3.10.8",
+            "additionalVersions": "3.9.16",
+            "installJupyterlab": "true",
+            "configureJupyterlabAllowOrigin": "*"
+        },
+		"ghcr.io/devcontainers/features/github-cli:1": {
+            "version": "latest"
+        }
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [6080, 5901, 8888],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "R -q -e 'renv::install()'",
+
+	// Configure tool-specific properties.
+    "customizations": {
+        "vscode": {
+			"extensions": [
+				"ms-python.python",
+				"teabyii.ayu",
+				"ms-toolsai.jupyter",
+				"ms-toolsai.vscode-jupyter-powertoys",
+				"jeff-hykin.better-dockerfile-syntax",
+				"coenraads.bracket-pair-colorizer-2",
+				"file-icons.file-icons",
+				"emilast.logfilehighlighter",
+				"zhuangtongfa.material-theme",
+				"ibm.output-colorizer",
+				"wayou.vscode-todo-highlight",
+				"atishay-jain.all-autocomplete",
+				"hookyqr.beautify",
+				"phplasma.csv-to-table",
+				"alefragnani.bookmarks",
+				"mrmlnc.vscode-duplicate",
+				"tombonnike.vscode-status-bar-format-toggle",
+				"donjayamanne.githistory",
+				"codezombiech.gitignore",
+				"eamodio.gitlens",
+				"zainchen.json",
+				"ritwickdey.liveserver",
+				"yzhang.markdown-all-in-one",
+				"pkief.markdown-checkbox",
+				"shd101wyy.markdown-preview-enhanced",
+				"ionutvmi.path-autocomplete",
+				"esbenp.prettier-vscode",
+				"diogonolasco.pyinit",
+				"ms-python.vscode-pylance",
+				"njpwerner.autodocstring",
+				"kevinrose.vsc-python-indent",
+				"mechatroner.rainbow-csv",
+				"msrvida.vscode-sanddance",
+				"rafamel.subtle-brackets",
+				"formulahendry.terminal",
+				"tyriar.terminal-tabs",
+				"redhat.vscode-yaml"
+			]
+        }
+    }
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}

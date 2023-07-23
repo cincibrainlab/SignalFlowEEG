@@ -19,3 +19,4 @@ icaweights/
 *.code-workspace
 
 /.quarto/
+.devcontainer/license.lic
