@@ -27,7 +27,7 @@ classdef outflow_CalcConnectivity < SignalFlowSuperClass
                 'gamma2', 65, 90;
                 };
 
-            [EEG,results] = eeg_htpGraphPhaseBcm(EEG, 'gpuOn',args.num_gpuOn, 'outputdir', args.char_outputdir,'bandDefs',args.bandDefs);
+            [EEG,args.results] = eeg_htpGraphPhaseBcm(EEG, 'gpuOn',args.num_gpuOn, 'outputdir', args.char_outputdir,'bandDefs',args.bandDefs);
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

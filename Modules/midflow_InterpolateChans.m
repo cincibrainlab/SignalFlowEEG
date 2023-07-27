@@ -40,7 +40,7 @@ classdef midflow_InterpolateChans < SignalFlowSuperClass
             args.char_method = 'spherical';
             args.num_channels = [];
 
-            [EEG,results] = eeg_htpEegInterpolateChansEeglab(EEG,'method', args.char_method, 'channels', args.num_channels);
+            [EEG,args.results] = eeg_htpEegInterpolateChansEeglab(EEG,'method', args.char_method, 'channels', args.num_channels);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

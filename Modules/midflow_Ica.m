@@ -52,7 +52,7 @@ classdef midflow_Ica < SignalFlowSuperClass
             args.num_rank = getrank(double(rankEEG.data));
             args.char_icadir = fullfile(pwd,'icaweights');
 
-            [EEG,results] = eeg_htpEegIcaEeglab(EEG,'method', args.char_method, 'rank', args.num_rank,...
+            [EEG,args.results] = eeg_htpEegIcaEeglab(EEG,'method', args.char_method, 'rank', args.num_rank,...
                 'icadir',args.char_icadir);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

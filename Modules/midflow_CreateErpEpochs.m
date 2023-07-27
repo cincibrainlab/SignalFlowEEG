@@ -48,7 +48,7 @@ classdef midflow_CreateErpEpochs < SignalFlowSuperClass
             args.log_rmbaseline = false;
             args.num_baselinelimits = [-.5 0];
 
-            EEG = eeg_htpEegCreateErpEpochsEeglab(EEG,'epochlimits', args.num_epochlimits, 'rmbaseline', args.log_rmbaseline,...
+            [EEG,args.results] = eeg_htpEegCreateErpEpochsEeglab(EEG,'epochlimits', args.num_epochlimits, 'rmbaseline', args.log_rmbaseline,...
                 'baselinelimits',args.num_baselinelimits);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

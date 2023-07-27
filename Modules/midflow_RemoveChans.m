@@ -54,7 +54,7 @@ classdef midflow_RemoveChans < SignalFlowSuperClass
             args.log_removechannel = false;
             args.log_automark = false;
 
-            [EEG,results] = eeg_htpEegRemoveChansEeglab(EEG,'trim', args.log_trim, 'minimumduration', args.num_minimumduration,...
+            [EEG,args.results] = eeg_htpEegRemoveChansEeglab(EEG,'trim', args.log_trim, 'minimumduration', args.num_minimumduration,...
                 'threshold',args.num_threshold, 'removechannel', args.log_removechannel, 'automark', args.log_automark);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

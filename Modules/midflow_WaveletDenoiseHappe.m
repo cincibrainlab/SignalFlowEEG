@@ -25,7 +25,7 @@ classdef midflow_WaveletDenoiseHappe < SignalFlowSuperClass
             args.num_lowpass = .5;
             args.log_filtOn = true;
 
-            [EEG,results] = eeg_htpEegWaveletDenoiseHappe(EEG, 'isErp', args.log_isErp);
+            [EEG,args.results] = eeg_htpEegWaveletDenoiseHappe(EEG, 'isErp', args.log_isErp);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

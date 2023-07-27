@@ -40,7 +40,7 @@ classdef midflow_CreateEpochs < SignalFlowSuperClass
             args.num_epochlength = 2;
             args.num_epochlimits = [0 args.num_epochlength];
 
-            [EEG,results] = eeg_htpEegCreateEpochsEeglab(EEG,'epochlength', args.num_epochlength, 'epochlimits', args.num_epochlimits);
+            [EEG,args.results] = eeg_htpEegCreateEpochsEeglab(EEG,'epochlength', args.num_epochlength, 'epochlimits', args.num_epochlimits);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

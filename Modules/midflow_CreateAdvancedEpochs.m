@@ -24,7 +24,7 @@ classdef midflow_CreateAdvancedEpochs < SignalFlowSuperClass
             args.num_baselineLength = [-100 0];
             args.char_rois = [rOccTemp lOccTemp];
 
-            [EEG,results] = eeg_htpEegAdvancedEpochs(EEG, args.char_mainTrigger, args.char_backupTrigger,args.num_epochLength, args.num_baselineLength, args.char_rois);
+            [EEG,args.results] = eeg_htpEegAdvancedEpochs(EEG, args.char_mainTrigger, args.char_backupTrigger,args.num_epochLength, args.num_baselineLength, args.char_rois);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

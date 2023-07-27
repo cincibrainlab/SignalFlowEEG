@@ -36,7 +36,7 @@ classdef midflow_ResampleData < SignalFlowSuperClass
 
             args.num_srate = 500;
 
-            [EEG,results] = eeg_htpEegResampleDataEeglab(EEG,'srate', args.num_srate);
+            [EEG,args.results] = eeg_htpEegResampleDataEeglab(EEG,'srate', args.num_srate);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

@@ -32,7 +32,7 @@ classdef midflow_Rereference < SignalFlowSuperClass
             EEG = obj.beginEEG;
             % Signal Processing Code Below
 
-            [EEG,results] = eeg_htpEegRereferenceEeglab(EEG);
+            [EEG,args.results] = eeg_htpEegRereferenceEeglab(EEG);
             args.method = 'Average';
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

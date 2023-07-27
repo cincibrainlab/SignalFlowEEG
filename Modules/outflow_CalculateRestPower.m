@@ -25,7 +25,7 @@ classdef outflow_CalculateRestPower < SignalFlowSuperClass
                             'gamma2', 65, 80; 'epsilon', 81, 120; };
             args.log_useParquet = false;
 
-            [EEG,results] = eeg_htpCalcRestPower(EEG, 'gpuOn',args.num_gpuOn,'duration',args.num_duration,...
+            [EEG,args.results] = eeg_htpCalcRestPower(EEG, 'gpuOn',args.num_gpuOn,'duration',args.num_duration,...
                 'offset',args.num_offset,'window',args.num_window,'outputdir', args.char_outputdir,'bandDefs',args.bandDefs,'useParquet',args.log_useParquet);
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

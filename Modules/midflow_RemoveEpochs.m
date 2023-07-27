@@ -47,7 +47,7 @@ classdef midflow_RemoveEpochs < SignalFlowSuperClass
             args.num_threshold =  50;
             args.char_events = {};
 
-            [EEG,results] = eeg_htpEegRemoveEpochsEeglab(EEG,'limits', args.num_limits, 'thresholdrejection', args.log_thresholdrejection,...
+            [EEG,args.results] = eeg_htpEegRemoveEpochsEeglab(EEG,'limits', args.num_limits, 'thresholdrejection', args.log_thresholdrejection,...
                 'threshold',args.num_threshold, 'events', args.char_events);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

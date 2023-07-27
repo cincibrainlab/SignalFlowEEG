@@ -48,7 +48,7 @@ classdef midflow_RemoveComps < SignalFlowSuperClass
             args.num_removeics =  [];
             args.num_freqrange = [2 80];
 
-            [EEG,results] = eeg_htpEegRemoveCompsEeglab(EEG,'maxcomps', args.num_maxcomps, 'dpreset', args.char_dpreset, 'freqrange', args.num_freqrange);
+            [EEG,args.results] = eeg_htpEegRemoveCompsEeglab(EEG,'maxcomps', args.num_maxcomps, 'dpreset', args.char_dpreset, 'freqrange', args.num_freqrange);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);

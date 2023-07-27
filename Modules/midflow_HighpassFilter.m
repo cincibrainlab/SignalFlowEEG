@@ -56,7 +56,7 @@ classdef midflow_HighpassFilter < SignalFlowSuperClass
             args.num_filtorder = 6600;
             args.log_dynamicfiltorder = false;
 
-            [EEG,results] = eeg_htpEegHighpassFilterEeglab(EEG,'highpassfilt', args.num_highpassfilt, 'revfilt', args.log_revfilt,...
+            [EEG,args.results] = eeg_htpEegHighpassFilterEeglab(EEG,'highpassfilt', args.num_highpassfilt, 'revfilt', args.log_revfilt,...
                 'plotfreqz',args.num_plotfreqz, 'minphase', args.log_minphase, 'filtorder', args.num_filtorder, 'dynamicfiltorder', args.log_dynamicfiltorder );
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

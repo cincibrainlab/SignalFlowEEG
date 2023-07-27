@@ -32,7 +32,7 @@ classdef midflow_RemoveSegments < SignalFlowSuperClass
             EEG = obj.beginEEG;
             % Signal Processing Code Below
 
-            [EEG,results] = eeg_htpEegRemoveSegmentsEeglab(EEG);
+            [EEG,args.results] = eeg_htpEegRemoveSegmentsEeglab(EEG);
             args.proc_removed_regions = EEG.vhtp.eeg_htpEegRemoveSegmentsEeglab.proc_removed_regions;
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

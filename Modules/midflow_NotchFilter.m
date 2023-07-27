@@ -60,7 +60,7 @@ classdef midflow_NotchFilter < SignalFlowSuperClass
             args.num_filtorder = 3300;
             args.log_dynamicfiltorder = false;
 
-            [EEG,results] = eeg_htpEegNotchFilterEeglab(EEG,'notchfilt', args.num_notchfilt, 'revfilt', args.log_revfilt,...
+            [EEG,args.results] = eeg_htpEegNotchFilterEeglab(EEG,'notchfilt', args.num_notchfilt, 'revfilt', args.log_revfilt,...
                 'plotfreqz',args.num_plotfreqz, 'minphase', args.log_minphase, 'filtorder', args.num_filtorder, 'dynamicfiltorder', args.log_dynamicfiltorder );
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure

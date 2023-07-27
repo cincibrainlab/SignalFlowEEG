@@ -42,7 +42,7 @@ classdef midflow_FrequencyInterpolation < SignalFlowSuperClass
             args.num_targetfrequency = 60;
             args.num_halfmargin = 2;
 
-            [EEG,results] = eeg_htpEegFrequencyInterpolation(EEG,'targetfrequency', args.num_targetfrequency, 'halfmargin', args.num_halfmargin);
+            [EEG,args.results] = eeg_htpEegFrequencyInterpolation(EEG,'targetfrequency', args.num_targetfrequency, 'halfmargin', args.num_halfmargin);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             EEG = obj.HistoryTable(EEG, args);
