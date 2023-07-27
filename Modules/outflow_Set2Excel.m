@@ -93,7 +93,7 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             icaweights=~isempty(EEG.icaweights);
             removed_components= LookupInHistoryTable_results('proc_removeComps');
             events_dins=struct2table(EEG.urevent); events_dins=unique(events_dins.type); events_dins=strjoin(events_dins,', ');
-            EEGLAB_Version='';%TODO
+            EEGLAB_Version= eeg_getversion;
             VHTP_Version='';%TODO
             SignalFlow_Version='';%TODO
             
