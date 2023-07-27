@@ -72,8 +72,8 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             net_nbchan_orig= LookupInHistoryTable('QADataPre','first').nbchan;
             net_nbchan_post= LookupInHistoryTable('QADataPre','last').nbchan;
         	chans_removed= LookupInHistoryTable_results('proc_badchans');           
-            filt_bandlow=''; %LookupInHistoryTable('num_lowpassfilt','all');%TODO
-            filt_bandhigh=''; %LookupInHistoryTable('num_highpassfilt','all');%TODO
+            filt_bandlow= LookupInHistoryTable_results('notchcutoff'); filt_bandlow= filt_bandlow(1);
+            filt_bandhigh= LookupInHistoryTable_results('notchcutoff'); filt_bandhigh= filt_bandhigh(2);
             filt_lowcutoff= LookupInHistoryTable_results('lowcutoff');
         	filt_highcutoff= LookupInHistoryTable_results('highcutoff');
             original_sampling_rate_raw=LookupInHistoryTable('QADataPre','first').srate;
@@ -92,8 +92,7 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             num_interp_chans= LookupInHistoryTable('QADataPre','first').nbchan - LookupInHistoryTable_results('nbchan_post');
             icaweights=~isempty(EEG.icaweights);
             removed_components= LookupInHistoryTable_results('proc_removeComps');
-            events_dins=struct2table(EEG.urevent); events_dins=unique(events_dins.type);
-            events_dins=strjoin(events_dins,', ');
+            events_dins=struct2table(EEG.urevent); events_dins=unique(events_dins.type); events_dins=strjoin(events_dins,', ');
             EEGLAB_Version='';%TODO
             VHTP_Version='';%TODO
             SignalFlow_Version='';%TODO
