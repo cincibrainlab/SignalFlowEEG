@@ -30,12 +30,14 @@ classdef midflow_RemoveSegments < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             [EEG,args.results] = eeg_htpEegRemoveSegmentsEeglab(EEG);
             args.proc_removed_regions = EEG.vhtp.eeg_htpEegRemoveSegmentsEeglab.proc_removed_regions;
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

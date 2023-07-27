@@ -13,6 +13,7 @@ classdef midflow_WaveletDenoiseHappe < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
        
             args.log_isErp = true;% Default is false
@@ -28,6 +29,7 @@ classdef midflow_WaveletDenoiseHappe < SignalFlowSuperClass
             [EEG,args.results] = eeg_htpEegWaveletDenoiseHappe(EEG, 'isErp', args.log_isErp);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

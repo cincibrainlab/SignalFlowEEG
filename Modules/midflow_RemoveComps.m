@@ -41,6 +41,7 @@ classdef midflow_RemoveComps < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.num_maxcomps = 24;
@@ -51,6 +52,7 @@ classdef midflow_RemoveComps < SignalFlowSuperClass
             [EEG,args.results] = eeg_htpEegRemoveCompsEeglab(EEG,'maxcomps', args.num_maxcomps, 'dpreset', args.char_dpreset, 'freqrange', args.num_freqrange);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

@@ -35,6 +35,7 @@ classdef midflow_InterpolateChans < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.char_method = 'spherical';
@@ -43,6 +44,7 @@ classdef midflow_InterpolateChans < SignalFlowSuperClass
             [EEG,args.results] = eeg_htpEegInterpolateChansEeglab(EEG,'method', args.char_method, 'channels', args.num_channels);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

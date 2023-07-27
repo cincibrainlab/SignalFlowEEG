@@ -32,6 +32,7 @@ classdef midflow_ResampleData < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.num_srate = 500;
@@ -39,6 +40,7 @@ classdef midflow_ResampleData < SignalFlowSuperClass
             [EEG,args.results] = eeg_htpEegResampleDataEeglab(EEG,'srate', args.num_srate);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

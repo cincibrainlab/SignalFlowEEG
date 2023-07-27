@@ -35,12 +35,14 @@ classdef outflow_ExportSet < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             % Gets Default Parameter if User parameter is invalid or empty 
             args.char_filepath = obj.fileIoVar;
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             pop_saveset(EEG,'filename', EEG.filename, 'filepath', args.char_filepath);

@@ -45,6 +45,7 @@ classdef inflow_ImportSet < SignalFlowSuperClass
                 EEG = pop_loadset(args.char_filepath);
             end
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
         end
     end

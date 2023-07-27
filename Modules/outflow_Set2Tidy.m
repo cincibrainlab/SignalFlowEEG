@@ -40,6 +40,7 @@ classdef outflow_Set2Tidy < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
             
             args.char_OutputDir = obj.fileIoVar;
@@ -49,6 +50,7 @@ classdef outflow_Set2Tidy < SignalFlowSuperClass
             eeg_htpTidyData(EEG, 'OutputFormat', args.char_OutputFormat,'OutputDir', args.char_OutputDir,'Suffix', args.char_Suffix)
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

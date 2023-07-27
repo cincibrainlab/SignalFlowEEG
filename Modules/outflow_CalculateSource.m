@@ -13,6 +13,7 @@ classdef outflow_CalculateSource < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.char_outputdir = obj.fileIoVar;
@@ -34,6 +35,7 @@ classdef outflow_CalculateSource < SignalFlowSuperClass
                 'headmodelfile',args.char_headmodelfile,'deletetempfiles',args.log_deletetempfiles,'usepreexisting',args.log_usepreexisting,'resetprotocol',args.log_resetprotocol);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

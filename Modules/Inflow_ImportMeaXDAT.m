@@ -35,6 +35,7 @@ classdef Inflow_ImportMeaXDAT < SignalFlowSuperClass
             else 
                 EEG = [];
             end
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
         end
     end

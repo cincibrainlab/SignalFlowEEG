@@ -46,6 +46,7 @@ classdef midflow_RemoveChans < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.log_trim = false;
@@ -58,6 +59,7 @@ classdef midflow_RemoveChans < SignalFlowSuperClass
                 'threshold',args.num_threshold, 'removechannel', args.log_removechannel, 'automark', args.log_automark);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

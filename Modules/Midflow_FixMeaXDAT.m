@@ -20,6 +20,7 @@ classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
             
             % Dictionary for correct mappings 
@@ -69,6 +70,7 @@ classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
             end
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

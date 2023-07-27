@@ -13,6 +13,7 @@ classdef midflow_CreateAdvancedEpochs < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             rOccTemp = {'E83', 'E90', 'E96', 'E100', 'E89', 'E95', 'E99', 'E88', 'E94'};
@@ -27,6 +28,7 @@ classdef midflow_CreateAdvancedEpochs < SignalFlowSuperClass
             [EEG,args.results] = eeg_htpEegAdvancedEpochs(EEG, args.char_mainTrigger, args.char_backupTrigger,args.num_epochLength, args.num_baselineLength, args.char_rois);
             
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;

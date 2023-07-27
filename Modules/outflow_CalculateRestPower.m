@@ -13,6 +13,7 @@ classdef outflow_CalculateRestPower < SignalFlowSuperClass
         function sfOutput = run(obj)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
+            [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
             args.num_gpuOn = 0;
@@ -29,6 +30,7 @@ classdef outflow_CalculateRestPower < SignalFlowSuperClass
                 'offset',args.num_offset,'window',args.num_window,'outputdir', args.char_outputdir,'bandDefs',args.bandDefs,'useParquet',args.log_useParquet);
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
+            [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
             sfOutput = EEG;
