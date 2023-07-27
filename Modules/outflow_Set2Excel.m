@@ -72,10 +72,20 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             net_nbchan_orig= LookupInHistoryTable('QADataPre','first').nbchan;
             net_nbchan_post= LookupInHistoryTable('QADataPre','last').nbchan;
         	chans_removed= LookupInHistoryTable_results('proc_badchans');           
-            filt_bandlow= LookupInHistoryTable_results('notchcutoff'); filt_bandlow= filt_bandlow(1);
-            filt_bandhigh= LookupInHistoryTable_results('notchcutoff'); filt_bandhigh= filt_bandhigh(2);
-            filt_lowcutoff= LookupInHistoryTable_results('lowcutoff');
-        	filt_highcutoff= LookupInHistoryTable_results('highcutoff');
+            filt_bandlow= LookupInHistoryTable_results('notchcutoff'); 
+            try
+                filt_bandlow= filt_bandlow(1);
+            catch
+                filt_bandlow= '';
+            end
+            filt_bandhigh= LookupInHistoryTable_results('notchcutoff'); 
+            try
+                filt_bandhigh= filt_bandhigh(2);
+            catch
+                filt_bandhigh= '';
+            end
+            filt_lowcutoff= LookupInHistoryTable('num_lowpassfilt','all');
+        	filt_highcutoff= LookupInHistoryTable('num_highpassfilt','all');
             original_sampling_rate_raw=LookupInHistoryTable('QADataPre','first').srate;
             resampling_rate= LookupInHistoryTable('num_srate','all');
         	xmax_raw= LookupInHistoryTable('QADataPre','first').xmax;
@@ -134,7 +144,14 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
                     % Check the provided option
                     if strcmp(option, 'all')
                         % Join all values with commas
-                        values_combined = strjoin(cellstr(values_with_desired_key), ', ');
+                        for i=1:length(values_with_desired_key)
+                            if i == 1
+                                values_combined = values_with_desired_key{i};
+                            else
+                                values_combined = strcat(num2str(values_combined),', ', num2str(values_with_desired_key{i}));
+                            end
+%                         values_combined = strjoin(cellstr(num2str(values_with_desired_key)), ', ');
+                        end
                     elseif strcmp(option, 'last')
                         % Return the last value
                         values_combined = values_with_desired_key{end};
@@ -150,6 +167,7 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
                     values_combined = '';
                 end
             end
+
             function values_combined = LookupInHistoryTable_results(desired_result)
                 % Convert option to lowercase to make it case-insensitive
                 values_combined = '';
