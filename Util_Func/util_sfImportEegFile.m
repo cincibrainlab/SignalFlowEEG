@@ -320,8 +320,8 @@ function [children,ptext,textflag] = parseChildModules(theModule)
     % Recurse over module children.
     children = struct;
     ptext = struct; textflag = 'Text';
-    if hasChildModules(theModule)
-        childModules = getChildModules(theModule);
+    if hasChildNodes(theModule)
+        childModules = getChildNodes(theModule);
         numChildModules = getLength(childModules);
         
         for count = 1:numChildModules
@@ -383,7 +383,7 @@ function [text,name,attr,childs,textflag] = getNodeData(theModule)
     % Create structure of module info.
     
     %make sure name is allowed as structure name
-    name = toCharArray(getModuleName(theModule))';
+    name = toCharArray(getNodeName(theModule))';
     name = strrep(name, '-', '_dash_');
     name = strrep(name, ':', '_colon_');
     name = strrep(name, '.', '_dot_');
