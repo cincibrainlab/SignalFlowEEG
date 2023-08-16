@@ -110,8 +110,20 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
                 events_dins='';
             end 
             EEGLAB_Version= eeg_getversion;
-            VHTP_Version=util_GetGitCommitVersion( 'htpDoctor.m' );
-            SignalFlow_Version=util_GetGitCommitVersion( 'SignalFlowControl.m' );
+            [status,hash] = system('git rev-parse HEAD:vhtp');
+            if( status ~= 0 )
+                VHTP_Version='UnableToFind';
+            else
+                VHTP_Version=hash;
+            end
+
+            [status,hash] = system('git rev-parse HEAD');
+            if( status ~= 0 )
+                SignalFlow_Version='UnableToFind';
+            else
+                SignalFlow_Version=hash;
+            end
+            
             
             new_row_data = {Timestamp, preprocessed_by,	last_step_applied,raw_filename,	pathway,	study_title,net_nbchan_orig, net_nbchan_post,	chans_removed, filt_bandlow, filt_bandhigh, filt_lowcutoff,	filt_highcutoff, original_sampling_rate_raw, resampling_rate,	xmax_raw,	xmax_post, xmax_percent, xmax_epoch, epoch_length, epoch_limits, epoch_trials, epoch_badtrials, epoch_badid, final_epoch_count, dataRank, num_interp_chans, icaweights,	removed_components, events_dins, EEGLAB_Version, VHTP_Version,SignalFlow_Version};
 
