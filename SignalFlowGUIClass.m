@@ -112,10 +112,13 @@ classdef SignalFlowGUIClass
                 try
                     moduleText = obj.SelectedModule.Text;
                     parentModuleText = obj.SelectedModule.Parent.Text;
+                    [~, ~, ext] = fileparts(moduleText);
+
                     hasSetExtension = contains(moduleText, '.set');
+                    hasimportExtension = any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf'}));
                     isInImportFolder = contains(parentModuleText, 'Import');
 
-                    app.ExecuteFileButton.Enable = hasSetExtension && isInImportFolder;
+                    app.ExecuteFileButton.Enable = (hasimportExtension) && isInImportFolder;
 
                     setButtonEnableState(app, executeSetFileButtons, hasSetExtension);
                 catch
@@ -140,11 +143,7 @@ classdef SignalFlowGUIClass
                 executeSetFileButtons = {'ButtonBrowseSpectra', 'ButtonBrowseElectrode', 'ButtonBrowsePlot', 'ButtonBrowseEeglab'};
                 try
                     moduleText = obj.SelectedModule.Text;
-                    parentModuleText = obj.SelectedModule.Parent.Text;
                     hasSetExtension = contains(moduleText, '.set');
-                    isInImportFolder = contains(parentModuleText, 'Import');
-
-                    app.ExecuteFileButton.Enable = hasSetExtension && isInImportFolder;
 
                     setButtonEnableState(app, executeSetFileButtons, hasSetExtension);
                 catch
