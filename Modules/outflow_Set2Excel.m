@@ -45,7 +45,7 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             
             args.char_OutputDir = obj.fileIoVar;
             args.char_Filename = 'A00_ANALYSIS_study';
-            args.char_OutputFormat = '.csv';
+            args.char_OutputFormat = '.xlsx';
 
             if isfolder(args.char_OutputDir)
                 wholeFilePath = fullfile(args.char_OutputDir,strcat(args.char_Filename,args.char_OutputFormat));
@@ -61,6 +61,7 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             else 
                 ColumnHeaders = {'Timestamp', 'preprocessed_by',	'last_step_applied','raw_filename',	'pathway',	'study_title','net_nbchan_orig', 'net_nbchan_post',	'chans_removed', 'filt_bandlow', 'filt_bandhigh', 'filt_lowcutoff',	'filt_highcutoff', 'original_sampling_rate_raw', 'resampling_rate',	'xmax_raw',	'xmax_post', 'xmax_percent', 'xmax_epoch', 'epoch_length', 'epoch_limits', 'epoch_trials', 'epoch_badtrials', 'epoch_badid', 'final_epoch_count', 'dataRank', 'num_interp_chans', 'icaweights',	'removed_components', 'events_dins', 'EEGLAB Version', 'VHTP Version','SignalFlow Version'};
                 table_data = array2table(ColumnHeaders,'VariableNames', ColumnHeaders);
+                table_data(1,:)= [];
             end
 
             Timestamp= LookupInHistoryTable("timestamp","last");
@@ -109,19 +110,20 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
                 events_dins='';
             end 
             EEGLAB_Version= eeg_getversion;
-            VHTP_Version='';%TODO
-            SignalFlow_Version='';%TODO
+            VHTP_Version=utilGetGitCommitVersion( 'htpDoctor.m' );
+            SignalFlow_Version=utilGetGitCommitVersion( 'SignalFlowControl.m' );
             
             new_row_data = {Timestamp, preprocessed_by,	last_step_applied,raw_filename,	pathway,	study_title,net_nbchan_orig, net_nbchan_post,	chans_removed, filt_bandlow, filt_bandhigh, filt_lowcutoff,	filt_highcutoff, original_sampling_rate_raw, resampling_rate,	xmax_raw,	xmax_post, xmax_percent, xmax_epoch, epoch_length, epoch_limits, epoch_trials, epoch_badtrials, epoch_badid, final_epoch_count, dataRank, num_interp_chans, icaweights,	removed_components, events_dins, EEGLAB_Version, VHTP_Version,SignalFlow_Version};
 
             new_row_table = cell2table(new_row_data, 'VariableNames', table_data.Properties.VariableNames);
             % Append the new row table to the original table_data
-           for col = 1:width(table_data)
-                if isnumeric(table_data{1, col}) || islogical(table_data{1, col})
-                    table_data.(col) = cellstr(num2str(table_data{:, col}));
+            if size(table_data,1) > 1
+                for col = 1:width(table_data)
+                    if isnumeric(table_data{1, col}) || islogical(table_data{1, col})
+                        table_data.(col) = cellstr(num2str(table_data{:, col}));
+                    end
                 end
             end
-            
             % Convert all data types to cell arrays of strings in new_row_table
             for col = 1:width(new_row_table)
                 if isnumeric(new_row_table{1, col}) || islogical(new_row_table{1, col})
@@ -132,8 +134,22 @@ classdef outflow_Set2Excel < SignalFlowSuperClass
             
             % 'Timestamp', 'preprocessed_by',	'last_step_applied','raw_filename',	'pathway',	'study_title','net_nbchan_orig', 'net_nbchan_post',	'chans_removed', 'filt_bandlow', 'filt_bandhigh', 'filt_lowcutoff',	'filt_highcutoff', 'original_sampling_rate_raw', 'resampling_rate',	'xmax_raw',	'xmax_post', 'xmax_percent', 'xmax_epoch', 'epoch_length', 'epoch_limits', 'epoch_trials', 'epoch_badtrials', 'epoch_badid', 'final_epoch_count', 'dataRank', 'num_interp_chans', 'icaweights',	'removed_components', 'events_dins', 'EEGLAB Version', 'VHTP Version','SignalFlow Version'
             % Write output to file if requested
-            if strcmpi(args.char_OutputFormat,'.csv')
-                writetable(table_data, wholeFilePath);
+            if strcmpi(args.char_OutputFormat,'.xlsx')
+%                 fid = fopen(wholeFilePath, 'w');
+%                 if fid == -1
+%                     error('Cannot open file for writing: %s', filename);
+%                 end
+%                 % Write data rows
+%                 for row = 1:size(table_data, 1)
+%                         for column = 1:size(table_data, 2)
+%                             fprintf(fid, '%s,', table_data(row, column)); % Adjust data access as needed
+%                         end
+%                     fprintf(fid, '\n');
+%                 end
+%                 fclose(fid);
+%                 table_data = table2array(table_data);
+%                 writecell(table_data, wholeFilePath)
+                writetable(table_data, wholeFilePath,"AutoFitWidth",false);
             elseif strcmpi(args.char_OutputFormat,'.parquet')
                 parquetwrite(wholeFilePath, table_data);
             else 
