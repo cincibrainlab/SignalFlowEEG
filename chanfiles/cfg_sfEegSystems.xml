@@ -85,8 +85,8 @@
       <surficeMNI>128_chanlocsMNI.txt</surficeMNI>
    </listitem>
    <listitem>
-      <net_displayname>NeuroNexus H32 MEA</net_displayname>
-      <net_name>NeuroNexusH32MEA</net_name>
+      <net_displayname>EDF NeuroNexus H32 MEA</net_displayname>
+      <net_name>EDFNeuroNexusH32MEA</net_name>
       <net_file>chanfiles/mea3d.mat</net_file>
       <net_dict>chanfiles/TBD</net_dict>
       <net_graphic>chanfiles/meaimg.PNG</net_graphic>

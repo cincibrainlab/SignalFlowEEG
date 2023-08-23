@@ -11,31 +11,7 @@ function EEG = util_sfImportEegFile(varargin)
     nettype = ip.Results.nettype;
     chanxml = 'cfg_sfEegSystems.xml';
     
-    % START: Utilty code
-%     %EGI128
-%     filepath = 'C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\128_EGI\0012_rest.raw';
-%     nettype = 'EGI128';
-%     ImportTestEEG = util_sfImportEegFile('C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\128_EGI\0012_rest.raw','nettype','EGI128');
-
-%     %EGI64
-%     filepath = '';
-%     nettype = 'EGI64';
-
-%     %EGI32
-%     filepath = 'C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\32_EGI\32_rest.raw';
-%     nettype = 'EGI32';
-%     ImportTestEEG = util_sfImportEegFile('C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\32_EGI\32_rest.raw','nettype','EGI32');
-
-%     %NeuroNexusH32MEA
-%     filepath = 'C:\Users\Nate\Documents\testImport\1-Import\11rest.edf';
-%     nettype = 'NeuroNexusH32MEA';
-%     ImportTestEEG = util_sfImportEegFile('C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\raw_files_ForNate_3.10.2022\MEA_30_EDF\11rest.edf','nettype','NeuroNexusH32MEA');
-
-%     %EDFGENERIC
-%     filepath = '';
-%     nettype = 'EDFGENERIC';
-
-    
+    % START: Utilty code    
     
     filepath = fullfile(filepath);
     [~,importEEGName,~] = fileparts(filepath);
@@ -119,7 +95,7 @@ function EEG = util_sfImportEegFile(varargin)
             EEG.urchanlocs = locs;
             EEG.chaninfo = chaninfo;
             
-        case 'NeuroNexusH32MEA'
+        case 'EDFNeuroNexusH32MEA'
             try         
                 try
                     EEG = pop_biosig( fullfile(filepath) );
