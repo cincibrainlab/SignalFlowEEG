@@ -1,4 +1,4 @@
-classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
+classdef inflow_ImportEDFNeuroNexusH32MEA < SignalFlowSuperClass
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
 %  
@@ -7,7 +7,7 @@ classdef inflow_ImportNeuroNexusH32MEA < SignalFlowSuperClass
 %% Contact:
 %  https://github.com/cincibrainlab/SignalFlowEEG/issues
     methods
-        function obj = inflow_ImportNeuroNexusH32MEA(varargin)
+        function obj = inflow_ImportEDFNeuroNexusH32MEA(varargin)
            
             % Define Custom Flow Function
             setup.flabel = 'Import NeuroNexusH32MEA File';
