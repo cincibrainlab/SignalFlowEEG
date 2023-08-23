@@ -1,4 +1,4 @@
-classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
+classdef midflow_FixMeaXDAT < SignalFlowSuperClass
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
 %  
@@ -7,7 +7,7 @@ classdef Midflow_FixMeaXDAT < SignalFlowSuperClass
 %% Contact:
 %  https://github.com/cincibrainlab/SignalFlowEEG/issues
     methods
-        function obj = Midflow_FixMeaXDAT(varargin)
+        function obj = midflow_FixMeaXDAT(varargin)
            
             % Define Custom Flow Function
             setup.flabel = 'Fix MEA XDAT File';

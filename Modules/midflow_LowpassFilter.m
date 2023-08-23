@@ -25,7 +25,7 @@ classdef midflow_LowpassFilter < SignalFlowSuperClass
 %                 default: 3300
 %
 %   'log_dynamicfiltorder' - numeric boolean indicating whether to use dynamic filtorder determined via EEGLAB filtering function
-%                        default: 0
+%                        default: 1
 %   
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
@@ -55,8 +55,8 @@ classdef midflow_LowpassFilter < SignalFlowSuperClass
             args.log_revfilt = false;
             args.num_plotfreqz =  0;
             args.log_minphase = false;
-            args.num_filtorder = 3300;
-            args.log_dynamicfiltorder = false;
+            args.num_filtorder = 3300; % If args.log_dynamicfiltorder = true, this argument does nothing 
+            args.log_dynamicfiltorder = true;
 
             [EEG,args.results] = eeg_htpEegLowpassFilterEeglab(EEG,'lowpassfilt', args.num_lowpassfilt, 'revfilt', args.log_revfilt,...
                 'plotfreqz',args.num_plotfreqz, 'minphase', args.log_minphase, 'filtorder', args.num_filtorder, 'dynamicfiltorder', args.log_dynamicfiltorder );
