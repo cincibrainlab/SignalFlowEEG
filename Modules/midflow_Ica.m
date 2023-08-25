@@ -9,7 +9,7 @@ classdef midflow_Ica < SignalFlowSuperClass
 %
 %% Function Specific Inputs:
 %   'char_method'  - Text representing method utilized for ICA
-%               default: 'binica' e.g. {'binica', cudaica', 'runica'}
+%               default: 'runica' e.g. {'binica', cudaica', 'runica'}
 %
 %   'num_rank' - Number representing the data rank of input data
 %            default: getrank(double(EEG.data))
@@ -43,13 +43,21 @@ classdef midflow_Ica < SignalFlowSuperClass
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
-            args.char_method = 'binica';
+            
+            args.char_method = 'runica';
+            % If you want ICA to run faster download our binaries
+            % https://github.com/cincibrainlab/Binica 
+            % and use:
+            % args.char_method = 'binica';
+
             if ndims(EEG.data) == 3
                 disp('Warning: Data converted to continuous for ICA.')
                 rankEEG = eeg_htpEegEpoch2Cont( EEG );
             else
                 rankEEG = EEG;
             end
+            % You can override the rank by removing the getrank() function
+            % and making it the rank you want 
             args.num_rank = getrank(double(rankEEG.data));
             args.char_icadir = fullfile(pwd,'icaweights');
 

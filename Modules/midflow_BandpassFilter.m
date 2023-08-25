@@ -9,7 +9,7 @@ classdef midflow_BandpassFilter < SignalFlowSuperClass
 %
 %% Function Specific Inputs:
 %   'num_bandpassfilt' - Array of two numbers utilized for edges of bandpass filtering
-%                    default: [55 65]
+%                    default: [2 80]
 %
 %   'log_revfilt' - logical boolean to invert filter from bandpass to notch
 %               default: false e.g. {false -> bandpass, true -> notch}
@@ -50,7 +50,7 @@ classdef midflow_BandpassFilter < SignalFlowSuperClass
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
-            args.num_bandpassfilt = [55 65];
+            args.num_bandpassfilt = [2 80];
             args.log_revfilt = false;
             args.num_plotfreqz =  0;
             args.log_minphase = false;

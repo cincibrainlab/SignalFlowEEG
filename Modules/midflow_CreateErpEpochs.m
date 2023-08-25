@@ -46,7 +46,7 @@ classdef midflow_CreateErpEpochs < SignalFlowSuperClass
 
             args.char_epochevent = missing;
             args.num_epochlimits = [-.500 2.750];
-            args.log_rmbaseline = false;
+            args.log_rmbaseline = false; % If False no baseline will be removed 
             args.num_baselinelimits = [-.5 0];
 
             [EEG,args.results] = eeg_htpEegCreateErpEpochsEeglab(EEG,'epochlimits', args.num_epochlimits, 'rmbaseline', args.log_rmbaseline,...

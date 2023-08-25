@@ -13,7 +13,7 @@ classdef midflow_NotchFilter < SignalFlowSuperClass
 %
 %   'num_notchfilt' - Array of two numbers utilized for generating the line noise
 %             used in harmonics calculation for notch filtering
-%             default: [55 65]
+%             default: [57 63]
 %
 %   'log_revfilt' - Logical boolean to invert filter from bandpass to notch
 %               default: true e.g. {false -> bandpass, true -> notch}
@@ -54,8 +54,8 @@ classdef midflow_NotchFilter < SignalFlowSuperClass
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
-            args.num_notchfilt = [55 65];
-            args.log_revfilt = false;
+            args.num_notchfilt = [57 63];
+            args.log_revfilt = true;
             args.num_plotfreqz =  0;
             args.log_minphase = false;
             args.num_filtorder = 3300; % If args.log_dynamicfiltorder = true, this argument does nothing 

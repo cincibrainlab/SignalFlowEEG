@@ -26,7 +26,7 @@ classdef midflow_AsrClean < SignalFlowSuperClass
 %
 %                   5: Custom
 %                 
-%                 default: 2
+%                 default: 5
 %                 
 %   'num_asrflatline' - Integer representing the seconds of the max flatline duration. Longer flatline is abnormal.
 %                    default: 5
@@ -73,8 +73,9 @@ classdef midflow_AsrClean < SignalFlowSuperClass
             EEG = obj.beginEEG;
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
-
-            args.num_asrmode = 2;             
+            % This is the mode that allows you to change all parameters below,    
+            % If node is not 5, some parameters will be ignored. 
+            args.num_asrmode = 5;       
             args.num_asrflatline = 5;         
             args.num_asrhighpass = [0.25 0.75];   
             args.num_asrchannel = 0.85;         
