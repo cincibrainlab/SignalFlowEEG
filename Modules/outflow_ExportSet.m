@@ -40,8 +40,11 @@ classdef outflow_ExportSet < SignalFlowSuperClass
 
             % Gets Default Parameter if User parameter is invalid or empty 
             args.char_filepath = obj.fileIoVar;
+            
             % Change this if you want a custom file name
-            args.char_filename = EEG.filename; 
+            [~,name,ext]= fileparts(EEG.filename);
+            args.char_filename = 'suffix';
+            EEG.filename = [name, char_filename,ext];
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             [args.QADataPost] = util_GetQAData(EEG);
