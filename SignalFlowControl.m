@@ -1081,6 +1081,10 @@ classdef SignalFlowControl < handle
 
                 case 'Project_Load'
                     load(obj.proj.load_file);
+                    obj.Setup_AddPaths();
+                    obj.Setup_Messages();
+                    obj.Setup_DisplayVersion();
+                    obj.Setup_UtilityFunctions();
 
                 case 'Project_Execute'
                     importDir = obj.proj.path_import;
