@@ -1402,10 +1402,6 @@ classdef SignalFlowGUIClass
                 end
             end
         end
-        function [obj,app] = FigureSizeChangedSetupPanelFix(obj,app)
-            obj.reloadPlugins(app)
-            obj.reloadCustomPaths(app)
-        end
     end
     methods (Static)
         function openFolder(filename)
