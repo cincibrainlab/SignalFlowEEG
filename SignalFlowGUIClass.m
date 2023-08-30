@@ -1107,29 +1107,37 @@ classdef SignalFlowGUIClass
             % retrieve paths
             labelStruct = obj.sfControl.Project_GetFolderLabels;
 
-            % create buttons for each path (import first)
-            % Hardcoded buttons sizes
-            buttonHeight = 22;
-            buttonSpacing = 10;
-            lampWidth = 20;
+            % Assuming the element's position vector is [left bottom width height]
+            elementPosition = app.PathSetupPanel.Position;
+            
+            % Calculate the top position
+            topPosition = elementPosition(2) + elementPosition(4);
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
 
+            % Hardcoded buttons sizes
+            ButtonXLeft = elementPosition(1) + 40;
+            LampXLeft = elementPosition(1) + 12;
+            buttonWidth = 180;
+            buttonHeight = 22;
+            buttonSpacing = 10;
+            lampWidthHeight = 20;
+
             % Check status of button
             for i = 1 : numel({labelStruct.tag})
                 % Create a button/lamp if needed
-                app.PathButtons{i} = uibutton(app.PathSetupPanel, 'state');
+                app.PathButtons{i} = uibutton(app.SetupTab, 'state');
                 app.PathButtons{i}.HorizontalAlignment = 'left';
 
-                app.PathLamps{i} = uilamp(app.PathSetupPanel);
+                app.PathLamps{i} = uilamp(app.SetupTab);
                 % Calculate the button's bottom position for vertical stacking
-                bottomPosition = 400 - (i - 1) * (buttonHeight + buttonSpacing);
+                bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
                 % Set the button's position
-                app.PathButtons{i}.Position = [40, bottomPosition, 180, buttonHeight];
+                app.PathButtons{i}.Position = [ButtonXLeft, bottomPosition, buttonWidth, buttonHeight];
                 % Create a lamp UI element
-                app.PathLamps{i}.Position = [12, bottomPosition + (buttonHeight - lampWidth) / 2, lampWidth, lampWidth];
+                app.PathLamps{i}.Position = [LampXLeft, bottomPosition + (buttonHeight - lampWidthHeight) / 2, lampWidthHeight, lampWidthHeight];
 
             end
 
@@ -1217,29 +1225,38 @@ classdef SignalFlowGUIClass
 
             pluginStatus= SignalFlowDoctor();
 
-            % Hardcoded buttons sizes
-            buttonHeight = 22;
-            buttonSpacing = 10;
-            lampWidth = 20;
+            % Assuming the element's position vector is [left bottom width height]
+            elementPosition = app.PluginSetupPanel.Position;
+            
+            % Calculate the top position
+            topPosition = elementPosition(2) + elementPosition(4);
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
+
+            % Hardcoded buttons sizes
+            ButtonXLeft = elementPosition(1) + 40;
+            LampXLeft = elementPosition(1) + 12;
+            buttonWidth = 180;
+            buttonHeight = 22;
+            buttonSpacing = 10;
+            lampWidthHeight = 20;
 
             % Check status of button
             if numel(app.PluginButtons) == 0
                 for i = 1 : numel(pluginNames)
                     % Create a button/lamp if needed
-                    app.PluginButtons{i} = uibutton(app.PluginSetupPanel, 'state');
+                    app.PluginButtons{i} = uibutton(app.SetupTab, 'state');
                     app.PluginButtons{i}.HorizontalAlignment = 'left';
 
-                    app.PluginLamps{i} = uilamp(app.PluginSetupPanel);
+                    app.PluginLamps{i} = uilamp(app.SetupTab);
                     % Calculate the button's bottom position for vertical stacking
-                    bottomPosition = 450 - (i - 1) * (buttonHeight + buttonSpacing);
+                    bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
                     % Set the button's position
-                    app.PluginButtons{i}.Position = [40, bottomPosition, 180, buttonHeight];
+                    app.PluginButtons{i}.Position = [ButtonXLeft, bottomPosition, buttonWidth, buttonHeight];
                     % Create a lamp UI element
-                    app.PluginLamps{i}.Position = [12, bottomPosition + (buttonHeight - lampWidth) / 2, lampWidth, lampWidth];
+                    app.PluginLamps{i}.Position = [LampXLeft, bottomPosition + (buttonHeight - lampWidthHeight) / 2, lampWidthHeight, lampWidthHeight];
 
                 end
             end
@@ -1384,7 +1401,10 @@ classdef SignalFlowGUIClass
                     close(fig);
                 end
             end
-
+        end
+        function [obj,app] = FigureSizeChangedSetupPanelFix(obj,app)
+            obj.reloadPlugins(app)
+            obj.reloadCustomPaths(app)
         end
     end
     methods (Static)
