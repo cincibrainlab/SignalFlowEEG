@@ -43,8 +43,8 @@ classdef outflow_ExportSet < SignalFlowSuperClass
             
             % Change this if you want a custom file name
             [~,name,ext]= fileparts(EEG.filename);
-            args.char_filename = 'suffix';
-            EEG.filename = [name, char_filename,ext];
+            args.char_filename = ''; % change this if you would like a suffix (args.char_filename = '_suffix';)
+            EEG.filename = [name, args.char_filename,ext];
 
             %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
             [args.QADataPost] = util_GetQAData(EEG);
