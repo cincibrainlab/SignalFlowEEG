@@ -50,7 +50,7 @@ classdef outflow_ExportSet < SignalFlowSuperClass
             [args.QADataPost] = util_GetQAData(EEG);
             EEG = obj.HistoryTable(EEG, args);
 
-            pop_saveset(EEG,'filename', args.char_filename, 'filepath', args.char_filepath);
+            pop_saveset(EEG,'filename', EEG.filename, 'filepath', args.char_filepath);
             sfOutput = EEG;
         end
     end
