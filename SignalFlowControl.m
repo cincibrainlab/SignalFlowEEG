@@ -503,6 +503,7 @@ classdef SignalFlowControl < handle
                             % add module to User Module Array
                             module_script = diff.('newmodules'){mi};
                             obj.module.OriginalUserModuleArray{end+1} = eval(module_script);
+                            obj.module.OriginalModuleArray{end+1} = eval(module_script);
                         end
                     end
 
