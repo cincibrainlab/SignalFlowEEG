@@ -10,7 +10,7 @@ classdef inflow_ImportEDFNeuroNexusH32MEA < SignalFlowSuperClass
         function obj = inflow_ImportEDFNeuroNexusH32MEA(varargin)
            
             % Define Custom Flow Function
-            setup.flabel = 'Import NeuroNexusH32MEA File';
+            setup.flabel = 'Import EDFNeuroNexusH32MEA File';
             setup.flowMode = 'inflow';
 
             % Construction Function
