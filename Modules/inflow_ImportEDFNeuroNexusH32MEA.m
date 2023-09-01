@@ -21,7 +21,7 @@ classdef inflow_ImportEDFNeuroNexusH32MEA < SignalFlowSuperClass
             % run() - Process the EEG data.           
             % Signal Processing Code Below
             args.char_filepath = obj.fileIoVar;
-            args.char_netType = 'NeuroNexusH32MEA';
+            args.char_netType = 'EDFNeuroNexusH32MEA';
 
             % Get the folder path, file name, and file extension
             [folderPath, ~, fileExtension] = fileparts(args.char_filepath);        
