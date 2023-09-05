@@ -122,8 +122,7 @@ function EEG = util_sfImportEegFile(varargin)
                 
                 % Ceates Mapping based on Table given by Carrie Jonak (Binder Lab at UC
                 % Riverside, California) March 2nd 2020
-                    
-                
+
                 % Remove irrelevant channels
                 if EEG.nbchan == 33
                     EEG = pop_select( EEG, 'nochannel', [31,32,33]);
