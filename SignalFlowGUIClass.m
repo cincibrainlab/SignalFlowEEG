@@ -326,10 +326,7 @@ classdef SignalFlowGUIClass
 
                 if contains(currentTargetModule.fname, 'outflow')
                     module = uitreenode(app.ExecuteTree, 'Text', strcat(moduleText,' Folder Tag: [',labelStruct(pathResults).tag,']'), 'NodeData', currentTargetModule.fileIoVar);
-                    if ~isempty(currentTargetModule.fileIoVar)
-                        addpath(currentTargetModule.fileIoVar);
-                        createFileModules(currentTargetModule.fileIoVar, module);
-                    elseif ~ismissing(obj.sfControl.proj.path_results)
+                    if isfield(obj.sfControl.proj, 'path_results') && ~isempty(obj.sfControl.proj.path_results)
                         createFileModules(obj.sfControl.proj.path_results, module);
                     end
                 end
