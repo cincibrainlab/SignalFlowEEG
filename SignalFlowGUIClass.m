@@ -847,6 +847,7 @@ classdef SignalFlowGUIClass
             obj.refreshTrees(app);
             obj.reloadCustomPaths(app);
             obj.setupEditProjectInformationLoad(app);
+            obj.reloadPlugins(app);
         end
 
         function obj = saveProject(obj,app)
