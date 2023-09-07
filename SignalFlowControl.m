@@ -1086,17 +1086,25 @@ classdef SignalFlowControl < handle
                     obj.Setup_DisplayVersion();
                     obj.Setup_UtilityFunctions();
 
+                    labelStruct = obj.Project_GetFolderLabels;
+                    % Find the index of the 'path_results' label in the labelStruct array.
+                    pathResults = strcmp({labelStruct.tag}, 'path_results');
+                    pathImport = strcmp({labelStruct.tag}, 'path_import');
+                    % Set the output directory of the last TargetModule to the folder corresponding to the 'path_results' label.
+                    obj.proj.path_import = labelStruct(pathImport).folder;
+                    obj.proj.path_results = labelStruct(pathResults).folder;
+                 
                     n = length(obj.module.TargetModuleArray);
                     for i = 1:n
                         currentTargetModule = obj.module.TargetModuleArray{i};
         
-                        if contains(currentTargetModule.fname, 'inflow')
+                        if contains(currentTargetModule.flowMode, 'inflow')
                             if isfield(obj.proj, 'path_import') && ~isempty(obj.proj.path_import)
                                 obj.module.TargetModuleArray{i}.fileIoVar = obj.proj.path_import;
                             end
                         end
         
-                        if contains(currentTargetModule.fname, 'outflow')
+                        if contains(currentTargetModule.flowMode, 'outflow')
                             if isfield(obj.proj, 'path_results') && ~isempty(obj.proj.path_results)
                                 obj.module.TargetModuleArray{i}.fileIoVar = obj.proj.path_results;
                             end
