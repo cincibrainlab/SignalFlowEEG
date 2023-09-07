@@ -845,9 +845,35 @@ classdef SignalFlowGUIClass
                 obj.sfControl = obj.sfControl.Project_Load(fullPath);
             end
             obj.refreshTrees(app);
-            obj.reloadCustomPaths(app);
             obj.setupEditProjectInformationLoad(app);
             obj.reloadPlugins(app);
+            obj.reloadCustomPaths(app);
+
+            labelStruct = obj.sfControl.Project_GetFolderLabels;
+            % Find the index of the 'path_results' label in the labelStruct array.
+            pathResults = strcmp({labelStruct.tag}, 'path_results');
+            pathImport = strcmp({labelStruct.tag}, 'path_import');
+            % Set the output directory of the last TargetModule to the folder corresponding to the 'path_results' label.
+            obj.sfControl.proj.path_import = labelStruct(pathImport).folder;
+            obj.sfControl.proj.path_results = labelStruct(pathResults).folder;
+         
+            n = length(obj.sfControl.module.TargetModuleArray);
+            for i = 1:n
+                currentTargetModule = obj.sfControl.module.TargetModuleArray{i};
+
+                if contains(currentTargetModule.flowMode, 'inflow')
+                    if isfield(obj.sfControl.proj, 'path_import') && ~isempty(obj.sfControl.proj.path_import)
+                        obj.sfControl.module.TargetModuleArray{i}.fileIoVar = obj.sfControl.proj.path_import;
+                    end
+                end
+
+                if contains(currentTargetModule.flowMode, 'outflow')
+                    if isfield(obj.sfControl.proj, 'path_results') && ~isempty(obj.sfControl.proj.path_results)
+                        obj.sfControl.module.TargetModuleArray{i}.fileIoVar = obj.sfControl.proj.path_results;
+                    end
+                end
+            end
+
         end
 
         function obj = saveProject(obj,app)
