@@ -1086,6 +1086,23 @@ classdef SignalFlowControl < handle
                     obj.Setup_DisplayVersion();
                     obj.Setup_UtilityFunctions();
 
+                    n = length(obj.module.TargetModuleArray);
+                    for i = 1:n
+                        currentTargetModule = obj.module.TargetModuleArray{i};
+        
+                        if contains(currentTargetModule.fname, 'inflow')
+                            if isfield(obj.proj, 'path_import') && ~isempty(obj.proj.path_import)
+                                obj.module.TargetModuleArray{i}.fileIoVar = obj.proj.path_import;
+                            end
+                        end
+        
+                        if contains(currentTargetModule.fname, 'outflow')
+                            if isfield(obj.proj, 'path_results') && ~isempty(obj.proj.path_results)
+                                obj.module.TargetModuleArray{i}.fileIoVar = obj.proj.path_results;
+                            end
+                        end
+                    end
+
                 case 'Project_Execute'
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
