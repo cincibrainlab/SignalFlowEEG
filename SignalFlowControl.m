@@ -1276,14 +1276,16 @@ classdef SignalFlowControl < handle
                     if ~isempty(EEG)
                         % Iterate through the rest of the TargetModuleArray and execute each module.
                         for i = 2:length(obj.module.TargetModuleArray)
-                            if strcmp(obj.module.TargetModuleArray{i}.flowMode,'outflow') && isempty(obj.module.TargetModuleArray{i}.fileIoVar)
+                            if strcmp(obj.module.TargetModuleArray{i}.flowMode, 'outflow')
                                 labelStruct = obj.Project_GetFolderLabels;
-                                % Find the index of the 'path_results' label in the labelStruct array.
-                                pathResults = strcmp({labelStruct.tag}, 'path_results');
-                                % Set the output directory of the last TargetModule to the folder corresponding to the 'path_results' label.
-                                if ~ismissing(labelStruct(pathResults).folder)
-                                    obj.module.TargetModuleArray{i}.fileIoVar = labelStruct(pathResults).folder;
-                                end 
+                                pathInTag = any(strcmp({labelStruct.folder}, obj.module.TargetModuleArray{i}.fileIoVar));                            
+                                if ~pathInTag
+                                    pathResultsIdx = find(strcmp({labelStruct.tag}, 'path_results'), 1);
+                            
+                                    if ~isempty(pathResultsIdx) && ~isempty(labelStruct(pathResultsIdx).folder)
+                                        obj.module.TargetModuleArray{i}.fileIoVar = labelStruct(pathResultsIdx).folder;
+                                    end
+                                end
                             end
                             obj.module.TargetModuleArray{i}.beginEEG = EEG;
                             EEG = obj.module.TargetModuleArray{i}.run();
