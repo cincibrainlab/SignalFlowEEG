@@ -20,7 +20,7 @@ classdef midflow_RemoveChans < SignalFlowSuperClass
 %                 default: 5
 %
 %   'log_removechannel' - true/false if channels should be removed after marking prior to next step.
-%                      default: false
+%                      default: true
 %    
 %   'log_automark'      - turns on and off automatic detection 
 %                      default: false
@@ -52,7 +52,7 @@ classdef midflow_RemoveChans < SignalFlowSuperClass
             args.log_trim = false;
             args.num_minimumduration = 10;
             args.num_threshold =  5;
-            args.log_removechannel = false;
+            args.log_removechannel = true; % true if you want channels removed. False is notes only, does not remove 
             args.log_automark = false;
 
             [EEG,args.results] = eeg_htpEegRemoveChansEeglab(EEG,'trim', args.log_trim, 'minimumduration', args.num_minimumduration,...
