@@ -30,7 +30,8 @@ function DragAndDropGUI()
 
     % Initialize an array to store information about vertices
     control.DAG.vertices = struct('Position', [], 'Color', [], 'Handle', [], 'Text', []);
-    control.DAG.edges = gobjects(30);
+    control.DAG.UIedges = gobjects(30);
+    control.data.edges = zeros(30);
     
     % Create a context menu for drawing arrows
     contextMenu = uicontextmenu(fig);
@@ -178,46 +179,96 @@ function DragAndDropGUI()
             disp('Please set both source and target vertices for drawing an arrow.');
             return;
         end        
-        % Draw the arrow as a line with an arrowhead
-        control.DAG.edges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = annotation('arrow', 'HeadLength', 10, 'HeadWidth', 10,Parent=canvas);
-        updateArrows(control.UI.sourceRectangleIndex)
-        updateArrows(control.UI.targetRectangleIndex)
-        % Clear the source and target vertices
-%         control.UI.sourceRectangleIndex = [];
-%         control.UI.targetRectangleIndex = [];
+        tempEdges = control.data.edges;
+        tempEdges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
+        isDAG = isDirectedAcyclicGraph(tempEdges);
+        if isDAG
+            control.data.edges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
+            % Draw the arrow as a line with an arrowhead
+            control.DAG.UIedges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = annotation('arrow', 'HeadLength', 10, 'HeadWidth', 10,Parent=canvas);
+            
+            updateArrows(control.UI.sourceRectangleIndex)
+            updateArrows(control.UI.targetRectangleIndex)
+            % Clear the source and target vertices
+    %         control.UI.sourceRectangleIndex = [];
+    %         control.UI.targetRectangleIndex = [];
+        end
         setappdata(fig,'control',control)
     end
 
     function updateArrows(movedVerticeIndex)
-        for t = 1 : size(control.DAG.edges,2) %If Source
-            if isa(control.DAG.edges(movedVerticeIndex,t),'matlab.graphics.shape.Arrow')
+        for t = 1 : size(control.DAG.UIedges,2) %If Source
+            if isa(control.DAG.UIedges(movedVerticeIndex,t),'matlab.graphics.shape.Arrow')
                 sourcePosition = control.DAG.vertices(movedVerticeIndex).Position;
                 targetPosition = control.DAG.vertices(t).Position;
 
                 % Calculate the positions for drawing the arrow
                 arrowStartX = (sourcePosition(1) + 0.5 * sourcePosition(3));
-                arrowStartY = (sourcePosition(2) + 0.5 * sourcePosition(4));
+                arrowStartY = (sourcePosition(2));
                 arrowEndX = (targetPosition(1) + 0.5 * targetPosition(3));
-                arrowEndY = (targetPosition(2) + 0.5 * targetPosition(4));
+                arrowEndY = (targetPosition(2) + targetPosition(4));
         
-                control.DAG.edges(movedVerticeIndex,t).X = [arrowStartX, arrowEndX];
-                control.DAG.edges(movedVerticeIndex,t).Y = [arrowStartY, arrowEndY];
+                control.DAG.UIedges(movedVerticeIndex,t).X = [arrowStartX, arrowEndX];
+                control.DAG.UIedges(movedVerticeIndex,t).Y = [arrowStartY, arrowEndY];
             end
         end
-        for j = 1 : size(control.DAG.edges,1) %If Target
-            if isa(control.DAG.edges(j,movedVerticeIndex),'matlab.graphics.shape.Arrow')
+        for j = 1 : size(control.DAG.UIedges,1) %If Target
+            if isa(control.DAG.UIedges(j,movedVerticeIndex),'matlab.graphics.shape.Arrow')
                 sourcePosition = control.DAG.vertices(j).Position;
                 targetPosition = control.DAG.vertices(movedVerticeIndex).Position;
 
                 % Calculate the positions for drawing the arrow
                 arrowStartX = (sourcePosition(1) + 0.5 * sourcePosition(3));
-                arrowStartY = (sourcePosition(2) + 0.5 * sourcePosition(4));
+                arrowStartY = (sourcePosition(2));
                 arrowEndX = (targetPosition(1) + 0.5 * targetPosition(3));
-                arrowEndY = (targetPosition(2) + 0.5 * targetPosition(4));
+                arrowEndY = (targetPosition(2) + targetPosition(4));
         
-                control.DAG.edges(j,movedVerticeIndex).X = [arrowStartX, arrowEndX];
-                control.DAG.edges(j,movedVerticeIndex).Y = [arrowStartY, arrowEndY];
+                control.DAG.UIedges(j,movedVerticeIndex).X = [arrowStartX, arrowEndX];
+                control.DAG.UIedges(j,movedVerticeIndex).Y = [arrowStartY, arrowEndY];
             end
         end 
+    end
+    function isDAG = isDirectedAcyclicGraph(adjMatrix)
+        % Check if the adjacency matrix represents a DAG.
+        numNodes = size(adjMatrix, 1);
+        
+        % Initialize a visited array and a recursion stack.
+        visited = zeros(1, numNodes);
+        recStack = zeros(1, numNodes);
+        
+        % Helper function for DFS traversal.
+        function result = isCyclic(node)
+            if visited(node) == 0
+                visited(node) = 1;
+                recStack(node) = 1;
+                
+                % Recur for all neighbors.
+                neighbors = find(adjMatrix(node, :) == 1);
+                for x = 1:length(neighbors)
+                    n = neighbors(x);
+                    if visited(n) == 0 && isCyclic(n)
+                        result = true;
+                        return;
+                    elseif recStack(n) == 1
+                        result = true;
+                        return;
+                    end
+                end
+            end
+            recStack(node) = 0;
+            result = false;
+        end
+    
+        % Perform a DFS traversal on each unvisited node.
+        for i = 1:numNodes
+            if visited(i) == 0
+                if isCyclic(i)
+                    isDAG = false;
+                    return; % Graph has a cycle.
+                end
+            end
+        end
+        
+        isDAG = true; % No cycles found; it's a DAG.
     end
 end
