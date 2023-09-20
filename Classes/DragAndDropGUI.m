@@ -9,7 +9,10 @@ function DragAndDropGUI()
     
     % Create a button to create new vertices
     uicontrol('Style', 'pushbutton', 'String', 'Create Rectangle', ...
-        'Position', [20, 20, 120, 30], 'Callback', @createRectangle);
+        'Position', [20, 50, 120, 30], 'Callback', @createRectangle);
+    % Create a button for executing in order
+    uicontrol('Style', 'pushbutton', 'String', 'Execute', ...
+        'Position', [20, 20, 120, 30], 'Callback', @executeDAGInTopologicalOrder);
     
     % Create a listbox for the library of MATLAB functions
     libraryBox = uicontrol('Style', 'listbox', 'Position', [20, 80, 300, 500], ...
@@ -31,7 +34,7 @@ function DragAndDropGUI()
     % Initialize an array to store information about vertices
     control.DAG.vertices = struct('Position', [], 'Color', [], 'Handle', [], 'Text', []);
     control.DAG.UIedges = gobjects(30);
-    control.data.edges = zeros(30);
+    control.DAG.edges = zeros(30);
     
     % Create a context menu for drawing arrows
     contextMenu = uicontextmenu(fig);
@@ -40,6 +43,57 @@ function DragAndDropGUI()
     uimenu(contextMenu, 'Label', 'Draw Arrow', 'Callback', @drawArrow);
 
     setappdata(fig,'control',control)
+
+    function executeDAGInTopologicalOrder(~,~)
+        functions = control.data.functionNames;
+        adjMatrix = control.DAG.edges;
+        % Check if the graph is a DAG.
+        isDAG = isDirectedAcyclicGraph(adjMatrix);
+        if ~isDAG
+            disp('The graph has cycles and cannot be executed in topological order.');
+            return;
+        end
+        
+        % Perform topological sorting.
+        topologicalOrder = topologicalSort(adjMatrix);
+        
+        % Execute functions in topological order.
+        for node = topologicalOrder
+            % Execute the function associated with the current node.
+            disp(['Executing function for node ', num2str(node)]);
+            functions{node}(); % Call the function.
+        end
+    end
+    
+    function topologicalOrder = topologicalSort(adjMatrix)
+        numNodes = size(adjMatrix, 1);
+        inDegree = sum(adjMatrix, 1);
+        queue = [];
+        topologicalOrder = [];
+        
+        % Initialize queue with nodes having no incoming edges.
+        for node = 1:numNodes
+            if inDegree(node) == 0
+                queue = [queue, node];
+            end
+        end
+        
+        while ~isempty(queue)
+            node = queue(1);
+            queue(1) = [];
+            topologicalOrder = [topologicalOrder, node];
+            
+            % Update in-degrees of adjacent nodes.
+            neighbors = find(adjMatrix(node, :) == 1);
+            for i = 1:length(neighbors)
+                neighbor = neighbors(i);
+                inDegree(neighbor) = inDegree(neighbor) - 1;
+                if inDegree(neighbor) == 0
+                    queue = [queue, neighbor];
+                end
+            end
+        end
+    end
 
     % Get a list of .m files in a specified folder
     function functionList = getFunctionList(folderPath)
@@ -179,11 +233,11 @@ function DragAndDropGUI()
             disp('Please set both source and target vertices for drawing an arrow.');
             return;
         end        
-        tempEdges = control.data.edges;
+        tempEdges = control.DAG.edges;
         tempEdges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
         isDAG = isDirectedAcyclicGraph(tempEdges);
         if isDAG
-            control.data.edges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
+            control.DAG.edges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
             % Draw the arrow as a line with an arrowhead
             control.DAG.UIedges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = annotation('arrow', 'HeadLength', 10, 'HeadWidth', 10,Parent=canvas);
             
