@@ -80,38 +80,74 @@ function DragAndDropGUI()
         
         singleFileExecute(importPath,outputDir,ExecutionList);
 
-        function singleFileExecute(importFile,pathResults,ExecutionList)
-            % This function is responsible for executing a single file based on the input file's
-            % extension, and running the pipeline defined by the TargetModuleArray.
+        function childModules = findChildModules(moduleIndex)
+            % Find all modules that are children of the module at moduleIndex.
         
+            % Initialize an empty list to store child modules.
+            childModules = [];
+        
+            % Iterate through the modules in the adjacency matrix.
+            for i = 1:size(control.DAG.adjacency_matrix, 2)
+                if control.DAG.adjacency_matrix{moduleIndex, i} == 1
+                    % Module at index i is a child of the module at moduleIndex.
+                    childModules = [childModules, i];
+                end
+            end
+        end
+
+
+        function singleFileExecute(importFile, pathResults, ExecutionList, adjacencyMatrix)
+            % Create a cell array to store data queues for each module.
+            moduleQueues = cell(1, length(ExecutionList));
+            
             % Extract the file extension from the given input file.
             [~, ~, fileExtension] = fileparts(importFile);
+            
             % Define an array of valid file extensions that the function can process.
             validExtensions = {'.set', '.raw', '.edf'};
+            
             % Check if the file extension of the input file is within the valid extensions.
             if ismember(fileExtension, validExtensions)
-                % Set the input file path for the first TargetModule.
+                % Initialize the input file path for the first TargetModule.
                 ExecutionList{1}.fileIoVar = importFile;
+                
                 % Check if the input file exists and update the boolValidImportFile flag.
-                boolValidImportFile = exist(ExecutionList{1}.fileIoVar, 'file') == 2;               
+                boolValidImportFile = exist(ExecutionList{1}.fileIoVar, 'file') == 2;
+                
                 % If both the input file and output directory are valid, execute the pipeline.
                 if boolValidImportFile
                     % Run the first TargetModule.
-                    EEG = ExecutionList{1}.run(); 
+                    EEG = ExecutionList{1}.run();
                     ExecutionList{1}.endEEG = EEG;
+                    
+                    % Initialize queues for child modules.
+                    for childModuleIndex = findChildModules(1)
+                        moduleQueues{childModuleIndex} = {EEG};
+                    end
+                    
                     if ~isempty(EEG)
                         % Iterate through the rest of the TargetModuleArray and execute each module.
                         for i = 2:length(ExecutionList)
                             disp(['Executing node: (', topologicalOrder(i), ') Name: ', control.DAG.UIvertices(topologicalOrder(i)).Text.String]);
-                            if strcmp(ExecutionList{i}.flowMode, 'outflow')                         
+                            if strcmp(ExecutionList{i}.flowMode, 'outflow')
                                 ExecutionList{i}.fileIoVar = pathResults;
                             end
-                            ExecutionList{i}.beginEEG = EEG;
-                            EEG = ExecutionList{i}.run();
-                            ExecutionList{i}.endEEG = EEG;
+                            
+                            % Iterate through child modules and propagate data.
+                            for childModuleIndex = findChildModules(i)
+                                for j = 1:length(moduleQueues{childModuleIndex})
+                                    EEG = moduleQueues{childModuleIndex}{j};
+                                    ExecutionList{i}.beginEEG = EEG;
+                                    EEG = ExecutionList{i}.run();
+                                    ExecutionList{i}.endEEG = EEG;
+                                    % Add EEG data to the queue of the next child module.
+                                    nextChildModuleIndex = findChildModules(i + 1);
+                                    moduleQueues{nextChildModuleIndex} = [moduleQueues{nextChildModuleIndex}, {EEG}];
+                                end
+                            end
                         end
                     end
-                end        
+                end
             end
         end
     end
