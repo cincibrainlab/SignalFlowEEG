@@ -32,9 +32,11 @@ function DragAndDropGUI()
     
 
     % Initialize an array to store information about vertices
-    control.DAG.vertices = struct('Position', [], 'Color', [], 'Handle', [], 'Text', []);
+    control.DAG.UIvertices = struct('Position', [], 'Color', [], 'Handle', [], 'Text', []);
     control.DAG.UIedges = gobjects(30);
-    control.DAG.edges = zeros(30);
+%     control.DAG.adjacency_matrix = zeros(30);
+    control.DAG.adjacency_matrix = {};
+    control.DAG.vertex_list = [];
     
     % Create a context menu for drawing arrows
     contextMenu = uicontextmenu(fig);
@@ -46,7 +48,7 @@ function DragAndDropGUI()
 
     function executeDAGInTopologicalOrder(~,~)
         functions = control.data.functionNames;
-        adjMatrix = control.DAG.edges;
+        adjMatrix = control.DAG.adjacency_matrix;
         % Check if the graph is a DAG.
         isDAG = isDirectedAcyclicGraph(adjMatrix);
         if ~isDAG
@@ -55,42 +57,61 @@ function DragAndDropGUI()
         end
         
         % Perform topological sorting.
-        topologicalOrder = topologicalSort(adjMatrix);
+        topologicalOrder = topologicalSort();
+
+        importDir = 'C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\raw_files_ForNate_3.10.2022\128_EGI\';
+        importFile = '0012_rest.raw';
+        importPath = [importDir importFile];
+        outputDir = 'C:\Users\Nate\Documents\TestDeleteLater2';
+        % Get the current directory and all its subfolders
+        currentPath = genpath(pwd); % pwd gets the current directory
         
-        % Execute functions in topological order.
-        for node = topologicalOrder
-            % Execute the function associated with the current node.
-            disp(['Executing function for node ', num2str(node)]);
-            functions{node}(); % Call the function.
-        end
-    end
-    
-    function topologicalOrder = topologicalSort(adjMatrix)
-        numNodes = size(adjMatrix, 1);
-        inDegree = sum(adjMatrix, 1);
-        queue = [];
-        topologicalOrder = [];
-        
-        % Initialize queue with nodes having no incoming edges.
-        for node = 1:numNodes
-            if inDegree(node) == 0
-                queue = [queue, node];
-            end
+        % Add the current directory and its subfolders to the MATLAB path
+        addpath('C:\Users\Nate\Documents\eeglab2021.1')
+        eeglab nogui;
+        addpath(currentPath);
+        addpath(importDir)
+        addpath(outputDir)
+
+        for x =1 : length(topologicalOrder) 
+            tempModuleName = split(control.DAG.UIvertices(x).Text.String,'.',1);
+            ExecutionList{x} = feval(tempModuleName{1, 1});
         end
         
-        while ~isempty(queue)
-            node = queue(1);
-            queue(1) = [];
-            topologicalOrder = [topologicalOrder, node];
-            
-            % Update in-degrees of adjacent nodes.
-            neighbors = find(adjMatrix(node, :) == 1);
-            for i = 1:length(neighbors)
-                neighbor = neighbors(i);
-                inDegree(neighbor) = inDegree(neighbor) - 1;
-                if inDegree(neighbor) == 0
-                    queue = [queue, neighbor];
-                end
+        singleFileExecute(importPath,outputDir,ExecutionList);
+
+        function singleFileExecute(importFile,pathResults,ExecutionList)
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
+        
+            % Extract the file extension from the given input file.
+            [~, ~, fileExtension] = fileparts(importFile);
+            % Define an array of valid file extensions that the function can process.
+            validExtensions = {'.set', '.raw', '.edf'};
+            % Check if the file extension of the input file is within the valid extensions.
+            if ismember(fileExtension, validExtensions)
+                % Set the input file path for the first TargetModule.
+                ExecutionList{1}.fileIoVar = importFile;
+                % Check if the input file exists and update the boolValidImportFile flag.
+                boolValidImportFile = exist(ExecutionList{1}.fileIoVar, 'file') == 2;               
+                % If both the input file and output directory are valid, execute the pipeline.
+                if boolValidImportFile
+                    % Run the first TargetModule.
+                    EEG = ExecutionList{1}.run(); 
+                    ExecutionList{1}.endEEG = EEG;
+                    if ~isempty(EEG)
+                        % Iterate through the rest of the TargetModuleArray and execute each module.
+                        for i = 2:length(ExecutionList)
+                            disp(['Executing node: (', topologicalOrder(i), ') Name: ', control.DAG.UIvertices(topologicalOrder(i)).Text.String]);
+                            if strcmp(ExecutionList{i}.flowMode, 'outflow')                         
+                                ExecutionList{i}.fileIoVar = pathResults;
+                            end
+                            ExecutionList{i}.beginEEG = EEG;
+                            EEG = ExecutionList{i}.run();
+                            ExecutionList{i}.endEEG = EEG;
+                        end
+                    end
+                end        
             end
         end
     end
@@ -103,6 +124,48 @@ function DragAndDropGUI()
             functionList{i} = files(i).name;
         end
     end
+
+    function addVertex()
+        N = length(control.DAG.vertex_list) + 1;
+        control.DAG.vertex_list = [control.DAG.vertex_list, N];
+        control.DAG.adjacency_matrix{N, N} = 0;
+        control.DAG.adjacency_matrix = replaceEmptyWithZeros(control.DAG.adjacency_matrix);
+    end
+
+    function adjacency_matrix = replaceEmptyWithZeros(adjacency_matrix)
+        % Find empty cells in the adjacency matrix and replace them with zeros
+        for i = 1:numel(adjacency_matrix)
+            if isempty(adjacency_matrix{i})
+                adjacency_matrix{i} = 0;
+            end
+        end
+    end
+
+    
+    function tempAdjMatrix = addEdge(tempAdjMatrix,u, v)
+        if ismember(u, control.DAG.vertex_list) && ismember(v, control.DAG.vertex_list)
+            tempAdjMatrix{u, v} = 1;
+        else
+            error('Vertices u and/or v do not exist.');
+        end
+    end
+
+    % Not finished 
+%     function deleteVertex(u)
+%         if ismember(u, control.DAG.vertex_list)
+%             control.DAG.vertex_list(control.DAG.vertex_list == u) = [];
+%             control.DAG.adjacency_matrix(u, :) = [];
+%             control.DAG.adjacency_matrix(:, u) = [];
+%         else
+%             error('Vertex u does not exist.');
+%         end
+%     end
+    
+    function sorted_vertices = topologicalSort()
+        G = digraph(cell2mat(control.DAG.adjacency_matrix));
+        sorted_vertices = toposort(G);
+    end
+
     
     % Callback function to create a new rectangle
     function createRectangle(~, ~)
@@ -122,7 +185,13 @@ function DragAndDropGUI()
             textObj = text('Position', [textX, textY], 'String', control.UI.selectedFunction, 'HorizontalAlignment', 'center', 'ButtonDownFcn', @startDrag, 'ContextMenu', contextMenu);
     
             % Store rectangle information
-            control.DAG.vertices(end + 1) = struct('Position', rectPosition, 'Color', color, 'Handle', rect, 'Text', textObj);
+            addVertex()
+            control.DAG.UIvertices(end + 1) = struct('Position', rectPosition, 'Color', color, 'Handle', rect, 'Text', textObj);
+            % Check if it's the first iteration and the values are empty, then remove the entry
+            if isempty(control.DAG.UIvertices(1).Position) && isempty(control.DAG.UIvertices(1).Color) && ...
+               isempty(control.DAG.UIvertices(1).Handle) && isempty(control.DAG.UIvertices(1).Text)
+                control.DAG.UIvertices(1) = [];
+            end
         else
             msgbox('Please select a function from the library.', 'Error', 'error');
         end
@@ -146,8 +215,8 @@ function DragAndDropGUI()
         else
             item = 'Text';
         end
-        for i = 1:numel(control.DAG.vertices)
-            if control.DAG.vertices(i).(item) == fig.CurrentObject
+        for i = 1:numel(control.DAG.UIvertices)
+            if control.DAG.UIvertices(i).(item) == fig.CurrentObject
                 retObj = i;
                 return 
             end
@@ -160,13 +229,13 @@ function DragAndDropGUI()
         control = getappdata(fig,'control');
         if control.UI.dragging && ~isempty(control.UI.selectedObj)
             chosenObjIndex = getBaseIndex(control.UI.selectedObj);
-            chosenObj = control.DAG.vertices(chosenObjIndex);            
+            chosenObj = control.DAG.UIvertices(chosenObjIndex);            
             currentPoint = get(canvas, 'CurrentPoint');
             newPosition = [currentPoint(1, 1) - 0.5 * chosenObj.Handle.Position(3), ...
                 currentPoint(1, 2) - 0.5 * chosenObj.Handle.Position(4), ...
                 chosenObj.Handle.Position(3), chosenObj.Handle.Position(4)];
             set(chosenObj.Handle, 'Position', newPosition);
-            control.DAG.vertices(chosenObjIndex).Position = newPosition;
+            control.DAG.UIvertices(chosenObjIndex).Position = newPosition;
             updateArrows(chosenObjIndex)
             if ~isempty(chosenObj.Text)
                 textX = newPosition(1) + 0.5 * newPosition(3);
@@ -233,11 +302,10 @@ function DragAndDropGUI()
             disp('Please set both source and target vertices for drawing an arrow.');
             return;
         end        
-        tempEdges = control.DAG.edges;
-        tempEdges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
+        tempEdges = addEdge(control.DAG.adjacency_matrix,control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex);
         isDAG = isDirectedAcyclicGraph(tempEdges);
         if isDAG
-            control.DAG.edges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = 1;
+            control.DAG.adjacency_matrix = addEdge(control.DAG.adjacency_matrix,control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex);
             % Draw the arrow as a line with an arrowhead
             control.DAG.UIedges(control.UI.sourceRectangleIndex,control.UI.targetRectangleIndex) = annotation('arrow', 'HeadLength', 10, 'HeadWidth', 10,Parent=canvas);
             
@@ -253,8 +321,8 @@ function DragAndDropGUI()
     function updateArrows(movedVerticeIndex)
         for t = 1 : size(control.DAG.UIedges,2) %If Source
             if isa(control.DAG.UIedges(movedVerticeIndex,t),'matlab.graphics.shape.Arrow')
-                sourcePosition = control.DAG.vertices(movedVerticeIndex).Position;
-                targetPosition = control.DAG.vertices(t).Position;
+                sourcePosition = control.DAG.UIvertices(movedVerticeIndex).Position;
+                targetPosition = control.DAG.UIvertices(t).Position;
 
                 % Calculate the positions for drawing the arrow
                 arrowStartX = (sourcePosition(1) + 0.5 * sourcePosition(3));
@@ -268,8 +336,8 @@ function DragAndDropGUI()
         end
         for j = 1 : size(control.DAG.UIedges,1) %If Target
             if isa(control.DAG.UIedges(j,movedVerticeIndex),'matlab.graphics.shape.Arrow')
-                sourcePosition = control.DAG.vertices(j).Position;
-                targetPosition = control.DAG.vertices(movedVerticeIndex).Position;
+                sourcePosition = control.DAG.UIvertices(j).Position;
+                targetPosition = control.DAG.UIvertices(movedVerticeIndex).Position;
 
                 % Calculate the positions for drawing the arrow
                 arrowStartX = (sourcePosition(1) + 0.5 * sourcePosition(3));
@@ -295,9 +363,9 @@ function DragAndDropGUI()
             if visited(node) == 0
                 visited(node) = 1;
                 recStack(node) = 1;
-                
+        
                 % Recur for all neighbors.
-                neighbors = find(adjMatrix(node, :) == 1);
+                neighbors = find(cell2mat(adjMatrix(node, :)) == 1);
                 for x = 1:length(neighbors)
                     n = neighbors(x);
                     if visited(n) == 0 && isCyclic(n)
@@ -312,6 +380,7 @@ function DragAndDropGUI()
             recStack(node) = 0;
             result = false;
         end
+
     
         % Perform a DFS traversal on each unvisited node.
         for i = 1:numNodes
