@@ -1,5 +1,6 @@
 function DragAndDropGUI()
     % Create the main figure
+    clear all;
     fig = figure('Name', 'Drag and Drop vertices', 'Position', [100, 100, 900, 600]);
     
     % Create a canvas axis for drawing vertices
@@ -19,9 +20,11 @@ function DragAndDropGUI()
         'Callback', @selectFunction);
 
     % Populate the library listbox with function names
-    libraryPath = 'C:\Users\Nate\Documents\GitHub\SignalFlowEEG\Modules'; % Replace with the actual folder path
+    libraryPath = 'C:\Users\sueo8x\Documents\Github\SignalFlowEEG\Modules'; % Replace with the actual folder path
     control.data.functionNames = getFunctionList(libraryPath);
     set(libraryBox, 'String', control.data.functionNames);
+
+    control.data.branchIndex = 1;
     
     % Initialize variables for drag-and-drop
     control.UI.dragging = false;
@@ -47,7 +50,6 @@ function DragAndDropGUI()
     setappdata(fig,'control',control)
 
     function executeDAGInTopologicalOrder(~,~)
-        functions = control.data.functionNames;
         adjMatrix = control.DAG.adjacency_matrix;
         % Check if the graph is a DAG.
         isDAG = isDirectedAcyclicGraph(adjMatrix);
@@ -59,15 +61,15 @@ function DragAndDropGUI()
         % Perform topological sorting.
         topologicalOrder = topologicalSort();
 
-        importDir = 'C:\Users\Nate\Documents\VHTP_IMPORT_TESTING\raw_files_ForNate_3.10.2022\128_EGI\';
-        importFile = '0012_rest.raw';
+        importDir = 'C:\Users\sueo8x\Documents\raw_files_ForNate_3.10.2022\128_EGI_SET\';
+        importFile = '0012_rest.set';
         importPath = [importDir importFile];
-        outputDir = 'C:\Users\Nate\Documents\TestDeleteLater2';
+        outputDir = 'C:\Users\sueo8x\Documents\SignalFlowEEGDevSavesDELETELATER';
         % Get the current directory and all its subfolders
         currentPath = genpath(pwd); % pwd gets the current directory
         
         % Add the current directory and its subfolders to the MATLAB path
-        addpath('C:\Users\Nate\Documents\eeglab2021.1')
+        addpath('C:\Users\sueo8x\Documents\eeglab2022.1')
         eeglab nogui;
         addpath(currentPath);
         addpath(importDir)
@@ -78,7 +80,7 @@ function DragAndDropGUI()
             ExecutionList{x} = feval(tempModuleName{1, 1});
         end
         
-        singleFileExecute(importPath,outputDir,ExecutionList);
+        singleFileExecute(importPath,outputDir,ExecutionList,topologicalOrder);
 
         function childModules = findChildModules(moduleIndex)
             % Find all modules that are children of the module at moduleIndex.
@@ -96,7 +98,7 @@ function DragAndDropGUI()
         end
 
 
-        function singleFileExecute(importFile, pathResults, ExecutionList, adjacencyMatrix)
+        function singleFileExecute(importFile, pathResults, ExecutionList, topologicalOrder)
             % Create a cell array to store data queues for each module.
             moduleQueues = cell(1, length(ExecutionList));
             
@@ -121,8 +123,8 @@ function DragAndDropGUI()
                     ExecutionList{1}.endEEG = EEG;
                     
                     % Initialize queues for child modules.
-                    for childModuleIndex = findChildModules(1)
-                        moduleQueues{childModuleIndex} = {EEG};
+                    for childModuleIndexSetup = findChildModules(1)
+                        moduleQueues{childModuleIndexSetup} = {EEG};
                     end
                     
                     if ~isempty(EEG)
@@ -132,19 +134,20 @@ function DragAndDropGUI()
                             if strcmp(ExecutionList{i}.flowMode, 'outflow')
                                 ExecutionList{i}.fileIoVar = pathResults;
                             end
-                            
-                            % Iterate through child modules and propagate data.
-                            for childModuleIndex = findChildModules(i)
-                                for j = 1:length(moduleQueues{childModuleIndex})
-                                    EEG = moduleQueues{childModuleIndex}{j};
-                                    ExecutionList{i}.beginEEG = EEG;
-                                    EEG = ExecutionList{i}.run();
-                                    ExecutionList{i}.endEEG = EEG;
+                            for j = 1:length(moduleQueues{i})
+                                EEG = moduleQueues{i}{j};
+                                control.data.branchIndex = control.data.branchIndex + 1;
+                                EEG.setname = [EEG.setname '_' num2str(control.data.branchIndex)];
+                                EEG.filename = [EEG.setname '.set'];
+                                ExecutionList{i}.beginEEG = EEG;
+                                EEG = ExecutionList{i}.run();
+                                ExecutionList{i}.endEEG = EEG;
+                                % Iterate through child modules and propagate data.
+                                for childModuleIndex = findChildModules(i)                   
                                     % Add EEG data to the queue of the next child module.
-                                    nextChildModuleIndex = findChildModules(i + 1);
-                                    moduleQueues{nextChildModuleIndex} = [moduleQueues{nextChildModuleIndex}, {EEG}];
+                                    moduleQueues{childModuleIndex} = [moduleQueues{childModuleIndex}, {EEG}];
                                 end
-                            end
+                            end                          
                         end
                     end
                 end
@@ -269,7 +272,8 @@ function DragAndDropGUI()
             currentPoint = get(canvas, 'CurrentPoint');
             newPosition = [currentPoint(1, 1) - 0.5 * chosenObj.Handle.Position(3), ...
                 currentPoint(1, 2) - 0.5 * chosenObj.Handle.Position(4), ...
-                chosenObj.Handle.Position(3), chosenObj.Handle.Position(4)];
+                chosenObj.Handle.Position(3), ...
+                chosenObj.Handle.Position(4)];
             set(chosenObj.Handle, 'Position', newPosition);
             control.DAG.UIvertices(chosenObjIndex).Position = newPosition;
             updateArrows(chosenObjIndex)
