@@ -25,7 +25,7 @@ classdef outflow_CalculateSource < SignalFlowSuperClass
             args.log_confirmplot = false;
             args.log_saveset = true;
             args.log_computeheadmodel = false;
-            args.char_headmodelfile = 'Empty';
+            args.char_headmodelfile = 'chanfiles/GSN-HydroCel-129.sfp';
             args.log_deletetempfiles = false;
             args.log_usepreexisting = false;
             args.log_resetprotocol = false;
