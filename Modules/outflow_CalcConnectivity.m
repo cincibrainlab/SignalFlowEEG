@@ -16,7 +16,7 @@ classdef outflow_CalcConnectivity < SignalFlowSuperClass
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
 
-            args.num_gpuOn = 1;
+            args.num_gpuOn = 0;
             args.char_outputdir = obj.fileIoVar;
             args.bandDefs = {
                 'delta', 2 , 3.5;
