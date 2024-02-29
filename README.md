@@ -1,4 +1,4 @@
-# SignalFlow for HBCD
+# SignalFlowEEG
 
 ## A Reproducible EEG Processing Framework
 
