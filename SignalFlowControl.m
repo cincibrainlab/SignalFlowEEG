@@ -16,13 +16,46 @@ classdef SignalFlowControl < handle
         end
         function obj = Startup( obj )
 
+            
+
             obj.Setup_AddPaths();
             obj.Setup_Messages();
             obj.Setup_DisplayVersion();
-            obj.Setup_UtilityFunctions();
 
+            obj.update_Git_Pull();
+
+            obj.Setup_UtilityFunctions();
+            
             obj.ModuleHandler('Initialize');
             obj.ProjectHandler('Initialize');
+
+
+        end
+
+        function update_Git_Pull ( obj )
+            % Automatic Git Fetch and Pull
+
+            % Define your Git repository path
+            repositoryPath = obj.setup.sfdir;
+            obj.msgSuccess(sprintf(''));
+            
+            % Run Git fetch
+            system(['git -C "', repositoryPath, '" fetch --all']);
+            
+            % Check if there are new changes
+            [~, result] = system(['git -C "', repositoryPath, '" status -uno']);
+            if contains(result, 'diverged') || contains(result,'behind')
+                response = input('Do you want to pull new changes? This will remove all local changes. (yes/no): ', 's');
+                if strcmpi(response, 'yes')
+                    % Run Git pull
+                    system(['git reset --hard origin/main && git -C "', repositoryPath, '" pull --recurse-submodules']);
+                    disp('New changes pulled successfully.');
+                else
+                    obj.msgSuccess(sprintf('No changes pulled.'));
+                end
+            else
+                obj.msgSuccess(sprintf('No new changes found.'));
+            end
         end
 
         function obj = Setup_AddPaths( obj )
