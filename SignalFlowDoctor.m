@@ -1,5 +1,6 @@
 function [results, paths]  = SignalFlowDoctor( action )
 timestamp = datetime('now', 'Format', 'yyMMddHHmmss'); % timestamp
+maxRetry = 5;
 [note, fixnote, failednote, successnote, successpath] = sf_utilities();
 
 if nargin < 1, action = missing;
@@ -181,7 +182,8 @@ end
 
          ToolIsAvailable = checkRequirements( action );
         try_matlab_path = missing;
-        while ToolIsAvailable == false
+        retryNum = 0;
+        while ToolIsAvailable == false && retryNum < maxRetry
             try
                 if ~ismissing(try_matlab_path), 
                     addpath(genpath(fullfile(try_matlab_path))); 
@@ -206,7 +208,7 @@ end
                     break;
                 end
             end
-
+            retryNum = retryNum + 1;
         end
         results = ToolIsAvailable;
 
@@ -217,7 +219,8 @@ end
 
         ToolIsAvailable = checkRequirements( action );
         try_matlab_path = missing;
-        while ToolIsAvailable == false
+        retryNum = 0;
+        while ToolIsAvailable == false && retryNum < maxRetry
             try
                 if ~ismissing(try_matlab_path), 
                     addpath(fullfile(try_matlab_path)); 
@@ -249,7 +252,7 @@ end
                     break;
                 end
             end
-
+            retryNum = retryNum + 1;
         end
         results = ToolIsAvailable;
 
@@ -294,7 +297,8 @@ end
                 pluginsize = 42.7;
         end
         ToolIsAvailable = checkRequirements(action);
-        while ToolIsAvailable == false
+        retryNum = 0;
+        while ToolIsAvailable == false && retryNum < maxRetry
             try
                 assert(ToolIsAvailable);
                 ToolIsAvailable = true;
@@ -324,6 +328,7 @@ end
                     end
 
                 end
+                retryNum = retryNum + 1;
             end
         end
 
