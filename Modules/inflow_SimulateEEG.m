@@ -57,7 +57,7 @@ classdef inflow_SimulateEEG < SignalFlowSuperClass
         end
 
 
-        function EEG = run(obj)
+        function EEG = run(obj, varargin)
             % run() - Process the EEG data.
             % Signal Processing Code Below
 

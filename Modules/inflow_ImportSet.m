@@ -29,7 +29,7 @@ classdef inflow_ImportSet < SignalFlowSuperClass
             obj = obj@SignalFlowSuperClass(setup, varargin{:});
         end
 
-        function EEG = run(obj)
+        function EEG = run(obj, varargin)
             % run() - Process the EEG data.         
             % Signal Processing Code Below
 

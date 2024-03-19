@@ -17,7 +17,9 @@ classdef (Abstract) SignalFlowSuperClass < handle
         beginEEG        % * input dataset (mid and outflow functions)
         endEEG          % * output dataset
         fileIoVar
-
+        moduleArray     % * store the whole moduleArray
+        currentIndex    % * store the current index
+        
         
     end
 
@@ -45,7 +47,6 @@ classdef (Abstract) SignalFlowSuperClass < handle
  %          %Set Unique Hash Value
             obj.hashcode = missing; % obj.generate_Hash();
             obj.setup = in.setup;
-
             obj.isUserModule = false;
 
         end
@@ -170,7 +171,7 @@ classdef (Abstract) SignalFlowSuperClass < handle
     end
 
     methods (Abstract)        
-        EEG = run( obj ); % Runs the signal processing algorithm.
+        EEG = run( obj, varargin ); % Runs the signal processing algorithm.
     end
 
     methods (Static)

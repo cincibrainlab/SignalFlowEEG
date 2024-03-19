@@ -882,6 +882,7 @@ classdef SignalFlowControl < handle
                 
                 case 'Project_InitializeFolders'
 
+                    obj.proj.path_autosave = missing;
                     obj.proj.path_import = missing;
                     obj.proj.path_temp = missing;
                     obj.proj.path_results = missing;
@@ -1295,6 +1296,29 @@ classdef SignalFlowControl < handle
             [~, ~, fileExtension] = fileparts(importFile);
             % Define an array of valid file extensions that the function can process.
             validExtensions = {'.set', '.raw', '.edf'};
+            labelStruct = obj.Project_GetFolderLabels;
+    
+            % Check if pathAutoSave folder is not empty
+            pathAutoSaveTag = 'path_autosave';
+            pathAutoSaveFolder = find(strcmp({labelStruct.tag}, pathAutoSaveTag), 1);
+            
+            if ~isempty(dir(labelStruct(pathAutoSaveFolder).folder))
+                % Folder is not empty, raise dialog
+                choice = questdlg("Please note that the autosave folder is not empty. Are you sure you want to proceed and potentially overwrite existing files? If you prefer a different folder, please create it and associate it with 'path_autosave' in the setup tab", ...
+                                    'Warning', 'Proceed', 'Cancel', 'Cancel');
+
+                % Handle user choice
+                if strcmp(choice, 'Proceed')
+                    % Empty the folder
+                    rmdir(labelStruct(pathAutoSaveFolder).folder, 's');
+                    % Recreate the folder
+                    mkdir(labelStruct(pathAutoSaveFolder).folder);
+                else
+                    % Exit the function without further processing
+                    return;
+                end
+            end
+
             % Check if the file extension of the input file is within the valid extensions.
             if ismember(fileExtension, validExtensions)
                 % Set the input file path for the first TargetModule.
@@ -1304,13 +1328,13 @@ classdef SignalFlowControl < handle
                 % If both the input file and output directory are valid, execute the pipeline.
                 if boolValidImportFile
                     % Run the first TargetModule.
-                    EEG = obj.module.TargetModuleArray{1}.run(); 
+                    EEG = obj.module.TargetModuleArray{1}.run(obj.module.TargetModuleArray, 1); 
                     obj.module.TargetModuleArray{1}.endEEG = EEG;
                     if ~isempty(EEG)
                         % Iterate through the rest of the TargetModuleArray and execute each module.
                         for i = 2:length(obj.module.TargetModuleArray)
                             if strcmp(obj.module.TargetModuleArray{i}.flowMode, 'outflow')
-                                labelStruct = obj.Project_GetFolderLabels;
+                                
                                 pathInTag = any(strcmp({labelStruct.folder}, obj.module.TargetModuleArray{i}.fileIoVar));                            
                                 if ~pathInTag
                                     pathResultsIdx = find(strcmp({labelStruct.tag}, 'path_results'), 1);
@@ -1321,7 +1345,7 @@ classdef SignalFlowControl < handle
                                 end
                             end
                             obj.module.TargetModuleArray{i}.beginEEG = EEG;
-                            EEG = obj.module.TargetModuleArray{i}.run();
+                            EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray, i);
                             obj.module.TargetModuleArray{i}.endEEG = EEG;
                         end
                     end

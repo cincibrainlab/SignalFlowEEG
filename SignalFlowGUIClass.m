@@ -551,12 +551,47 @@ classdef SignalFlowGUIClass
             set(0,'ShowHiddenHandles','on')
             delete(get(0,'Children'))
         end
+        
+
+        function checkAutoSaveModuleAndPath(obj, app)
+            % Check if the text of obj.SelectedModule contains 'auto save'
+            if contains(lower(obj.SelectedModule.Text), 'auto save')
+                % Check if TargetModuleArray contains at least one element
+                if isempty(obj.sfControl.module.TargetModuleArray)
+                    uialert(app.SignalFlowEEGUIFigure, 'Failed to add the Auto Save module. Please ensure that there is at least one module.', 'Error', 'Icon', 'error');
+                    error('Failed to add the Auto Save module. Please ensure that there is at least one module.');
+                end
+        
+                % Find the index of 'path_autosave' label in the labelStruct array.
+                labelStruct = obj.sfControl.Project_GetFolderLabels;
+                pathAutoSave = strcmp({labelStruct.tag}, 'path_autosave');
+        
+                % Check if 'path_autosave' label is missing
+                if ismissing(labelStruct(pathAutoSave).folder)
+                    uialert(app.SignalFlowEEGUIFigure, 'Failed to add the Auto Save module. Please set the folder for Auto Save in the setup tab.', 'Error', 'Icon', 'error');
+                    error('Failed to add the Auto Save module. Please set the folder for Auto Save.');
+                end
+
+            end
+        end
+
+
 
         function obj = addModule(obj,app)
             try
                 hash = obj.SelectedModule.NodeData;
+                checkAutoSaveModuleAndPath(obj, app);
                 obj.sfControl = obj.sfControl.copyObjectByHash(hash);
-                if strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'outflow') && isempty(obj.sfControl.module.TargetModuleArray{end}.fileIoVar)
+
+                if strcmp(obj.sfControl.module.TargetModuleArray{end}.fname,'outflow_AutoSave')
+                    labelStruct = obj.sfControl.Project_GetFolderLabels;
+                    % Find the index of the 'path_results' label in the labelStruct array.
+                    pathAutoSave = strcmp({labelStruct.tag}, 'path_autosave');
+                    % Set the output directory of the last TargetModule to the folder corresponding to the 'path_results' label.
+                    if ~ismissing(labelStruct(pathAutoSave).folder)
+                        obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathAutoSave).folder;
+                    end
+                elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'outflow') && isempty(obj.sfControl.module.TargetModuleArray{end}.fileIoVar)
                     labelStruct = obj.sfControl.Project_GetFolderLabels;
                     % Find the index of the 'path_results' label in the labelStruct array.
                     pathResults = strcmp({labelStruct.tag}, 'path_results');
@@ -585,17 +620,6 @@ classdef SignalFlowGUIClass
 
         function obj = deleteModule(obj,app)
             try
-                hash = obj.SelectedModule.NodeData;
-                obj.sfControl = obj.sfControl.deleteObjectByHash(hash);
-                obj.refreshTargetTree(app);
-            catch error
-                obj.sfControl.msgError(strcat('SignalFlowGUIClass: deleteModule, Error:',obj.sfControl.Util_PrintFormattedError(error)));
-                return
-            end
-        end
-
-        function obj = moveModuleUp(obj,app)
-            try
                 % Get the currently selected module
                 tempSelectedModule = obj.SelectedModule;
 
@@ -606,7 +630,28 @@ classdef SignalFlowGUIClass
                 parentModule = tempSelectedModule.Parent;
                 siblings = parentModule.Children;
                 moduleIndex = find(siblings == tempSelectedModule);
+                hash = obj.SelectedModule.NodeData;
 
+                obj.sfControl = obj.sfControl.deleteObjectByHash(hash);
+                obj.refreshTargetTree(app);
+            catch error
+                obj.sfControl.msgError(strcat('SignalFlowGUIClass: deleteModule, Error:',obj.sfControl.Util_PrintFormattedError(error)));
+                return
+            end
+        end
+
+        function obj = moveModuleUp(obj,app)
+            try 
+                % Get the currently selected module
+                tempSelectedModule = obj.SelectedModule;
+
+                if isempty(tempSelectedModule) || isempty(tempSelectedModule.Parent)
+                    return;
+                end
+
+                parentModule = tempSelectedModule.Parent;
+                siblings = parentModule.Children;
+                moduleIndex = find(siblings == tempSelectedModule);
                 newIndex = moduleIndex - 1;
 
                 hash = tempSelectedModule.NodeData;
@@ -631,7 +676,6 @@ classdef SignalFlowGUIClass
                 parentModule = tempSelectedModule.Parent;
                 siblings = parentModule.Children;
                 moduleIndex = find(siblings == tempSelectedModule);
-
                 newIndex = moduleIndex + 1;
 
                 hash = tempSelectedModule.NodeData;
@@ -744,7 +788,13 @@ classdef SignalFlowGUIClass
                     app.ModuleNameEditField.Enable = true;
                     app.DefaultButton.Enable = true;
                     app.UpdateButton.Enable = true;
-                    if strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'outflow')
+
+                    if strcmp(obj.sfControl.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                        app.OutputFolderTagDropDown.Enable = false;
+                        app.ModuleNameEditField.Enable = false;
+                        app.DefaultButton.Enable = false;
+                        app.UpdateButton.Enable = false;
+                    elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'outflow')
                         app.OutputFolderTagDropDown.Enable = true;
                         for x =1:numel(labelStruct)
                             if strcmp(labelStruct(x).folder, obj.sfControl.module.TargetModuleArray{i}.fileIoVar)
@@ -1315,7 +1365,20 @@ classdef SignalFlowGUIClass
 
             % user can select a path or cancel, if they cancel the loop is
             % broken but the path is still assigned missing
-            directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'),'Select the Folder your plug-in is in:');
+            % directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'),'Select the Folder your plug-in is in:');
+
+            if ispc
+                % Windows
+                directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'), 'Select the Folder your plug-in is in:');
+            elseif ismac
+                % macOS
+                directoryPath = uigetdir(fullfile(getenv('HOME'), 'Documents'), 'Select the Folder your plug-in is in:');
+            else
+                % Linux (and other Unix-like systems)
+                directoryPath = uigetdir(fullfile(getenv('HOME'), 'Documents'), 'Select the Folder your plug-in is in:');
+            end
+
+
             if directoryPath == 0
                 obj.sfControl.proj.(labelStruct(i).tag) = missing;
             else
