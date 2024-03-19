@@ -464,6 +464,11 @@ classdef SignalFlowControl < handle
             % Description: Sets the description of the project.
             obj.ProjectHandler('Project_SetDescription', desc);
         end
+        
+        function obj = Project_SingleFileExecute(obj, filename)
+            % Description: Execute the pipeline for single file.
+            obj.ProjectHandler('Project_SingleFileExecute', filename)
+        end
 
         function obj = Project_Execute(obj)
             % Description: Executes the project.
@@ -1119,8 +1124,26 @@ classdef SignalFlowControl < handle
                     obj.Setup_Messages();
                     obj.Setup_DisplayVersion();
                     obj.Setup_UtilityFunctions();
+                
+                case 'Project_SingleFileExecute'
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
+                    filename = value;
+                    filename = strcat(obj.proj.path_import, filesep, filename);
+
+                    if exist(filename, 'file') == 2
+                        obj.singleFileExecute(filename)
+                    end
+            
 
                 case 'Project_Execute'
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
+
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1148,6 +1171,10 @@ classdef SignalFlowControl < handle
 %                     delete(pb);
 
                 case 'Project_ExecuteParallel'
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1288,6 +1315,42 @@ classdef SignalFlowControl < handle
 
         end
         
+        function success = clearAutoSaveFolder(obj)
+            try
+                % Get folder labels
+                labelStruct = obj.Project_GetFolderLabels;
+        
+                % Find the pathAutoSave folder
+                pathAutoSaveTag = 'path_autosave';
+                pathAutoSaveFolder = find(strcmp({labelStruct.tag}, pathAutoSaveTag), 1);
+        
+                % Check if pathAutoSave folder is not empty
+                if ~isempty(dir(labelStruct(pathAutoSaveFolder).folder))
+                    % Folder is not empty, prompt user
+                    choice = questdlg("Please note that the autosave folder is not empty. Are you sure you want to proceed and potentially overwrite existing files? If you prefer a different folder, please create it and associate it with 'path_autosave' in the setup tab", ...
+                                        'Warning', 'Proceed', 'Cancel', 'Cancel');
+        
+                    % Handle user choice
+                    if strcmp(choice, 'Proceed')
+                        % Empty the folder
+                        rmdir(labelStruct(pathAutoSaveFolder).folder, 's');
+                        % Recreate the folder
+                        mkdir(labelStruct(pathAutoSaveFolder).folder);
+                    else
+                        % Exit the function without further processing
+                        success = false;
+                        return;
+                    end
+                end
+                % Operation completed successfully
+                success = true;
+            catch
+                % Error occurred during the operation
+                success = false;
+            end
+        end
+
+
         function obj = singleFileExecute(obj, importFile)
             % This function is responsible for executing a single file based on the input file's
             % extension, and running the pipeline defined by the TargetModuleArray.
@@ -1297,27 +1360,7 @@ classdef SignalFlowControl < handle
             % Define an array of valid file extensions that the function can process.
             validExtensions = {'.set', '.raw', '.edf'};
             labelStruct = obj.Project_GetFolderLabels;
-    
-            % Check if pathAutoSave folder is not empty
-            pathAutoSaveTag = 'path_autosave';
-            pathAutoSaveFolder = find(strcmp({labelStruct.tag}, pathAutoSaveTag), 1);
-            
-            if ~isempty(dir(labelStruct(pathAutoSaveFolder).folder))
-                % Folder is not empty, raise dialog
-                choice = questdlg("Please note that the autosave folder is not empty. Are you sure you want to proceed and potentially overwrite existing files? If you prefer a different folder, please create it and associate it with 'path_autosave' in the setup tab", ...
-                                    'Warning', 'Proceed', 'Cancel', 'Cancel');
 
-                % Handle user choice
-                if strcmp(choice, 'Proceed')
-                    % Empty the folder
-                    rmdir(labelStruct(pathAutoSaveFolder).folder, 's');
-                    % Recreate the folder
-                    mkdir(labelStruct(pathAutoSaveFolder).folder);
-                else
-                    % Exit the function without further processing
-                    return;
-                end
-            end
 
             % Check if the file extension of the input file is within the valid extensions.
             if ismember(fileExtension, validExtensions)
@@ -1328,7 +1371,7 @@ classdef SignalFlowControl < handle
                 % If both the input file and output directory are valid, execute the pipeline.
                 if boolValidImportFile
                     % Run the first TargetModule.
-                    EEG = obj.module.TargetModuleArray{1}.run(obj.module.TargetModuleArray, 1); 
+                    EEG = obj.module.TargetModuleArray{1}.run(); 
                     obj.module.TargetModuleArray{1}.endEEG = EEG;
                     if ~isempty(EEG)
                         % Iterate through the rest of the TargetModuleArray and execute each module.
@@ -1345,7 +1388,11 @@ classdef SignalFlowControl < handle
                                 end
                             end
                             obj.module.TargetModuleArray{i}.beginEEG = EEG;
-                            EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray, i);
+                            if strcmp(obj.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                                EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray{i-1}, i);
+                            else
+                                EEG = obj.module.TargetModuleArray{i}.run();
+                            end
                             obj.module.TargetModuleArray{i}.endEEG = EEG;
                         end
                     end

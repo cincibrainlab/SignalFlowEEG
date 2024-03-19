@@ -17,9 +17,6 @@ classdef (Abstract) SignalFlowSuperClass < handle
         beginEEG        % * input dataset (mid and outflow functions)
         endEEG          % * output dataset
         fileIoVar
-        moduleArray     % * store the whole moduleArray
-        currentIndex    % * store the current index
-        
         
     end
 

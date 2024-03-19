@@ -620,18 +620,7 @@ classdef SignalFlowGUIClass
 
         function obj = deleteModule(obj,app)
             try
-                % Get the currently selected module
-                tempSelectedModule = obj.SelectedModule;
-
-                if isempty(tempSelectedModule) || isempty(tempSelectedModule.Parent)
-                    return;
-                end
-
-                parentModule = tempSelectedModule.Parent;
-                siblings = parentModule.Children;
-                moduleIndex = find(siblings == tempSelectedModule);
                 hash = obj.SelectedModule.NodeData;
-
                 obj.sfControl = obj.sfControl.deleteObjectByHash(hash);
                 obj.refreshTargetTree(app);
             catch error
@@ -794,6 +783,7 @@ classdef SignalFlowGUIClass
                         app.ModuleNameEditField.Enable = false;
                         app.DefaultButton.Enable = false;
                         app.UpdateButton.Enable = false;
+                        app.OutputFolderTagDropDown.Value = 'path_autosave';
                     elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'outflow')
                         app.OutputFolderTagDropDown.Enable = true;
                         for x =1:numel(labelStruct)
@@ -1081,11 +1071,8 @@ classdef SignalFlowGUIClass
         function obj = ExecuteFile(obj,app)
             tempFileSelected = obj.SelectedModule;
             filename = tempFileSelected.Text;
-            filename = strcat(obj.sfControl.proj.path_import, filesep, filename);
-            if exist(filename, 'file') == 2
-                obj.sfControl.singleFileExecute(filename)
-                obj.refreshExecuteTree(app);
-            end
+            obj.sfControl.Project_SingleFileExecute(filename)
+            obj.refreshExecuteTree(app);
         end
 
         function obj = BrowseHandler( obj, app, action, value )
