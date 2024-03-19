@@ -436,18 +436,28 @@ classdef SignalFlowControl < handle
             % Description: Saves the project with a new name and output directory.
             obj.proj.output_dir = outputDir;
             obj.proj.name = matlab.lang.makeValidName(projName);
-            obj.ProjectHandler('Project_SaveAs')
+            obj.proj.save_file = fullfile(obj.proj.output_dir, strcat(obj.proj.name,'.json'));
+            obj.saveApp(obj.proj.save_file)
         end
 
         function obj = Project_Save(obj)
-            % Description: Saves the project.
-            obj.ProjectHandler('Project_Save')
+            % Description: Saves the project. 
+            %Todo: Add a check to see if the project has been saved before.
+            %todo: make less redundant if saved already
+            obj.proj.output_dir = outputDir;
+            obj.proj.name = matlab.lang.makeValidName(projName);
+            obj.proj.save_file = fullfile(obj.proj.output_dir, strcat(obj.proj.name,'.json'));
+            obj.saveApp(obj.proj.save_file)
         end
 
         function obj = Project_Load(obj, inputFilename)
             % Description: Loads a project from a file.
             obj.proj.load_file = inputFilename;
-            obj = obj.ProjectHandler('Project_Load');
+            obj.Setup_AddPaths();
+            obj.Setup_Messages();
+            obj.Setup_DisplayVersion();
+            obj.Setup_UtilityFunctions();
+            obj.loadApp(inputFilename)
         end
 
         function obj = Project_SetName(obj, name)
@@ -729,7 +739,7 @@ classdef SignalFlowControl < handle
                     TargetModuleInfoNew = HashTable(strcmp(HashTable.tree,'Target'), :);
 
                     if size(TargetModuleInfoNew,1) == (size(TargetModuleInfo,1) + 1)
-                        str = sprintf('Success: added %s (%s) to Pipeline Builder.', TargetModuleInfo.fname{end}, TargetModuleInfo.hashcode{end});
+                        str = sprintf('Success: added %s (%s) to Pipeline Builder.', TargetModuleInfoNew.fname{end}, TargetModuleInfoNew.hashcode{end});
                         obj.msgIndent(str);
                     else
                         str = sprintf('Module was not added to Pipeline Builder.');
@@ -1110,20 +1120,6 @@ classdef SignalFlowControl < handle
                     else
                         obj.msgError('Starting folder not found.');
                     end
-
-                case 'Project_SaveAs'
-                    obj.proj.save_file = fullfile(obj.proj.output_dir, obj.proj.name);
-                    save(obj.proj.save_file, 'obj');
-
-                case 'Project_Save'
-                    save(obj.proj.save_file, 'obj');
-
-                case 'Project_Load'
-                    load(obj.proj.load_file);
-                    obj.Setup_AddPaths();
-                    obj.Setup_Messages();
-                    obj.Setup_DisplayVersion();
-                    obj.Setup_UtilityFunctions();
                 
                 case 'Project_SingleFileExecute'
                     success = obj.clearAutoSaveFolder();
@@ -1555,6 +1551,151 @@ classdef SignalFlowControl < handle
             % Set the HTML content of the UIHTML element
             % app.UIHTMLComponent.HTML = htmlOutput;
             obj.proj.CurrentConsoleMessage = htmlOutput;
+        end
+
+        function saveApp(obj, jsonFilePath)
+            jsonData = transformToJsonData(obj);
+            obj.saveJSONData(jsonFilePath, jsonData);
+        end
+        
+        function obj = loadApp(obj,jsonFilePath)
+            jsonData = obj.loadJSONData(jsonFilePath);
+            obj =  obj.setLoadData(jsonData);
+        end
+        
+        % functions needed for save
+        function saveJSONData(~,jsonFilePath, jsonData) 
+            try
+                % Convert the JSON data to a string
+                jsonString = jsonencode(jsonData,PrettyPrint=true);
+            
+                % Write the string to a file
+                fid = fopen(jsonFilePath, 'w');
+                if fid == -1
+                    error('Cannot create JSON file');
+                end
+                fwrite(fid, jsonString, 'char');
+                fclose(fid);
+            catch e
+                % Handle any errors that may occur during writing
+                disp('Error writing JSON to file');
+                disp(e);
+            end
+        end
+        
+        function jsonData = transformToJsonData(obj)
+            jsonData = struct;
+        
+            % get proj info
+            jsonData.proj = struct;
+            jsonData.proj.name = obj.proj.name;
+            jsonData.proj.description = obj.proj.desc;
+            jsonData.proj.author = obj.proj.author;
+            % get proj path tags from the app
+            for y=1:length(fieldnames(obj.proj))
+                    
+                % for each field that have 'fileIO' in the name
+                currentFields = fieldnames(obj.proj);
+                if contains(currentFields{y}, 'path_')
+                    jsonData.proj.pathTags.(currentFields{y}) = obj.proj.(currentFields{y});
+                end
+            end
+        
+            % get module info
+            jsonData.TargetModuleArray = struct;
+            for x=1:length(obj.module.TargetModuleArray)
+                % displayName
+                jsonData.TargetModuleArray(x).displayName = obj.module.TargetModuleArray{x}.displayName;
+                % defauleHash
+                % jsonData.TargetModuleArray(x).defauleHash = App.module.TargetModuleArray(x).defauleHash;
+                % fname
+                jsonData.TargetModuleArray(x).fname = obj.module.TargetModuleArray{x}.fname;
+                % isUserModule
+                jsonData.TargetModuleArray(x).isUserModule = obj.module.TargetModuleArray{x}.isUserModule;
+                %fileSaveVars
+                jsonData.TargetModuleArray(x).fileSaveVars = struct;
+                % for each field that have 'fileIO' in the name
+        
+                for y=1:length(fieldnames(obj.module.TargetModuleArray{x}))
+                    
+                    % for each field that have 'fileIO' in the name
+                    currentFields = fieldnames(obj.module.TargetModuleArray{x});
+                    if contains(currentFields{y}, 'fileIo')
+                        jsonData.TargetModuleArray(x).fileSaveVars.(currentFields{y}) = obj.module.TargetModuleArray{x}.(currentFields{y});
+                    end
+                    
+                    
+                end
+        
+            end
+        end
+        
+        
+        % functions needed for load
+        function jsonData = loadJSONData(~,jsonFilePath) 
+            try
+                % Read the JSON file using jsondecode
+                jsonData = jsondecode(fileread(jsonFilePath));
+            
+                % Display the decoded JSON data
+                disp('Decoded JSON Data:');
+                disp(jsonData);
+            
+                % Access specific fields in the JSON data as needed
+                % For example, if your JSON has a field named 'name'
+                if isfield(jsonData, 'proj')
+                    disp(['Name: ', jsonData.proj.name]);
+                    disp(['Description: ', jsonData.proj.description]);
+                    disp(['Author: ', jsonData.proj.author]);
+                end
+            catch e
+                % Handle any errors that may occur during reading or decoding
+                disp('Error reading or decoding the JSON file.');
+                disp(e)
+            end
+        end
+        
+        function obj = setLoadData(obj,jsonData)
+            % Set the data from the JSON file to the app
+            if isempty(jsonData.proj.name)
+                jsonData.proj.name = missing;
+            end
+            if isempty(jsonData.proj.description)
+                jsonData.proj.description = missing;
+            end
+            if isempty(jsonData.proj.author)
+                jsonData.proj.author = missing;
+            end
+            obj.proj.name = jsonData.proj.name;
+            obj.proj.desc = jsonData.proj.description;
+            obj.proj.author = jsonData.proj.author;
+
+            % set the path tags
+            %  for each field in jsonData.proj.pathTags
+            currentFields = fieldnames(jsonData.proj.pathTags);
+            for y=1:length(fieldnames(jsonData.proj.pathTags))
+                % Set the path tags from the JSON file to the app
+                if isempty(jsonData.proj.pathTags.(currentFields{y}))
+                    jsonData.proj.pathTags.(currentFields{y}) = missing;
+                end
+                obj.proj.(currentFields{y}) = jsonData.proj.pathTags.(currentFields{y});
+            end
+
+            % set the module data
+            for x=1:length(jsonData.TargetModuleArray)
+                %  Initialize the module data by function 
+                % TODO maybe change to hash once we have default one 
+                obj.module.selectedFuncName = jsonData.TargetModuleArray(x).fname;
+                obj.ModuleHandler('copyObjectByFuncName');
+                obj.module.TargetModuleArray{x}.displayName = jsonData.TargetModuleArray(x).displayName;
+                obj.module.TargetModuleArray{x}.fname = jsonData.TargetModuleArray(x).fname;
+                obj.module.TargetModuleArray{x}.isUserModule = jsonData.TargetModuleArray(x).isUserModule;
+                %fileSaveVars
+                currentFieldNames = fieldnames(jsonData.TargetModuleArray(x).fileSaveVars);
+                for y=1:length(fieldnames(jsonData.TargetModuleArray(x).fileSaveVars))
+                    obj.module.TargetModuleArray{x}.(currentFieldNames{y}) = jsonData.TargetModuleArray(x).fileSaveVars.(currentFieldNames{y});
+                end
+            end
         end
     end
 

@@ -876,7 +876,7 @@ classdef SignalFlowGUIClass
             % Get the user's documents directory
             userDocs = fullfile(getenv('USERPROFILE'), 'Documents');
             % Open file explorer in the documents directory and allow user to select a JSON file
-            [file, path] = uigetfile(fullfile(userDocs, '*.mat'), 'Select MAT file');
+            [file, path] = uigetfile(fullfile(userDocs, '*.json'), 'Select JSON file');
             if isequal(file, 0)
                 disp('User selected Cancel');
             else

@@ -117,6 +117,7 @@ end
 % if contains(fieldnames(currentFieldName, 'fileIo'))
 %     jsonData.TargetModuleArray(x).fileSaveVars.(fieldnames(fakeApp.module.TargetModuleArray{x}(y))) = fakeApp.module.TargetModuleArray(x).(fieldnames(fakeApp.module.TargetModuleArray{x}(y)));
 % end
+
 % functions needed for load
 function jsonData = loadJSONData(jsonFilePath) 
     try
@@ -161,3 +162,12 @@ function fakeApp = setLoadData(jsonData, fakeApp)
     %     end
     % end
 end
+
+% I want to implement defualt hashes, I think that will cause less bugs 
+
+% I also need to implement and save commit hash, user should be notified if
+% not same commit. A choice doesn't necessarily need to be made but we
+% could give option to switch to that commit 
+
+
+
