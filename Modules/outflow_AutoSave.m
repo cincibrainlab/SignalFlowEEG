@@ -12,6 +12,16 @@ classdef outflow_AutoSave < SignalFlowSuperClass
 
         function sfOutput = run(obj, varargin)
             % run() - Process the EEG data.
+
+            % Get SIgnal Flow Control 
+            % Still remove moduleArray and currentIndex from the super
+            % class 
+
+            % Just get previous module from varagerin 
+
+            % with the single File Execute make a check if its the auto
+            % save and only pass to that 
+
             % Parse inputs
             p = inputParser;
             addOptional(p, 'moduleArray', {}, @(x) iscell(x));
