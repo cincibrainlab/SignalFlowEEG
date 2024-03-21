@@ -1,8 +1,9 @@
 classdef SignalFlowGUIClass
     %SIGNALFLOWGUI Summary of this class goes here
     %   Detailed explanation goes here
-
+    % TODO: Add description of the class
     properties
+        %TODO , comment with uses of each property
         SelectedModule
         sfControl
         spectraFig
@@ -13,6 +14,7 @@ classdef SignalFlowGUIClass
     end
 
     methods
+        %TODO, useless constructor
         function obj = SignalFlowGUIClass()
         end
 
@@ -48,6 +50,7 @@ classdef SignalFlowGUIClass
 
             while obj.guisetup.isLoading
 
+                % Fake loading, just to mess with the user's head
                 app.progress = .5;
                 app.progressDialog.Value = app.progress;
                 app.progressDialog.Message = sprintf('Loading Startup functions... (%.0f%%)', app.progress * 100);
@@ -67,6 +70,7 @@ classdef SignalFlowGUIClass
             close(app.progressDialog);
         end
 
+        %TODO, make this into search box 
         function obj = FilterViewByFlowType( obj, app)
             if  isempty(app.BuilderModuleFilterDropDown.Items)
 
@@ -195,7 +199,7 @@ classdef SignalFlowGUIClass
                 end
             end
 
-
+            %TODO duplicate function, merge them 
             function createFileModules(folderPath, parentModule)
 
                 folderContents = dir(folderPath);
@@ -334,6 +338,7 @@ classdef SignalFlowGUIClass
 
             expand(app.ExecuteTree, 'all');
 
+            %TODO duplicate function, merge them
             function createFileModules(folderPath, parentModule)
 
                 if ismissing(folderPath)
@@ -418,6 +423,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO, make logger class and all try catck blocks can be merged into one
         function obj = setupEditProjectInformationSave(obj,app)
             try
                 obj.sfControl.proj.name = app.TitleEditField.Value;
@@ -442,6 +448,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO, make logger class. all try catck blocks can be merged into one
         function obj = setupEditProjectInformationLoad(obj,app)
             try
                 if ~ismissing(obj.sfControl.proj.name)
@@ -599,6 +606,8 @@ classdef SignalFlowGUIClass
                     if ~ismissing(labelStruct(pathResults).folder)
                         obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathResults).folder;
                     end
+
+                    % TODO: REmove this because changing on reordering will be crazy
                     if numel(obj.sfControl.module.TargetModuleArray)~= 1 && strcmp(obj.sfControl.module.TargetModuleArray{end}.displayName,'Export Set')
                         obj.sfControl.module.TargetModuleArray{end}.displayName = strcat('Export Set <-', obj.sfControl.module.TargetModuleArray{end - 1}.displayName);
                     end
@@ -928,6 +937,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO: Make an actual good looking GUI. Have never moved beyond my dev one 
         function obj = saveAsProject(obj,app)
             % Create the figure
             fig = figure('Name', 'Save File', 'NumberTitle', 'off', ...
@@ -1075,6 +1085,7 @@ classdef SignalFlowGUIClass
             obj.refreshExecuteTree(app);
         end
 
+        % TODO: Put this in functions . THis does nothing 
         function obj = BrowseHandler( obj, app, action, value )
 
             if nargin < 4
@@ -1144,6 +1155,8 @@ classdef SignalFlowGUIClass
             obj.reloadPlugins(app);
         end
 
+        % TODO: THis is the lamps placement issues. we need to rework almost entire gui to completely gety rid of bug 
+        % TODO: The only way is to pre-place the lamps and then just make them visible or invisible.
         function [obj,app] = reloadCustomPaths(obj, app)
             for i = 1:numel(app.PathButtons)
                 delete(app.PathButtons{i})

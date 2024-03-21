@@ -11,15 +11,15 @@ classdef SignalFlowControl < handle
         msgEvent
     end
     methods
-
+        %TDDO: Pretty sure this is uesless, double check then remove
         function obj = SignalFlowControl()
         end
         function obj = Startup( obj )
-
-            
-
+            %TODO: in Setup_AddPaths, autoload default projects dir 
             obj.Setup_AddPaths();
+
             obj.Setup_Messages();
+
             obj.Setup_DisplayVersion();
 
             obj.update_Git_Pull();
@@ -61,7 +61,7 @@ classdef SignalFlowControl < handle
         function obj = Setup_AddPaths( obj )
           
             % Essential MATLAB Path Setup
-            disp('Adding SignalFlow to MATLAB Path')
+            disp('Adding SignalFlow to MATLAB Path') %TODO: make new logger class type it out 
             try
                 [obj.setup.sfdir, ~, ~] = fileparts(which(mfilename));
                 addpath(genpath(obj.setup.sfdir));
@@ -78,12 +78,14 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: Delete , this will be handled by the logger class
         function obj = Setup_Messages( obj )
 
             obj.proj.last_message = '';
 
         end
 
+        % TODO: use logger class 
         function obj = Setup_DisplayVersion(obj)
             
             obj.setup.sfversion = '23.1';
@@ -105,6 +107,7 @@ classdef SignalFlowControl < handle
             obj.ModuleHandler('Modules_ResetTargetArray');
         end
 
+        %TODO: THis will need to work with new hash system 
         function obj = Modules_AssignUniqueHashToMissing( obj )
 
             no_source = numel( obj.module.OriginalSourceModuleArray );
@@ -216,6 +219,7 @@ classdef SignalFlowControl < handle
                 end
             end
         end
+
         function obj = Modules_CopyandEditModule( obj )
             obj.ModuleHandler('Modules_CopyandEditModule');
         end
@@ -269,7 +273,7 @@ classdef SignalFlowControl < handle
 
         % Project Functions
         function obj = Project_AssignCustomFolder(obj, custom_path, tag)
-            % Description: Assigns a subfolder to the project and creates it if it doesn't exist.
+            % Description: Assigns a subfolder to the project.
 
             % Create a string to use as a key in the obj.proj object
             folder_tag = sprintf('path_%s', tag);
@@ -368,6 +372,7 @@ classdef SignalFlowControl < handle
             str = obj.proj.(folder_tag);
         end
 
+        % TODO: This is not used and should be removed
         function obj = Setup_DisplayMethods(obj)
             % This function displays the methods of an object by category, including setup, project, modules, and util.
 
@@ -382,6 +387,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: This is not used and should be removed
         function regexpMethods(obj, pattern)
             % This function displays the methods of an object that match a regular expression pattern.
 
@@ -391,6 +397,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: This is not used and should be removed
         function obj = Project_CreateSubfolder(obj, rootfolder, newsubfolder)
             obj.msgHeader('Create New Project Folder');
 
@@ -485,6 +492,7 @@ classdef SignalFlowControl < handle
             obj.ProjectHandler('Project_Execute');
         end
 
+        % TODO: Useless delete this 
         function obj = Project_BatchExecute(obj)
 
         end
@@ -494,6 +502,7 @@ classdef SignalFlowControl < handle
             obj.ProjectHandler('Project_ExecuteParallel');
         end
 
+        % TODO: MAke this into a the functions that are called by the project handler
         function obj = ModuleHandler(obj, action, value)
             if nargin < 2
                 value = missing;
@@ -875,6 +884,7 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: Delete this and put into functions 
         function [obj, result] = ProjectHandler(obj, action, value)
 
             if nargin < 2
@@ -1216,6 +1226,7 @@ classdef SignalFlowControl < handle
             end
         end
 
+        % TODO: Not used delete this
         function EEGCell = Project_ImportFileList(obj, method)
 
             fl = obj.proj.filelist_import;
@@ -1235,6 +1246,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: Not used delete this
         function EEGCell = Project_AnalyzeFileList(obj, method, filelist_tag)
             obj.msgHeader('Run Signal Analysis on Filelist by Tag');
             obj.msgIndent(sprintf('Function: <strong>%s,</strong>', method));
@@ -1271,6 +1283,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: Not used delete this
         function obj = Project_EegExportSet(obj, EEGCell, Project_Folder)
             obj.msgHeader('| Export EEG to Project Folder As SET\n');
 
@@ -1348,6 +1361,14 @@ classdef SignalFlowControl < handle
 
 
         function obj = singleFileExecute(obj, importFile)
+            %TODO Logging needs to be implemented
+            % The main issue with this is SO mant conditions and if else statements. This is not a good practice.
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
+            % We should seperate the conditions and if else statements into different functions and call them from here.
+            % This will make the code more readable and maintainable.
+            %TODO: RIp this code apart and make it more readable and maintainable.
+
             % This function is responsible for executing a single file based on the input file's
             % extension, and running the pipeline defined by the TargetModuleArray.
         
@@ -1398,7 +1419,7 @@ classdef SignalFlowControl < handle
 
 
 
-        
+        % TODO: maybe not used, double check and delete if not used
         function Setup_StoreCustomPaths(obj, path)
             % Add a path to the MATLAB path
 
@@ -1415,6 +1436,7 @@ classdef SignalFlowControl < handle
             obj.setup.paths_user.(validFolderName) = path;
         end
 
+        % TODO: not used, delete
         function Setup_PrintCustomPaths(obj)
             % Print the setup property as a table
 
@@ -1433,6 +1455,7 @@ classdef SignalFlowControl < handle
             disp(setupTable_long);
         end
 
+        % TODO: maybe not used, double check and delete if not used
         function Project_CheckMissing(obj)
             % Validate the project metadata and report any missing or invalid fields.
             obj.proj.detailsAreComplete = false;
@@ -1477,6 +1500,7 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: All of these should be removed and changes with logger class. These are faulty abd error prone.
         function str = msgHeader(obj, str)
             cprintf('*Blue', '\n| %s\n', str);
        
@@ -1700,16 +1724,19 @@ classdef SignalFlowControl < handle
     end
 
     methods (Static)
+        % TODO: move to logger class
         function msg = Util_PrintFormattedError( err )
             msg = getReport(err, 'basic');
             msg = regexprep(msg, {'\n\s*', '\n\n+'}, {' ', '\n'});
             msg = regexprep(msg, '<a.*?>|</a>', '');
         end
 
+        % TODO: move to logger class
         function msg = lead_message() 
             msg = datestr(now, 'yyyy/mm/dd HH:MM:SS');
         end
 
+        % TODO: This is a duplicate of the function in the super class 
         function hash = generate_Hash()
             % Get the current time in milliseconds
             timestamp = round(posixtime(datetime('now')) * 1000);
@@ -1726,6 +1753,7 @@ classdef SignalFlowControl < handle
             hash = shuffledString(1:6);
         end
 
+        % TODO: not used, delete
         function EEG = importHelper(method, filename)
 
             opts = struct();
@@ -1737,6 +1765,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: not used, delete
         function EEG = analysisHelper(method, filename)
 
             opts = struct();
@@ -1750,6 +1779,7 @@ classdef SignalFlowControl < handle
 
         end
 
+        % TODO: move to logger class
         function msg(str, formatcode)
             % Check if the formatting code was provided
             if nargin < 2
