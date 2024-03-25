@@ -847,20 +847,6 @@ classdef SignalFlowGUIClass
 
         end
 
-        function obj = EditModuleButtonPushed(obj, app)
-            baseModuleFile =  obj.sfControl.module.CurrentModuleInfo.filename;
-            edit(baseModuleFile{1});
-        end
-
-        function obj = CopyandEditModuleButtonPushed(obj, app)
-
-
-            obj.sfControl.Modules_CopyandEditModule;
-            %  obj.refreshUserModuleFiles(app);
-
-
-        end
-
         function obj = ViewModuleCodeButtonPushed(obj, app)
 
             try

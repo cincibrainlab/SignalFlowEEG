@@ -219,10 +219,6 @@ classdef SignalFlowControl < handle
                 end
             end
         end
-
-        function obj = Modules_CopyandEditModule( obj )
-            obj.ModuleHandler('Modules_CopyandEditModule');
-        end
         
         function obj = Modules_DisplayAvailable(obj)
             % Description: Displays the list of available modules.
@@ -631,49 +627,6 @@ classdef SignalFlowControl < handle
                     end
 
                     refreshModuleTable = false;
-
-                case 'Modules_CopyandEditModule'
-                    obj.msgHeader('Copy and Create New User Module');
-
-                    % get the active module file
-                    baseModuleFile =  obj.module.CurrentModuleInfo.filename{1};
-
-                    % define relevant paths
-                    UserModulesDir = fullfile(obj.setup.sfdir,'UserModules');
-
-                    % generate new filename for copied module
-                    [~, name, ext] = fileparts(baseModuleFile);
-
-                    try
-                        % newCopy = feval(name);
-                        uniqueHash = ['_Copy', num2str(randi(999))]; % newCopy.hashcode;
-                        userModuleFile = [name '_' uniqueHash ext];
-                    catch error
-                        obj.msgError(strcat('SignalFlowControl: Modules_CopyandEditModule, Error:',obj.Util_PrintFormattedError(error)));
-                    end
-
-                    originalFile = baseModuleFile;
-                    newFile = fullfile(UserModulesDir, userModuleFile);
-                    content = fileread(originalFile);
-
-                    % Define the string to find and the replacement string
-                    findString = name;
-                    replaceString = [name '_' uniqueHash];
-
-                    % tag all user modules
-                    findUserModuleString = 'obj.isUserModule = false;';
-                    replaceUserModuleString = 'obj.isUserModule = true;';
-
-                    % Perform the find and replace
-                    updatedContent = strrep(content, findString, replaceString);
-                    updatedContent = strrep(updatedContent, findUserModuleString, replaceUserModuleString);
-
-                    % Save the updated content to the file
-                    fid = fopen(newFile, 'w');
-                    fwrite(fid, updatedContent);
-                    fclose(fid);
-
-                    edit(newFile);
 
                 case 'checkNumberOfModules'
                     try
