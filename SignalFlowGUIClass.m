@@ -606,11 +606,6 @@ classdef SignalFlowGUIClass
                     if ~ismissing(labelStruct(pathResults).folder)
                         obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathResults).folder;
                     end
-
-                    % TODO: REmove this because changing on reordering will be crazy
-                    if numel(obj.sfControl.module.TargetModuleArray)~= 1 && strcmp(obj.sfControl.module.TargetModuleArray{end}.displayName,'Export Set')
-                        obj.sfControl.module.TargetModuleArray{end}.displayName = strcat('Export Set <-', obj.sfControl.module.TargetModuleArray{end - 1}.displayName);
-                    end
                 elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'inflow')
                     labelStruct = obj.sfControl.Project_GetFolderLabels;
                     % Find the index of the 'path_results' label in the labelStruct array.
