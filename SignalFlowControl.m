@@ -180,22 +180,32 @@ classdef SignalFlowControl < handle
         
         end
 
-        function obj = setModuleViewMode( obj, flowMode )
+        function obj = setModuleViewMode( obj, flowMode, searchValue )
 
             view_index =  obj.module.filtered.(flowMode);
             hashlibrary = obj.module.HashLibrary(view_index, :);
 
-            % Find the module groups based on the 'tree' column
-            [groupingVariable, foundGroup] = findgroups(hashlibrary.tree);
+            % Logical indexing to filter based on propertyName (displayName) containing searchValue
+            if ~isempty(searchValue)
+                searchMask = cellfun(@(x) contains(x.displayName, searchValue, 'IgnoreCase', true), hashlibrary.class);
+                hashlibrary = hashlibrary(searchMask, :);
+            end
 
-            % check if either array is blank
-            missingGroup = setdiff({'Source','User'}, foundGroup);
-
-            % Define a function to gather colums
-            collectRows = @(rows) {rows};
-
-            % Apply the function to each group of rows in the 'Value' column
-            moduleClasses = splitapply(collectRows, hashlibrary.class, groupingVariable);
+            if isempty(hashlibrary)
+                moduleClasses = {}; % Return an empty cell array if hashlibrary is empty
+            else 
+                % Find the module groups based on the 'tree' column
+                [groupingVariable, foundGroup] = findgroups(hashlibrary.tree);
+    
+                % check if either array is blank
+                missingGroup = setdiff({'Source','User'}, foundGroup);
+    
+                % Define a function to gather colums
+                collectRows = @(rows) {rows};
+    
+                % Apply the function to each group of rows in the 'Value' column
+                moduleClasses = splitapply(collectRows, hashlibrary.class, groupingVariable);
+            end
 
             for i = 1 : numel(foundGroup)
                 id = foundGroup{i};

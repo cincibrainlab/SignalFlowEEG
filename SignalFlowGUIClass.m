@@ -69,8 +69,14 @@ classdef SignalFlowGUIClass
             pause(1);
             close(app.progressDialog);
         end
-
-        %TODO, make this into search box 
+        
+        function obj = moduleSearchFieldChanged(obj, app)
+            flowTypeDropDownValue = app.BuilderModuleFilterDropDown.Value;
+            moduleSearchValue = app.ModuleSearchEditField.Value;
+            obj.sfControl.setModuleViewMode(flowTypeDropDownValue, moduleSearchValue);
+            obj.refreshSourceTree(app)
+        end
+        
         function obj = FilterViewByFlowType( obj, app)
             if  isempty(app.BuilderModuleFilterDropDown.Items)
 
@@ -79,7 +85,8 @@ classdef SignalFlowGUIClass
                 %  app.BuilderModuleFilterDropDown.Value = filter_options{end};
             end
             flowTypeDropDownValue = app.BuilderModuleFilterDropDown.Value;
-            obj.sfControl.setModuleViewMode(flowTypeDropDownValue);
+            moduleSearchValue = app.ModuleSearchEditField.Value;
+            obj.sfControl.setModuleViewMode(flowTypeDropDownValue, moduleSearchValue);
         end
 
         function buttonEnableCheck(obj, app)
