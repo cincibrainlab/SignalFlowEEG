@@ -70,13 +70,13 @@ classdef SignalFlowGUIClass
             close(app.progressDialog);
         end
         
-        function obj = moduleSearchFieldChanged(obj, app)
+        function obj = moduleSearchButtonPushed(obj, app)
             flowTypeDropDownValue = app.BuilderModuleFilterDropDown.Value;
             moduleSearchValue = app.ModuleSearchEditField.Value;
             obj.sfControl.setModuleViewMode(flowTypeDropDownValue, moduleSearchValue);
             obj.refreshSourceTree(app)
         end
-        
+
         function obj = FilterViewByFlowType( obj, app)
             if  isempty(app.BuilderModuleFilterDropDown.Items)
 
