@@ -112,7 +112,7 @@ classdef SignalFlowGUIClass
                     setButtonEnableState(app, {'AddFunctionButton'}, isSourceTree);
                     setButtonEnableState(app, {'DeleteFunctionButton'}, isTargetTree);
                 catch
-                    setButtonEnableState(app, {'AddFunctionButton', 'DeleteFunctionButton', 'OutputFolderTagDropDown'}, false);
+                    setButtonEnableState(app, {'AddFunctionButton', 'DeleteFunctionButton'}, false);
                 end
             end
 
@@ -186,9 +186,11 @@ classdef SignalFlowGUIClass
         function obj = resetPipeline( obj, app)
             app.AddFunctionButton.Enable = false;
             app.DeleteFunctionButton.Enable = false;
-            app.OutputFolderTagDropDown.Enable = false;
-            app.DefaultButton.Visible = false;
-            app.UpdateButton.Visible = false;
+            app.OutputFolderTagDropDown.Visible = false;
+            app.OutputFolderTagDropDownLabel.Visible = false;
+            app.CurrentFolderLabel.Visible = false;
+            app.CurrentFolderEditField.Visible = false;
+            app.OutputFolderResetButton.Visible = false;
             obj.sfControl.Modules_ResetTargetArray();
             obj.refreshTargetTree(app)
         end
@@ -391,10 +393,11 @@ classdef SignalFlowGUIClass
                 case 'Builder'
                     app.AddFunctionButton.Enable = false;
                     app.DeleteFunctionButton.Enable = false;
-                    app.OutputFolderTagDropDown.Enable = false;
-                    app.DefaultButton.Visible = false;
-                    app.UpdateButton.Visible = false;
-
+                    app.OutputFolderTagDropDown.Visible = false;
+                    app.OutputFolderTagDropDownLabel.Visible = false;
+                    app.OutputFolderResetButton.Visible = false;
+                    app.CurrentFolderLabel.Visible = false;
+                    app.CurrentFolderEditField.Visible = false;
                     obj.refreshSourceTree(app);
                     obj.refreshUserModuleTree(app);
                     obj.refreshTargetTree(app);
@@ -588,9 +591,11 @@ classdef SignalFlowGUIClass
         end
         
         function obj = OutputFolderContainerToggle(obj, app, booleanValue)
-            app.OutputFolderTagDropDown.Enable = booleanValue;
-            app.DefaultButton.Visible = booleanValue;
-            app.UpdateButton.Visible = booleanValue;
+            app.OutputFolderTagDropDown.Visible = booleanValue;
+            app.OutputFolderTagDropDownLabel.Visible = booleanValue;
+            app.CurrentFolderLabel.Visible = booleanValue;
+            app.CurrentFolderEditField.Visible = booleanValue;
+            app.OutputFolderResetButton.Visible = booleanValue;
         end
 
 
@@ -601,6 +606,8 @@ classdef SignalFlowGUIClass
                 obj.sfControl = obj.sfControl.copyObjectByHash(hash);
                 
                 app.ModuleNameEditField.Value = obj.sfControl.module.TargetModuleArray{end}.displayName;
+                app.ModuleTypeEditField.Value = obj.sfControl.module.TargetModuleArray{end}.flowMode;
+
                 OutputFolderContainerToggle(obj, app, false);
 
                 if strcmp(obj.sfControl.module.TargetModuleArray{end}.fname,'outflow_AutoSave')
@@ -634,8 +641,9 @@ classdef SignalFlowGUIClass
                 elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'midflow')
                     app.OutputFolderTagDropDown.Value = 'path_temp';
                 else
-                OutputFolderContainerToggle(obj, app, false);
+                    OutputFolderContainerToggle(obj, app, false);
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value;
                 obj.refreshTargetTree(app);
             catch error
                 obj.sfControl.msgError(strcat('SignalFlowGUIClass: addModule, Error:',obj.sfControl.Util_PrintFormattedError(error)));
@@ -745,6 +753,7 @@ classdef SignalFlowGUIClass
                     folderLabelIndex = strcmp({labelStruct.tag}, app.OutputFolderTagDropDown.Value);
                     targetModule.fileIoVar = labelStruct(folderLabelIndex).folder;
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value; 
             end
             obj.refreshTargetTree(app)
         end
@@ -774,6 +783,7 @@ classdef SignalFlowGUIClass
                         targetModule.fileIoVar = labelStruct(folderLabelIndex).folder;
                     end
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value; 
             end
             obj.refreshTargetTree(app)
         end
@@ -801,6 +811,8 @@ classdef SignalFlowGUIClass
 
                 if found
                     app.ModuleNameEditField.Value = obj.sfControl.module.TargetModuleArray{i}.displayName;
+                    app.ModuleTypeEditField.Value = obj.sfControl.module.TargetModuleArray{i}.flowMode;
+                    
                     OutputFolderContainerToggle(obj, app, false);
 
                     if strcmp(obj.sfControl.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
@@ -810,9 +822,11 @@ classdef SignalFlowGUIClass
                         for x =1:numel(labelStruct)
                             if strcmp(labelStruct(x).folder, obj.sfControl.module.TargetModuleArray{i}.fileIoVar)
                                 app.OutputFolderTagDropDown.Value = labelStruct(x).tag;
+                                app.CurrentFolderEditField.Value = labelStruct(x).tag;
                                 return
                             else
                                 app.OutputFolderTagDropDown.Value = 'path_results';
+                                app.CurrentFolderEditField.Value = 'path_results';
                             end
                         end
                     elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'inflow')
