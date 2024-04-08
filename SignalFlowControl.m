@@ -1095,6 +1095,12 @@ classdef SignalFlowControl < handle
                     end
                 
                 case 'Project_SingleFileExecute'
+
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
+
                     success = obj.clearAutoSaveFolder();
                     if ~success
                         return; 
@@ -1108,6 +1114,12 @@ classdef SignalFlowControl < handle
             
 
                 case 'Project_Execute'
+
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
+
                     success = obj.clearAutoSaveFolder();
                     if ~success
                         return; 
@@ -1140,6 +1152,12 @@ classdef SignalFlowControl < handle
 %                     delete(pb);
 
                 case 'Project_ExecuteParallel'
+
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
+
                     success = obj.clearAutoSaveFolder();
                     if ~success
                         return; 
@@ -1287,6 +1305,17 @@ classdef SignalFlowControl < handle
 
         end
         
+        function success = checkPipelineValidations(obj)
+            % Check if the flow mode of the first module is 'inflow'
+            if strcmp(obj.module.TargetModuleArray{1}.flowMode, 'inflow')
+                success = true;
+            else
+                obj.msgError('The first module of the pipeline must be configured as an inflow module. Please rebuild the pipeline.');
+                success = false;
+            end
+        end
+
+
         function success = clearAutoSaveFolder(obj)
             try
                 % Get folder labels
