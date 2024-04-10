@@ -1079,6 +1079,7 @@ classdef SignalFlowGUIClass
         end
 
         function obj = ExecuteLoop(obj,app)
+            obj.sfControl.UIFigure = app.SignalFlowEEGUIFigure;
             obj.sfControl.Project_Execute()
             obj.refreshExecuteTree(app);
         end
@@ -1091,6 +1092,7 @@ classdef SignalFlowGUIClass
         function obj = ExecuteFile(obj,app)
             tempFileSelected = obj.SelectedModule;
             filename = tempFileSelected.Text;
+            obj.sfControl.UIFigure = app.SignalFlowEEGUIFigure;
             obj.sfControl.Project_SingleFileExecute(filename)
             obj.refreshExecuteTree(app);
         end

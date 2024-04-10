@@ -6,6 +6,7 @@ classdef SignalFlowControl < handle
         module = struct(); % module structure
         proj = struct(); % project structure
         util = struct(); % utility function handles
+        UIFigure matlab.ui.Figure 
     end
     events
         msgEvent
@@ -1109,7 +1110,7 @@ classdef SignalFlowControl < handle
                     filename = strcat(obj.proj.path_import, filesep, filename);
 
                     if exist(filename, 'file') == 2
-                        obj.singleFileExecute(filename)
+                        obj.singleFileExecute(filename, 1, 1)
                     end
             
 
@@ -1124,7 +1125,7 @@ classdef SignalFlowControl < handle
                     if ~success
                         return; 
                     end
-
+                    
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1142,10 +1143,12 @@ classdef SignalFlowControl < handle
                         end
                     end
                     
+                   
 %                     pb = util_sfProgressBar(length(dirContents));
 
-                    for x = 1:length(dirContents)                 
-                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name));
+                    totalFiles = length(dirContents);
+                    for x = 1:totalFiles             
+                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name), x, totalFiles);
 %                         pb.iter(x);
                     end
 %                     pb.close();
@@ -1190,7 +1193,7 @@ classdef SignalFlowControl < handle
 %                     afterEach(dq, @(~) pb.iter(idx))
 
                     parfor x = 1:length(dirContents)                 
-                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name));
+                        obj.singleFileExecuteParallel(strcat(dirContents(x).folder, filesep, dirContents(x).name));
                         % Send data to the DataQueue
                         send(dq, x);
                         
@@ -1350,17 +1353,8 @@ classdef SignalFlowControl < handle
                 success = false;
             end
         end
-
-
-        function obj = singleFileExecute(obj, importFile)
-            %TODO Logging needs to be implemented
-            % The main issue with this is SO mant conditions and if else statements. This is not a good practice.
-            % This function is responsible for executing a single file based on the input file's
-            % extension, and running the pipeline defined by the TargetModuleArray.
-            % We should seperate the conditions and if else statements into different functions and call them from here.
-            % This will make the code more readable and maintainable.
-            %TODO: RIp this code apart and make it more readable and maintainable.
-
+        
+        function obj = singleFileExecuteParallel(obj, importFile)
             % This function is responsible for executing a single file based on the input file's
             % extension, and running the pipeline defined by the TargetModuleArray.
         
@@ -1405,6 +1399,99 @@ classdef SignalFlowControl < handle
                             obj.module.TargetModuleArray{i}.endEEG = EEG;
                         end
                     end
+                end        
+            end
+        end
+
+        function obj = singleFileExecute(obj, importFile, currentFile, totalFiles)
+            %TODO Logging needs to be implemented
+            % The main issue with this is SO mant conditions and if else statements. This is not a good practice.
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
+            % We should seperate the conditions and if else statements into different functions and call them from here.
+            % This will make the code more readable and maintainable.
+            %TODO: RIp this code apart and make it more readable and maintainable.
+
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
+        
+            % Extract the file extension from the given input file.
+            [~, filename, fileExtension] = fileparts(importFile);
+            % Define an array of valid file extensions that the function can process.
+            validExtensions = {'.set', '.raw', '.edf'};
+            labelStruct = obj.Project_GetFolderLabels;
+
+
+            % Check if the file extension of the input file is within the valid extensions.
+            if ismember(fileExtension, validExtensions)
+                % Set the input file path for the first TargetModule.
+                obj.module.TargetModuleArray{1}.fileIoVar = importFile;
+                % Check if the input file exists and update the boolValidImportFile flag.
+                boolValidImportFile = exist(obj.module.TargetModuleArray{1}.fileIoVar, 'file') == 2;               
+                % If both the input file and output directory are valid, execute the pipeline.
+                if boolValidImportFile
+                    % Initialize progress bar
+                    message = sprintf('Executing Pipeline for file %d out of %d files', currentFile, totalFiles);
+                    progressBar = uiprogressdlg(obj.UIFigure, 'Title', message);
+                    obj.msgIndent(message);
+                    progressBar.Cancelable = 'off';
+                    numModules = length(obj.module.TargetModuleArray);
+                    
+                    first = 1;
+                    progressBar.Value = first / numModules;
+                    message = sprintf('Starting Step %d: %s out of %d steps for file %s', first, obj.module.TargetModuleArray{first}.displayName, numModules, filename);
+                    progressBar.Message = message;
+                    obj.msgIndent(message);
+
+                    % Run the first TargetModule.
+                    EEG = obj.module.TargetModuleArray{first}.run(); 
+                    obj.module.TargetModuleArray{first}.endEEG = EEG;
+                    
+                    message = sprintf('Ending Step %d: %s out of %d steps for file %s', first, obj.module.TargetModuleArray{first}.displayName, numModules, filename);
+                    progressBar.Message = message;
+                    obj.msgIndent(message);
+
+                    if ~isempty(EEG)
+
+                        % Iterate through the rest of the TargetModuleArray and execute each module.
+                        for i = 2:length(obj.module.TargetModuleArray)
+                            % Update progress bar
+                            progressBar.Value = i / numModules;
+                            message = sprintf('Starting Step %d: %s out of %d steps for file %s', i, obj.module.TargetModuleArray{i}.displayName, numModules, filename);
+                            progressBar.Message = message;
+                            obj.msgIndent(message);
+
+                            if strcmp(obj.module.TargetModuleArray{i}.flowMode, 'outflow')
+                                
+                                pathInTag = any(strcmp({labelStruct.folder}, obj.module.TargetModuleArray{i}.fileIoVar));                            
+                                if ~pathInTag
+                                    pathResultsIdx = find(strcmp({labelStruct.tag}, 'path_results'), 1);
+                            
+                                    if ~isempty(pathResultsIdx) && ~isempty(labelStruct(pathResultsIdx).folder)
+                                        obj.module.TargetModuleArray{i}.fileIoVar = labelStruct(pathResultsIdx).folder;
+                                    end
+                                end
+                            end
+                            obj.module.TargetModuleArray{i}.beginEEG = EEG;
+                            if strcmp(obj.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                                EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray{i-1}, i);
+                            else
+                                EEG = obj.module.TargetModuleArray{i}.run();
+                            end
+                            obj.module.TargetModuleArray{i}.endEEG = EEG;
+                            % Update progress bar for module completion
+                            message = sprintf('Ending Step %d: %s out of %d steps for file %s', i, obj.module.TargetModuleArray{i}.displayName, numModules, filename);
+                            progressBar.Message = message;
+                            obj.msgIndent(message);
+                        end
+                    end
+                    % Update progress bar for pipeline completion
+                    message = sprintf('Pipeline execution completed for file %d out of %d files', currentFile, totalFiles);
+                    progressBar.Message = message;
+                    obj.msgSuccess(message);
+        
+                    % Close progress bar
+                    delete(progressBar);
                 end        
             end
         end
