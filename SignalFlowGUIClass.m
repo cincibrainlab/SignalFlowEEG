@@ -1194,10 +1194,10 @@ classdef SignalFlowGUIClass
             labelStruct = obj.sfControl.Project_GetFolderLabels;
 
             % Assuming the element's position vector is [left bottom width height]
-            elementPosition = app.PathSetupPanel.Position;
+            elementPosition = app.PathPanel.Position;
             
             % Calculate the top position
-            topPosition = elementPosition(2) + elementPosition(4);
+            topPosition = elementPosition(2) + elementPosition(4) - 75;
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
@@ -1205,7 +1205,7 @@ classdef SignalFlowGUIClass
             % Hardcoded buttons sizes
             ButtonXLeft = elementPosition(1) + 40;
             LampXLeft = elementPosition(1) + 12;
-            buttonWidth = 180;
+            buttonWidth = 175;
             buttonHeight = 22;
             buttonSpacing = 10;
             lampWidthHeight = 20;
@@ -1213,10 +1213,10 @@ classdef SignalFlowGUIClass
             % Check status of button
             for i = 1 : numel({labelStruct.tag})
                 % Create a button/lamp if needed
-                app.PathButtons{i} = uibutton(app.SetupTab, 'state');
+                app.PathButtons{i} = uibutton(app.PathPanel, 'state');
                 app.PathButtons{i}.HorizontalAlignment = 'left';
 
-                app.PathLamps{i} = uilamp(app.SetupTab);
+                app.PathLamps{i} = uilamp(app.PathPanel);
                 % Calculate the button's bottom position for vertical stacking
                 bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
@@ -1312,10 +1312,10 @@ classdef SignalFlowGUIClass
             pluginStatus= SignalFlowDoctor();
 
             % Assuming the element's position vector is [left bottom width height]
-            elementPosition = app.PluginSetupPanel.Position;
+            elementPosition = app.PluginPanel.Position;
             
             % Calculate the top position
-            topPosition = elementPosition(2) + elementPosition(4);
+            topPosition = elementPosition(2) + elementPosition(4) - 75;
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
@@ -1323,19 +1323,20 @@ classdef SignalFlowGUIClass
             % Hardcoded buttons sizes
             ButtonXLeft = elementPosition(1) + 40;
             LampXLeft = elementPosition(1) + 12;
-            buttonWidth = 180;
+            buttonWidth = 175;
             buttonHeight = 22;
             buttonSpacing = 10;
             lampWidthHeight = 20;
+            
 
             % Check status of button
             if numel(app.PluginButtons) == 0
                 for i = 1 : numel(pluginNames)
                     % Create a button/lamp if needed
-                    app.PluginButtons{i} = uibutton(app.SetupTab, 'state');
+                    app.PluginButtons{i} = uibutton(app.PluginPanel, 'state');
                     app.PluginButtons{i}.HorizontalAlignment = 'left';
 
-                    app.PluginLamps{i} = uilamp(app.SetupTab);
+                    app.PluginLamps{i} = uilamp(app.PluginPanel);
                     % Calculate the button's bottom position for vertical stacking
                     bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
