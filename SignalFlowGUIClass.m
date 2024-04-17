@@ -203,30 +203,35 @@ classdef SignalFlowGUIClass
             for i =1 : numel(labelStruct)
                 if ~ismissing(labelStruct(i).folder)
                     module = uitreenode(app.SetupFileListTree, 'Text', sprintf("%s: %s", labelStruct(i).tag, obj.sfControl.proj.(labelStruct(i).tag)));
-                    createFileModules(obj.sfControl.proj.(labelStruct(i).tag), module);
+                    obj.createFileModules(obj.sfControl.proj.(labelStruct(i).tag), module);
                 end
             end
+            
+            expand(app.SetupFileListTree, 'all');
+           
+        end
 
-            %TODO duplicate function, merge them 
-            function createFileModules(folderPath, parentModule)
+        function createFileModules(obj, folderPath, parentModule)
 
+            if ismissing(folderPath)
+                obj.sfControl.msgWarning('Import folder not found. Are project folders assigned?');
+                return;
+            else
                 folderContents = dir(folderPath);
+            end
 
-                for c = 1:numel(folderContents)
-                    entry = folderContents(c);
+            for c = 1:numel(folderContents)
+                entry = folderContents(c);
 
-                    if strcmp(entry.name, '.') || strcmp(entry.name, '..')
-                        continue;
-                    end
-
-                    [~, ~, ext] = fileparts(entry.name);
-
-                    if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
-                        fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
-                    end
+                if strcmp(entry.name, '.') || strcmp(entry.name, '..')
+                    continue;
                 end
 
-                expand(app.SetupFileListTree, 'all');
+                [~, ~, ext] = fileparts(entry.name);
+
+                if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
+                    fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
+                end
             end
         end
 
@@ -332,44 +337,20 @@ classdef SignalFlowGUIClass
                 if contains(currentTargetModule.fname, 'inflow')
                     module = uitreenode(app.ExecuteTree, 'Text', strcat(moduleText,' Folder Tag: [',labelStruct(pathResults).tag,']'));
                     if isfield(obj.sfControl.proj, 'path_import') && ~isempty(obj.sfControl.proj.path_import)
-                        createFileModules(obj.sfControl.proj.path_import, module);
+                        obj.createFileModules(obj.sfControl.proj.path_import, module);
                     end
                 end
 
                 if contains(currentTargetModule.fname, 'outflow')
                     module = uitreenode(app.ExecuteTree, 'Text', strcat(moduleText,' Folder Tag: [',labelStruct(pathResults).tag,']'), 'NodeData', currentTargetModule.fileIoVar);
                     if isfield(obj.sfControl.proj, 'path_results') && ~isempty(obj.sfControl.proj.path_results)
-                        createFileModules(obj.sfControl.proj.path_results, module);
+                        obj.createFileModules(obj.sfControl.proj.path_results, module);
                     end
                 end
             end
 
             expand(app.ExecuteTree, 'all');
-
-            %TODO duplicate function, merge them
-            function createFileModules(folderPath, parentModule)
-
-                if ismissing(folderPath)
-                    obj.sfControl.msgWarning('Import folder not found. Are project folders assigned?');
-                    return;
-                else
-                    folderContents = dir(folderPath);
-                end
-
-                for c = 1:numel(folderContents)
-                    entry = folderContents(c);
-
-                    if strcmp(entry.name, '.') || strcmp(entry.name, '..')
-                        continue;
-                    end
-
-                    [~, ~, ext] = fileparts(entry.name);
-
-                    if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
-                        fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
-                    end
-                end
-            end
+            
         end
 
         function refreshTrees(obj,app)
