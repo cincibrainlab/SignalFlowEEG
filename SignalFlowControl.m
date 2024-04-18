@@ -12,9 +12,7 @@ classdef SignalFlowControl < handle
         msgEvent
     end
     methods
-        %TDDO: Pretty sure this is uesless, double check then remove
-        function obj = SignalFlowControl()
-        end
+
         function obj = Startup( obj )
             %TODO: in Setup_AddPaths, autoload default projects dir 
             obj.Setup_AddPaths();
@@ -303,8 +301,6 @@ classdef SignalFlowControl < handle
                 obj.msgError('Folder not found. Check path name.');
             end
 
-            % Call the Project_CreateSubfolder function with the folder_tag value as an argument (this line is currently commented out)
-            %obj.ProjectHandler('Project_CreateSubfolder', obj.proj.(folder_tag));
         end
 
         function obj = Project_ShowAllFileLists(obj)
@@ -377,51 +373,6 @@ classdef SignalFlowControl < handle
 
             % Return the corresponding folder path
             str = obj.proj.(folder_tag);
-        end
-
-        % TODO: This is not used and should be removed
-        function obj = Setup_DisplayMethods(obj)
-            % This function displays the methods of an object by category, including setup, project, modules, and util.
-
-            disp('Setup methods:');
-            obj.regexpMethods('^Setup')
-            disp('Project methods:');
-            obj.regexpMethods('^Project')
-            disp('Modules methods:');
-            obj.regexpMethods('^Module')
-            disp('Util methods:');
-            obj.regexpMethods('^Util')
-
-        end
-
-        % TODO: This is not used and should be removed
-        function regexpMethods(obj, pattern)
-            % This function displays the methods of an object that match a regular expression pattern.
-
-            allMethods = methods(obj);
-            matchingMethods = allMethods(~cellfun(@isempty, regexp(allMethods, pattern)));
-            disp(matchingMethods);
-
-        end
-
-        % TODO: This is not used and should be removed
-        function obj = Project_CreateSubfolder(obj, rootfolder, newsubfolder)
-            obj.msgHeader('Create New Project Folder');
-
-            if nargin < 2
-                obj.msgError('No folder input provided.')
-                return;
-            end
-
-            if nargin < 3
-                newpath = rootfolder;
-                obj.msgWarning('No subfolder provided, will create root directory.')
-                obj.ProjectHandler('Project_CreateSubfolder', newpath);
-            else
-                newpath = fullfile(rootfolder, newsubfolder);
-                obj.ProjectHandler('Project_CreateSubfolder', newpath);
-            end
-
         end
 
         function obj = Project_CreateImportFileListWithSubfolders(obj, ext)
@@ -497,11 +448,6 @@ classdef SignalFlowControl < handle
         function obj = Project_Execute(obj)
             % Description: Executes the project.
             obj.ProjectHandler('Project_Execute');
-        end
-
-        % TODO: Useless delete this 
-        function obj = Project_BatchExecute(obj)
-
         end
 
         function obj = Project_ExecuteParallel(obj)
@@ -875,19 +821,6 @@ classdef SignalFlowControl < handle
                     obj.proj.path_import = missing;
                     obj.proj.path_temp = missing;
                     obj.proj.path_results = missing;
-                
-                case 'Project_CreateSubfolder'
-
-                    % Check if subfolder already exists in root directory.
-                    subfolderPath = value;
-
-                    if exist(subfolderPath, 'dir') == 7
-                        obj.msgWarning(sprintf('Subfolder already exists: %s', subfolderPath));
-                        return;
-                    else
-                        % Create subfolder in root directory.
-                        mkdir(subfolderPath)
-                    end
 
                 case 'Project_AssignImportFolder'
                     % Check if subfolder already exists in root directory.
@@ -1209,104 +1142,6 @@ classdef SignalFlowControl < handle
                     obj.msgWarning(strcat('Invalid action:', action))
             end
         end
-
-        % TODO: Not used delete this
-        function EEGCell = Project_ImportFileList(obj, method)
-
-            fl = obj.proj.filelist_import;
-            fl.fullname = fullfile(fl.filepath, fl.filename);
-            fl_length = size(fl, 1);
-
-            filelist = fl.fullname;
-            EEGCell = cell(fl_length, 1);
-
-            parfor i = 1:fl_length
-
-                filename = filelist{i};
-                EEG = obj.importHelper(method, filename);
-                EEGCell{i} = EEG;
-
-            end
-
-        end
-
-        % TODO: Not used delete this
-        function EEGCell = Project_AnalyzeFileList(obj, method, filelist_tag)
-            obj.msgHeader('Run Signal Analysis on Filelist by Tag');
-            obj.msgIndent(sprintf('Function: <strong>%s,</strong>', method));
-
-            % validate filelist_tag
-            proj_fields = fields(obj.proj);
-            filelist_indexes = contains(proj_fields,'filelist');
-
-            if contains(proj_fields(filelist_indexes), filelist_tag)
-                fl = obj.proj.(filelist_tag);
-                filelist_count = size(fl, 1);
-                obj.msgIndent(sprintf('<strong>%s</strong> filelist is valid with %d files.', filelist_tag,filelist_count));
-            else
-                obj.msgError('FileList Tag Not Found. Available Filelists.')
-                obj.Project_ShowAllFileLists;
-            end
-
-            % validate method/function name
-            % TBD
-
-            fl.fullname = fullfile(fl.filepath, fl.filename);
-            fl_length = size(fl, 1);
-
-            filelist = fl.fullname;
-            EEGCell = cell(fl_length, 1);
-
-            for i = 1:fl_length
-
-                filename = filelist{i};
-                EEG = obj.analysisHelper(method, filename);
-                EEGCell{i} = EEG;
-
-            end
-
-        end
-
-        % TODO: Not used delete this
-        function obj = Project_EegExportSet(obj, EEGCell, Project_Folder)
-            obj.msgHeader('| Export EEG to Project Folder As SET\n');
-
-            % Input parser
-            p = inputParser;
-            addRequired(p, 'EEGCell', @(x) iscell(x));
-            addRequired(p, 'Project_Folder', @(x) ischar(x));
-            parse(p, EEGCell, Project_Folder);
-            p = p.Results;
-
-            EEGCell = p.EEGCell;
-
-            try
-                Project_Folder = obj.proj.(p.Project_Folder);
-            catch
-                obj.msgWarning(sprintf('  <strong>%s</strong> is not a designated Project Folder.\n', p.Project_Folder));
-                obj.msgWarning(sprintf('  Use <strong>Project_AssignCustomFolder</strong> or choose from below:\n\n', p.Project_Folder));
-                obj.Project_ListFolders;
-                return;
-            end
-
-            EEGCell_length = numel(EEGCell);
-
-            for i = 1:EEGCell_length
-
-                EEG = EEGCell{i};
-                filename = EEG.filename;
-
-                try
-                    pop_saveset(EEG, 'filename', filename, 'filepath', Project_Folder);
-                    fprintf('Success: <strong>%s</strong>\n', filename);
-                catch
-                    msg = sprintf("saving <strong>%s</strong>", filename);
-                    obj.msgWarning(msg);
-                end
-
-            end
-
-        end
         
         function success = checkPipelineValidations(obj)
             % Check if the flow mode of the first module is 'inflow'
@@ -1494,77 +1329,6 @@ classdef SignalFlowControl < handle
                     delete(progressBar);
                 end        
             end
-        end
-
-
-
-        % TODO: maybe not used, double check and delete if not used
-        function Setup_StoreCustomPaths(obj, path)
-            % Add a path to the MATLAB path
-
-            % Validate path
-            validateattributes(path, {'char'}, {'nonempty'}, 'Setup_AddPath', 'path');
-            assert(isfolder(path), 'Path must be a folder.');
-            % Log a custom path in the environment variables
-
-            % Generate valid MATLAB filename stem
-            [~, folderName] = fileparts(path);
-            validFolderName = matlab.lang.makeValidName(folderName);
-
-            % Store path in setup property
-            obj.setup.paths_user.(validFolderName) = path;
-        end
-
-        % TODO: not used, delete
-        function Setup_PrintCustomPaths(obj)
-            % Print the setup property as a table
-
-            % Convert struct to table
-            setupTable = struct2table(obj.setup.paths_user);
-
-            % Extract variable names and values
-            varNames = setupTable.Properties.VariableNames;
-            varValues = table2cell(setupTable);
-
-            % Create new table with variable names and values
-            setupTable_long = table(varNames', varValues', 'VariableNames', {'Custom Path', 'Value'});
-
-            % Print table
-            obj.msgHeader('User added MATLAB paths');
-            disp(setupTable_long);
-        end
-
-        % TODO: maybe not used, double check and delete if not used
-        function Project_CheckMissing(obj)
-            % Validate the project metadata and report any missing or invalid fields.
-            obj.proj.detailsAreComplete = false;
-
-            obj.msgHeader('Set Project Details:');
-
-            % Check project name
-            if ismissing(obj.proj.name)
-                obj.msgWarning('Project Name: missing');
-            else
-                obj.msgIndent(sprintf('Project Name: %s', obj.proj.name));
-                obj.proj.detailsAreComplete = true;
-            end
-
-            % Check project author
-            if ismissing(obj.proj.author)
-                obj.msgWarning('Project Author: missing');
-            else
-                fprintf('  Project Author: %s\n', obj.proj.author);
-                obj.proj.detailsAreComplete = true;
-            end
-
-            % Check project description
-            if ismissing(obj.proj.desc)
-                obj.msgWarning('Project Description: missing');
-            else
-                fprintf('  Project Description: %s\n', obj.proj.desc);
-                obj.proj.detailsAreComplete = true;
-            end
-
         end
 
         function fileList = getAllMFiles(obj, folder)
@@ -1830,32 +1594,6 @@ classdef SignalFlowControl < handle
             shuffledString = combinedString(randperm(length(combinedString)));
             % Take the first 6 characters of the shuffled string as the short hash
             hash = shuffledString(1:6);
-        end
-
-        % TODO: not used, delete
-        function EEG = importHelper(method, filename)
-
-            opts = struct();
-            EEG = struct();
-            opts.(method).rawfile = filename;
-            importModule = feval(method, EEG, opts);
-            %EEG = importModule.validate();
-            EEG = importModule.run();
-
-        end
-
-        % TODO: not used, delete
-        function EEG = analysisHelper(method, filename)
-
-            opts = struct();
-            EEG = struct();
-            opts.(method).rawfile = filename;
-
-            EEG = pop_loadset(filename);
-
-            Module = feval(method, EEG, opts);
-            EEG = Module.run();
-
         end
 
         % TODO: move to logger class

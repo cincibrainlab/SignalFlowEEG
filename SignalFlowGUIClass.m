@@ -14,10 +14,7 @@ classdef SignalFlowGUIClass
     end
 
     methods
-        %TODO, useless constructor
-        function obj = SignalFlowGUIClass()
-        end
-
+    
         function updateTextbox( obj, app )
             str = obj.sfControl.proj.last_message;
             source =  sprintf('<html><body style="background-color: white; font-family: Arial, Helvetica, sans-serif;"">%s</body></html>', str);
