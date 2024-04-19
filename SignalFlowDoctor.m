@@ -272,6 +272,7 @@ end
     end
 
     function res = downloadEegLabPlugin( action )
+        %TODO: Double check autodownload for all of these work as expected
         switch action
             case 'clean_rawdata'
                 zip = 'http://sccn.ucsd.edu/eeglab/plugins/clean_rawdata2.7.zip';
@@ -286,7 +287,7 @@ end
             case 'iclabel'
                 name = 'ICLabel';
             case 'viewprops'
-                zip = 'http://sccn.ucsd.edu/eeglab/plugins/viewprops_1.5.4.zip';
+                zip = 'http://sccn.ucsd.edu/eeglab/plugins/Viewprops1.5.4.zip';
                 name = 'viewprops';
                 version = '1.5.4';
                 pluginsize = .19;

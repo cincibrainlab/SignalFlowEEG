@@ -37,7 +37,7 @@ classdef midflow_RemoveEpochs < SignalFlowSuperClass
             obj = obj@SignalFlowSuperClass(setup, varargin{:});
         end
 
-        function sfOutput = run(obj)
+        function sfOutput = run(obj, varargin)
             % run() - Process the EEG data.           
             EEG = obj.beginEEG;
             [args.QADataPre] = util_GetQAData(EEG);

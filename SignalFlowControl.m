@@ -6,20 +6,19 @@ classdef SignalFlowControl < handle
         module = struct(); % module structure
         proj = struct(); % project structure
         util = struct(); % utility function handles
+        UIFigure matlab.ui.Figure 
     end
     events
         msgEvent
     end
     methods
 
-        function obj = SignalFlowControl()
-        end
         function obj = Startup( obj )
-
-            
-
+            %TODO: in Setup_AddPaths, autoload default projects dir 
             obj.Setup_AddPaths();
+
             obj.Setup_Messages();
+
             obj.Setup_DisplayVersion();
 
             obj.update_Git_Pull();
@@ -61,7 +60,7 @@ classdef SignalFlowControl < handle
         function obj = Setup_AddPaths( obj )
           
             % Essential MATLAB Path Setup
-            disp('Adding SignalFlow to MATLAB Path')
+            disp('Adding SignalFlow to MATLAB Path') %TODO: make new logger class type it out 
             try
                 [obj.setup.sfdir, ~, ~] = fileparts(which(mfilename));
                 addpath(genpath(obj.setup.sfdir));
@@ -78,12 +77,14 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: Delete , this will be handled by the logger class
         function obj = Setup_Messages( obj )
 
             obj.proj.last_message = '';
 
         end
 
+        % TODO: use logger class 
         function obj = Setup_DisplayVersion(obj)
             
             obj.setup.sfversion = '23.1';
@@ -105,6 +106,7 @@ classdef SignalFlowControl < handle
             obj.ModuleHandler('Modules_ResetTargetArray');
         end
 
+        %TODO: THis will need to work with new hash system 
         function obj = Modules_AssignUniqueHashToMissing( obj )
 
             no_source = numel( obj.module.OriginalSourceModuleArray );
@@ -177,22 +179,32 @@ classdef SignalFlowControl < handle
         
         end
 
-        function obj = setModuleViewMode( obj, flowMode )
+        function obj = setModuleViewMode( obj, flowMode, searchValue )
 
             view_index =  obj.module.filtered.(flowMode);
             hashlibrary = obj.module.HashLibrary(view_index, :);
 
-            % Find the module groups based on the 'tree' column
-            [groupingVariable, foundGroup] = findgroups(hashlibrary.tree);
+            % Logical indexing to filter based on propertyName (displayName) containing searchValue
+            if ~isempty(searchValue)
+                searchMask = cellfun(@(x) contains(x.displayName, searchValue, 'IgnoreCase', true), hashlibrary.class);
+                hashlibrary = hashlibrary(searchMask, :);
+            end
 
-            % check if either array is blank
-            missingGroup = setdiff({'Source','User'}, foundGroup);
-
-            % Define a function to gather colums
-            collectRows = @(rows) {rows};
-
-            % Apply the function to each group of rows in the 'Value' column
-            moduleClasses = splitapply(collectRows, hashlibrary.class, groupingVariable);
+            if isempty(hashlibrary)
+                moduleClasses = {}; % Return an empty cell array if hashlibrary is empty
+            else 
+                % Find the module groups based on the 'tree' column
+                [groupingVariable, foundGroup] = findgroups(hashlibrary.tree);
+    
+                % check if either array is blank
+                missingGroup = setdiff({'Source','User'}, foundGroup);
+    
+                % Define a function to gather colums
+                collectRows = @(rows) {rows};
+    
+                % Apply the function to each group of rows in the 'Value' column
+                moduleClasses = splitapply(collectRows, hashlibrary.class, groupingVariable);
+            end
 
             for i = 1 : numel(foundGroup)
                 id = foundGroup{i};
@@ -215,9 +227,6 @@ classdef SignalFlowControl < handle
                     case 'Target'
                 end
             end
-        end
-        function obj = Modules_CopyandEditModule( obj )
-            obj.ModuleHandler('Modules_CopyandEditModule');
         end
         
         function obj = Modules_DisplayAvailable(obj)
@@ -269,7 +278,7 @@ classdef SignalFlowControl < handle
 
         % Project Functions
         function obj = Project_AssignCustomFolder(obj, custom_path, tag)
-            % Description: Assigns a subfolder to the project and creates it if it doesn't exist.
+            % Description: Assigns a subfolder to the project.
 
             % Create a string to use as a key in the obj.proj object
             folder_tag = sprintf('path_%s', tag);
@@ -292,8 +301,6 @@ classdef SignalFlowControl < handle
                 obj.msgError('Folder not found. Check path name.');
             end
 
-            % Call the Project_CreateSubfolder function with the folder_tag value as an argument (this line is currently commented out)
-            %obj.ProjectHandler('Project_CreateSubfolder', obj.proj.(folder_tag));
         end
 
         function obj = Project_ShowAllFileLists(obj)
@@ -368,48 +375,6 @@ classdef SignalFlowControl < handle
             str = obj.proj.(folder_tag);
         end
 
-        function obj = Setup_DisplayMethods(obj)
-            % This function displays the methods of an object by category, including setup, project, modules, and util.
-
-            disp('Setup methods:');
-            obj.regexpMethods('^Setup')
-            disp('Project methods:');
-            obj.regexpMethods('^Project')
-            disp('Modules methods:');
-            obj.regexpMethods('^Module')
-            disp('Util methods:');
-            obj.regexpMethods('^Util')
-
-        end
-
-        function regexpMethods(obj, pattern)
-            % This function displays the methods of an object that match a regular expression pattern.
-
-            allMethods = methods(obj);
-            matchingMethods = allMethods(~cellfun(@isempty, regexp(allMethods, pattern)));
-            disp(matchingMethods);
-
-        end
-
-        function obj = Project_CreateSubfolder(obj, rootfolder, newsubfolder)
-            obj.msgHeader('Create New Project Folder');
-
-            if nargin < 2
-                obj.msgError('No folder input provided.')
-                return;
-            end
-
-            if nargin < 3
-                newpath = rootfolder;
-                obj.msgWarning('No subfolder provided, will create root directory.')
-                obj.ProjectHandler('Project_CreateSubfolder', newpath);
-            else
-                newpath = fullfile(rootfolder, newsubfolder);
-                obj.ProjectHandler('Project_CreateSubfolder', newpath);
-            end
-
-        end
-
         function obj = Project_CreateImportFileListWithSubfolders(obj, ext)
             % Description: Create file list from import directory
             if nargin < 2
@@ -436,18 +401,28 @@ classdef SignalFlowControl < handle
             % Description: Saves the project with a new name and output directory.
             obj.proj.output_dir = outputDir;
             obj.proj.name = matlab.lang.makeValidName(projName);
-            obj.ProjectHandler('Project_SaveAs')
+            obj.proj.save_file = fullfile(obj.proj.output_dir, strcat(obj.proj.name,'.json'));
+            obj.saveApp(obj.proj.save_file)
         end
 
         function obj = Project_Save(obj)
-            % Description: Saves the project.
-            obj.ProjectHandler('Project_Save')
+            % Description: Saves the project. 
+            %Todo: Add a check to see if the project has been saved before.
+            %todo: make less redundant if saved already
+            obj.proj.output_dir = outputDir;
+            obj.proj.name = matlab.lang.makeValidName(projName);
+            obj.proj.save_file = fullfile(obj.proj.output_dir, strcat(obj.proj.name,'.json'));
+            obj.saveApp(obj.proj.save_file)
         end
 
         function obj = Project_Load(obj, inputFilename)
             % Description: Loads a project from a file.
             obj.proj.load_file = inputFilename;
-            obj = obj.ProjectHandler('Project_Load');
+            obj.Setup_AddPaths();
+            obj.Setup_Messages();
+            obj.Setup_DisplayVersion();
+            obj.Setup_UtilityFunctions();
+            obj.loadApp(inputFilename)
         end
 
         function obj = Project_SetName(obj, name)
@@ -464,14 +439,15 @@ classdef SignalFlowControl < handle
             % Description: Sets the description of the project.
             obj.ProjectHandler('Project_SetDescription', desc);
         end
+        
+        function obj = Project_SingleFileExecute(obj, filename)
+            % Description: Execute the pipeline for single file.
+            obj.ProjectHandler('Project_SingleFileExecute', filename)
+        end
 
         function obj = Project_Execute(obj)
             % Description: Executes the project.
             obj.ProjectHandler('Project_Execute');
-        end
-
-        function obj = Project_BatchExecute(obj)
-
         end
 
         function obj = Project_ExecuteParallel(obj)
@@ -479,6 +455,7 @@ classdef SignalFlowControl < handle
             obj.ProjectHandler('Project_ExecuteParallel');
         end
 
+        % TODO: MAke this into a the functions that are called by the project handler
         function obj = ModuleHandler(obj, action, value)
             if nargin < 2
                 value = missing;
@@ -608,49 +585,6 @@ classdef SignalFlowControl < handle
 
                     refreshModuleTable = false;
 
-                case 'Modules_CopyandEditModule'
-                    obj.msgHeader('Copy and Create New User Module');
-
-                    % get the active module file
-                    baseModuleFile =  obj.module.CurrentModuleInfo.filename{1};
-
-                    % define relevant paths
-                    UserModulesDir = fullfile(obj.setup.sfdir,'UserModules');
-
-                    % generate new filename for copied module
-                    [~, name, ext] = fileparts(baseModuleFile);
-
-                    try
-                        % newCopy = feval(name);
-                        uniqueHash = ['_Copy', num2str(randi(999))]; % newCopy.hashcode;
-                        userModuleFile = [name '_' uniqueHash ext];
-                    catch error
-                        obj.msgError(strcat('SignalFlowControl: Modules_CopyandEditModule, Error:',obj.Util_PrintFormattedError(error)));
-                    end
-
-                    originalFile = baseModuleFile;
-                    newFile = fullfile(UserModulesDir, userModuleFile);
-                    content = fileread(originalFile);
-
-                    % Define the string to find and the replacement string
-                    findString = name;
-                    replaceString = [name '_' uniqueHash];
-
-                    % tag all user modules
-                    findUserModuleString = 'obj.isUserModule = false;';
-                    replaceUserModuleString = 'obj.isUserModule = true;';
-
-                    % Perform the find and replace
-                    updatedContent = strrep(content, findString, replaceString);
-                    updatedContent = strrep(updatedContent, findUserModuleString, replaceUserModuleString);
-
-                    % Save the updated content to the file
-                    fid = fopen(newFile, 'w');
-                    fwrite(fid, updatedContent);
-                    fclose(fid);
-
-                    edit(newFile);
-
                 case 'checkNumberOfModules'
                     try
                         obj.module.numOfModules = numel(obj.module.OriginalSourceModuleArray) + numel(obj.module.OriginalUserModuleArray);
@@ -724,7 +658,7 @@ classdef SignalFlowControl < handle
                     TargetModuleInfoNew = HashTable(strcmp(HashTable.tree,'Target'), :);
 
                     if size(TargetModuleInfoNew,1) == (size(TargetModuleInfo,1) + 1)
-                        str = sprintf('Success: added %s (%s) to Pipeline Builder.', TargetModuleInfo.fname{end}, TargetModuleInfo.hashcode{end});
+                        str = sprintf('Success: added %s (%s) to Pipeline Builder.', TargetModuleInfoNew.fname{end}, TargetModuleInfoNew.hashcode{end});
                         obj.msgIndent(str);
                     else
                         str = sprintf('Module was not added to Pipeline Builder.');
@@ -860,6 +794,7 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: Delete this and put into functions 
         function [obj, result] = ProjectHandler(obj, action, value)
 
             if nargin < 2
@@ -882,22 +817,10 @@ classdef SignalFlowControl < handle
                 
                 case 'Project_InitializeFolders'
 
+                    obj.proj.path_autosave = missing;
                     obj.proj.path_import = missing;
                     obj.proj.path_temp = missing;
                     obj.proj.path_results = missing;
-                
-                case 'Project_CreateSubfolder'
-
-                    % Check if subfolder already exists in root directory.
-                    subfolderPath = value;
-
-                    if exist(subfolderPath, 'dir') == 7
-                        obj.msgWarning(sprintf('Subfolder already exists: %s', subfolderPath));
-                        return;
-                    else
-                        % Create subfolder in root directory.
-                        mkdir(subfolderPath)
-                    end
 
                 case 'Project_AssignImportFolder'
                     % Check if subfolder already exists in root directory.
@@ -1104,22 +1027,38 @@ classdef SignalFlowControl < handle
                     else
                         obj.msgError('Starting folder not found.');
                     end
+                
+                case 'Project_SingleFileExecute'
 
-                case 'Project_SaveAs'
-                    obj.proj.save_file = fullfile(obj.proj.output_dir, obj.proj.name);
-                    save(obj.proj.save_file, 'obj');
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
 
-                case 'Project_Save'
-                    save(obj.proj.save_file, 'obj');
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
+                    filename = value;
+                    filename = strcat(obj.proj.path_import, filesep, filename);
 
-                case 'Project_Load'
-                    load(obj.proj.load_file);
-                    obj.Setup_AddPaths();
-                    obj.Setup_Messages();
-                    obj.Setup_DisplayVersion();
-                    obj.Setup_UtilityFunctions();
+                    if exist(filename, 'file') == 2
+                        obj.singleFileExecute(filename, 1, 1)
+                    end
+            
 
                 case 'Project_Execute'
+
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
+
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
+                    
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1137,16 +1076,28 @@ classdef SignalFlowControl < handle
                         end
                     end
                     
+                   
 %                     pb = util_sfProgressBar(length(dirContents));
 
-                    for x = 1:length(dirContents)                 
-                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name));
+                    totalFiles = length(dirContents);
+                    for x = 1:totalFiles             
+                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name), x, totalFiles);
 %                         pb.iter(x);
                     end
 %                     pb.close();
 %                     delete(pb);
 
                 case 'Project_ExecuteParallel'
+
+                    success = obj.checkPipelineValidations();
+                    if ~success
+                        return; 
+                    end
+
+                    success = obj.clearAutoSaveFolder();
+                    if ~success
+                        return; 
+                    end
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1175,7 +1126,7 @@ classdef SignalFlowControl < handle
 %                     afterEach(dq, @(~) pb.iter(idx))
 
                     parfor x = 1:length(dirContents)                 
-                        obj.singleFileExecute(strcat(dirContents(x).folder, filesep, dirContents(x).name));
+                        obj.singleFileExecuteParallel(strcat(dirContents(x).folder, filesep, dirContents(x).name));
                         % Send data to the DataQueue
                         send(dq, x);
                         
@@ -1191,103 +1142,54 @@ classdef SignalFlowControl < handle
                     obj.msgWarning(strcat('Invalid action:', action))
             end
         end
-
-        function EEGCell = Project_ImportFileList(obj, method)
-
-            fl = obj.proj.filelist_import;
-            fl.fullname = fullfile(fl.filepath, fl.filename);
-            fl_length = size(fl, 1);
-
-            filelist = fl.fullname;
-            EEGCell = cell(fl_length, 1);
-
-            parfor i = 1:fl_length
-
-                filename = filelist{i};
-                EEG = obj.importHelper(method, filename);
-                EEGCell{i} = EEG;
-
-            end
-
-        end
-
-        function EEGCell = Project_AnalyzeFileList(obj, method, filelist_tag)
-            obj.msgHeader('Run Signal Analysis on Filelist by Tag');
-            obj.msgIndent(sprintf('Function: <strong>%s,</strong>', method));
-
-            % validate filelist_tag
-            proj_fields = fields(obj.proj);
-            filelist_indexes = contains(proj_fields,'filelist');
-
-            if contains(proj_fields(filelist_indexes), filelist_tag)
-                fl = obj.proj.(filelist_tag);
-                filelist_count = size(fl, 1);
-                obj.msgIndent(sprintf('<strong>%s</strong> filelist is valid with %d files.', filelist_tag,filelist_count));
+        
+        function success = checkPipelineValidations(obj)
+            % Check if the flow mode of the first module is 'inflow'
+            if strcmp(obj.module.TargetModuleArray{1}.flowMode, 'inflow')
+                success = true;
             else
-                obj.msgError('FileList Tag Not Found. Available Filelists.')
-                obj.Project_ShowAllFileLists;
+                obj.msgError('The first module of the pipeline must be configured as an inflow module. Please rebuild the pipeline.');
+                success = false;
             end
-
-            % validate method/function name
-            % TBD
-
-            fl.fullname = fullfile(fl.filepath, fl.filename);
-            fl_length = size(fl, 1);
-
-            filelist = fl.fullname;
-            EEGCell = cell(fl_length, 1);
-
-            for i = 1:fl_length
-
-                filename = filelist{i};
-                EEG = obj.analysisHelper(method, filename);
-                EEGCell{i} = EEG;
-
-            end
-
         end
 
-        function obj = Project_EegExportSet(obj, EEGCell, Project_Folder)
-            obj.msgHeader('| Export EEG to Project Folder As SET\n');
 
-            % Input parser
-            p = inputParser;
-            addRequired(p, 'EEGCell', @(x) iscell(x));
-            addRequired(p, 'Project_Folder', @(x) ischar(x));
-            parse(p, EEGCell, Project_Folder);
-            p = p.Results;
-
-            EEGCell = p.EEGCell;
-
+        function success = clearAutoSaveFolder(obj)
             try
-                Project_Folder = obj.proj.(p.Project_Folder);
-            catch
-                obj.msgWarning(sprintf('  <strong>%s</strong> is not a designated Project Folder.\n', p.Project_Folder));
-                obj.msgWarning(sprintf('  Use <strong>Project_AssignCustomFolder</strong> or choose from below:\n\n', p.Project_Folder));
-                obj.Project_ListFolders;
-                return;
-            end
-
-            EEGCell_length = numel(EEGCell);
-
-            for i = 1:EEGCell_length
-
-                EEG = EEGCell{i};
-                filename = EEG.filename;
-
-                try
-                    pop_saveset(EEG, 'filename', filename, 'filepath', Project_Folder);
-                    fprintf('Success: <strong>%s</strong>\n', filename);
-                catch
-                    msg = sprintf("saving <strong>%s</strong>", filename);
-                    obj.msgWarning(msg);
+                % Get folder labels
+                labelStruct = obj.Project_GetFolderLabels;
+        
+                % Find the pathAutoSave folder
+                pathAutoSaveTag = 'path_autosave';
+                pathAutoSaveFolder = find(strcmp({labelStruct.tag}, pathAutoSaveTag), 1);
+        
+                % Check if pathAutoSave folder is not empty
+                if ~isempty(dir(labelStruct(pathAutoSaveFolder).folder))
+                    % Folder is not empty, prompt user
+                    choice = questdlg("Please note that the autosave folder is not empty. Are you sure you want to proceed and potentially overwrite existing files? If you prefer a different folder, please create it and associate it with 'path_autosave' in the setup tab", ...
+                                        'Warning', 'Proceed', 'Cancel', 'Cancel');
+        
+                    % Handle user choice
+                    if strcmp(choice, 'Proceed')
+                        % Empty the folder
+                        rmdir(labelStruct(pathAutoSaveFolder).folder, 's');
+                        % Recreate the folder
+                        mkdir(labelStruct(pathAutoSaveFolder).folder);
+                    else
+                        % Exit the function without further processing
+                        success = false;
+                        return;
+                    end
                 end
-
+                % Operation completed successfully
+                success = true;
+            catch
+                % Error occurred during the operation
+                success = false;
             end
-
         end
         
-        function obj = singleFileExecute(obj, importFile)
+        function obj = singleFileExecuteParallel(obj, importFile)
             % This function is responsible for executing a single file based on the input file's
             % extension, and running the pipeline defined by the TargetModuleArray.
         
@@ -1295,6 +1197,9 @@ classdef SignalFlowControl < handle
             [~, ~, fileExtension] = fileparts(importFile);
             % Define an array of valid file extensions that the function can process.
             validExtensions = {'.set', '.raw', '.edf'};
+            labelStruct = obj.Project_GetFolderLabels;
+
+
             % Check if the file extension of the input file is within the valid extensions.
             if ismember(fileExtension, validExtensions)
                 % Set the input file path for the first TargetModule.
@@ -1310,7 +1215,7 @@ classdef SignalFlowControl < handle
                         % Iterate through the rest of the TargetModuleArray and execute each module.
                         for i = 2:length(obj.module.TargetModuleArray)
                             if strcmp(obj.module.TargetModuleArray{i}.flowMode, 'outflow')
-                                labelStruct = obj.Project_GetFolderLabels;
+                                
                                 pathInTag = any(strcmp({labelStruct.folder}, obj.module.TargetModuleArray{i}.fileIoVar));                            
                                 if ~pathInTag
                                     pathResultsIdx = find(strcmp({labelStruct.tag}, 'path_results'), 1);
@@ -1321,7 +1226,11 @@ classdef SignalFlowControl < handle
                                 end
                             end
                             obj.module.TargetModuleArray{i}.beginEEG = EEG;
-                            EEG = obj.module.TargetModuleArray{i}.run();
+                            if strcmp(obj.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                                EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray{i-1}, i);
+                            else
+                                EEG = obj.module.TargetModuleArray{i}.run();
+                            end
                             obj.module.TargetModuleArray{i}.endEEG = EEG;
                         end
                     end
@@ -1329,73 +1238,97 @@ classdef SignalFlowControl < handle
             end
         end
 
+        function obj = singleFileExecute(obj, importFile, currentFile, totalFiles)
+            %TODO Logging needs to be implemented
+            % The main issue with this is SO mant conditions and if else statements. This is not a good practice.
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
+            % We should seperate the conditions and if else statements into different functions and call them from here.
+            % This will make the code more readable and maintainable.
+            %TODO: RIp this code apart and make it more readable and maintainable.
 
-
+            % This function is responsible for executing a single file based on the input file's
+            % extension, and running the pipeline defined by the TargetModuleArray.
         
-        function Setup_StoreCustomPaths(obj, path)
-            % Add a path to the MATLAB path
+            % Extract the file extension from the given input file.
+            [~, filename, fileExtension] = fileparts(importFile);
+            % Define an array of valid file extensions that the function can process.
+            validExtensions = {'.set', '.raw', '.edf'};
+            labelStruct = obj.Project_GetFolderLabels;
 
-            % Validate path
-            validateattributes(path, {'char'}, {'nonempty'}, 'Setup_AddPath', 'path');
-            assert(isfolder(path), 'Path must be a folder.');
-            % Log a custom path in the environment variables
 
-            % Generate valid MATLAB filename stem
-            [~, folderName] = fileparts(path);
-            validFolderName = matlab.lang.makeValidName(folderName);
+            % Check if the file extension of the input file is within the valid extensions.
+            if ismember(fileExtension, validExtensions)
+                % Set the input file path for the first TargetModule.
+                obj.module.TargetModuleArray{1}.fileIoVar = importFile;
+                % Check if the input file exists and update the boolValidImportFile flag.
+                boolValidImportFile = exist(obj.module.TargetModuleArray{1}.fileIoVar, 'file') == 2;               
+                % If both the input file and output directory are valid, execute the pipeline.
+                if boolValidImportFile
+                    % Initialize progress bar
+                    message = sprintf('Executing Pipeline for file %d out of %d files', currentFile, totalFiles);
+                    progressBar = uiprogressdlg(obj.UIFigure, 'Title', message);
+                    obj.msgIndent(message);
+                    progressBar.Cancelable = 'off';
+                    numModules = length(obj.module.TargetModuleArray);
+                    
+                    first = 1;
+                    progressBar.Value = first / numModules;
+                    message = sprintf('Starting Step %d: %s out of %d steps for file %s', first, obj.module.TargetModuleArray{first}.displayName, numModules, filename);
+                    progressBar.Message = message;
+                    obj.msgIndent(message);
 
-            % Store path in setup property
-            obj.setup.paths_user.(validFolderName) = path;
-        end
+                    % Run the first TargetModule.
+                    EEG = obj.module.TargetModuleArray{first}.run(); 
+                    obj.module.TargetModuleArray{first}.endEEG = EEG;
+                    
+                    message = sprintf('Ending Step %d: %s out of %d steps for file %s', first, obj.module.TargetModuleArray{first}.displayName, numModules, filename);
+                    progressBar.Message = message;
+                    obj.msgIndent(message);
 
-        function Setup_PrintCustomPaths(obj)
-            % Print the setup property as a table
+                    if ~isempty(EEG)
 
-            % Convert struct to table
-            setupTable = struct2table(obj.setup.paths_user);
+                        % Iterate through the rest of the TargetModuleArray and execute each module.
+                        for i = 2:length(obj.module.TargetModuleArray)
+                            % Update progress bar
+                            progressBar.Value = i / numModules;
+                            message = sprintf('Starting Step %d: %s out of %d steps for file %s', i, obj.module.TargetModuleArray{i}.displayName, numModules, filename);
+                            progressBar.Message = message;
+                            obj.msgIndent(message);
 
-            % Extract variable names and values
-            varNames = setupTable.Properties.VariableNames;
-            varValues = table2cell(setupTable);
-
-            % Create new table with variable names and values
-            setupTable_long = table(varNames', varValues', 'VariableNames', {'Custom Path', 'Value'});
-
-            % Print table
-            obj.msgHeader('User added MATLAB paths');
-            disp(setupTable_long);
-        end
-
-        function Project_CheckMissing(obj)
-            % Validate the project metadata and report any missing or invalid fields.
-            obj.proj.detailsAreComplete = false;
-
-            obj.msgHeader('Set Project Details:');
-
-            % Check project name
-            if ismissing(obj.proj.name)
-                obj.msgWarning('Project Name: missing');
-            else
-                obj.msgIndent(sprintf('Project Name: %s', obj.proj.name));
-                obj.proj.detailsAreComplete = true;
+                            if strcmp(obj.module.TargetModuleArray{i}.flowMode, 'outflow')
+                                
+                                pathInTag = any(strcmp({labelStruct.folder}, obj.module.TargetModuleArray{i}.fileIoVar));                            
+                                if ~pathInTag
+                                    pathResultsIdx = find(strcmp({labelStruct.tag}, 'path_results'), 1);
+                            
+                                    if ~isempty(pathResultsIdx) && ~isempty(labelStruct(pathResultsIdx).folder)
+                                        obj.module.TargetModuleArray{i}.fileIoVar = labelStruct(pathResultsIdx).folder;
+                                    end
+                                end
+                            end
+                            obj.module.TargetModuleArray{i}.beginEEG = EEG;
+                            if strcmp(obj.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                                EEG = obj.module.TargetModuleArray{i}.run(obj.module.TargetModuleArray{i-1}, i);
+                            else
+                                EEG = obj.module.TargetModuleArray{i}.run();
+                            end
+                            obj.module.TargetModuleArray{i}.endEEG = EEG;
+                            % Update progress bar for module completion
+                            message = sprintf('Ending Step %d: %s out of %d steps for file %s', i, obj.module.TargetModuleArray{i}.displayName, numModules, filename);
+                            progressBar.Message = message;
+                            obj.msgIndent(message);
+                        end
+                    end
+                    % Update progress bar for pipeline completion
+                    message = sprintf('Pipeline execution completed for file %d out of %d files', currentFile, totalFiles);
+                    progressBar.Message = message;
+                    obj.msgSuccess(message);
+        
+                    % Close progress bar
+                    delete(progressBar);
+                end        
             end
-
-            % Check project author
-            if ismissing(obj.proj.author)
-                obj.msgWarning('Project Author: missing');
-            else
-                fprintf('  Project Author: %s\n', obj.proj.author);
-                obj.proj.detailsAreComplete = true;
-            end
-
-            % Check project description
-            if ismissing(obj.proj.desc)
-                obj.msgWarning('Project Description: missing');
-            else
-                fprintf('  Project Description: %s\n', obj.proj.desc);
-                obj.proj.detailsAreComplete = true;
-            end
-
         end
 
         function fileList = getAllMFiles(obj, folder)
@@ -1410,6 +1343,7 @@ classdef SignalFlowControl < handle
             end
         end
 
+        %TODO: All of these should be removed and changes with logger class. These are faulty abd error prone.
         function str = msgHeader(obj, str)
             cprintf('*Blue', '\n| %s\n', str);
        
@@ -1485,19 +1419,167 @@ classdef SignalFlowControl < handle
             % app.UIHTMLComponent.HTML = htmlOutput;
             obj.proj.CurrentConsoleMessage = htmlOutput;
         end
+
+        function saveApp(obj, jsonFilePath)
+            jsonData = transformToJsonData(obj);
+            obj.saveJSONData(jsonFilePath, jsonData);
+        end
+        
+        function obj = loadApp(obj,jsonFilePath)
+            jsonData = obj.loadJSONData(jsonFilePath);
+            obj =  obj.setLoadData(jsonData);
+        end
+        
+        % functions needed for save
+        function saveJSONData(~,jsonFilePath, jsonData) 
+            try
+                % Convert the JSON data to a string
+                jsonString = jsonencode(jsonData,PrettyPrint=true);
+            
+                % Write the string to a file
+                fid = fopen(jsonFilePath, 'w');
+                if fid == -1
+                    error('Cannot create JSON file');
+                end
+                fwrite(fid, jsonString, 'char');
+                fclose(fid);
+            catch e
+                % Handle any errors that may occur during writing
+                disp('Error writing JSON to file');
+                disp(e);
+            end
+        end
+        
+        function jsonData = transformToJsonData(obj)
+            jsonData = struct;
+        
+            % get proj info
+            jsonData.proj = struct;
+            jsonData.proj.name = obj.proj.name;
+            jsonData.proj.description = obj.proj.desc;
+            jsonData.proj.author = obj.proj.author;
+            % get proj path tags from the app
+            for y=1:length(fieldnames(obj.proj))
+                    
+                % for each field that have 'fileIO' in the name
+                currentFields = fieldnames(obj.proj);
+                if contains(currentFields{y}, 'path_')
+                    jsonData.proj.pathTags.(currentFields{y}) = obj.proj.(currentFields{y});
+                end
+            end
+        
+            % get module info
+            jsonData.TargetModuleArray = struct;
+            for x=1:length(obj.module.TargetModuleArray)
+                % displayName
+                jsonData.TargetModuleArray(x).displayName = obj.module.TargetModuleArray{x}.displayName;
+                % defauleHash
+                % jsonData.TargetModuleArray(x).defauleHash = App.module.TargetModuleArray(x).defauleHash;
+                % fname
+                jsonData.TargetModuleArray(x).fname = obj.module.TargetModuleArray{x}.fname;
+                % isUserModule
+                jsonData.TargetModuleArray(x).isUserModule = obj.module.TargetModuleArray{x}.isUserModule;
+                %fileSaveVars
+                jsonData.TargetModuleArray(x).fileSaveVars = struct;
+                % for each field that have 'fileIO' in the name
+        
+                for y=1:length(fieldnames(obj.module.TargetModuleArray{x}))
+                    
+                    % for each field that have 'fileIO' in the name
+                    currentFields = fieldnames(obj.module.TargetModuleArray{x});
+                    if contains(currentFields{y}, 'fileIo')
+                        jsonData.TargetModuleArray(x).fileSaveVars.(currentFields{y}) = obj.module.TargetModuleArray{x}.(currentFields{y});
+                    end
+                    
+                    
+                end
+        
+            end
+        end
+        
+        
+        % functions needed for load
+        function jsonData = loadJSONData(~,jsonFilePath) 
+            try
+                % Read the JSON file using jsondecode
+                jsonData = jsondecode(fileread(jsonFilePath));
+            
+                % Display the decoded JSON data
+                disp('Decoded JSON Data:');
+                disp(jsonData);
+            
+                % Access specific fields in the JSON data as needed
+                % For example, if your JSON has a field named 'name'
+                if isfield(jsonData, 'proj')
+                    disp(['Name: ', jsonData.proj.name]);
+                    disp(['Description: ', jsonData.proj.description]);
+                    disp(['Author: ', jsonData.proj.author]);
+                end
+            catch e
+                % Handle any errors that may occur during reading or decoding
+                disp('Error reading or decoding the JSON file.');
+                disp(e)
+            end
+        end
+        
+        function obj = setLoadData(obj,jsonData)
+            % Set the data from the JSON file to the app
+            if isempty(jsonData.proj.name)
+                jsonData.proj.name = missing;
+            end
+            if isempty(jsonData.proj.description)
+                jsonData.proj.description = missing;
+            end
+            if isempty(jsonData.proj.author)
+                jsonData.proj.author = missing;
+            end
+            obj.proj.name = jsonData.proj.name;
+            obj.proj.desc = jsonData.proj.description;
+            obj.proj.author = jsonData.proj.author;
+
+            % set the path tags
+            %  for each field in jsonData.proj.pathTags
+            currentFields = fieldnames(jsonData.proj.pathTags);
+            for y=1:length(fieldnames(jsonData.proj.pathTags))
+                % Set the path tags from the JSON file to the app
+                if isempty(jsonData.proj.pathTags.(currentFields{y}))
+                    jsonData.proj.pathTags.(currentFields{y}) = missing;
+                end
+                obj.proj.(currentFields{y}) = jsonData.proj.pathTags.(currentFields{y});
+            end
+
+            % set the module data
+            for x=1:length(jsonData.TargetModuleArray)
+                %  Initialize the module data by function 
+                % TODO maybe change to hash once we have default one 
+                obj.module.selectedFuncName = jsonData.TargetModuleArray(x).fname;
+                obj.ModuleHandler('copyObjectByFuncName');
+                obj.module.TargetModuleArray{x}.displayName = jsonData.TargetModuleArray(x).displayName;
+                obj.module.TargetModuleArray{x}.fname = jsonData.TargetModuleArray(x).fname;
+                obj.module.TargetModuleArray{x}.isUserModule = jsonData.TargetModuleArray(x).isUserModule;
+                %fileSaveVars
+                currentFieldNames = fieldnames(jsonData.TargetModuleArray(x).fileSaveVars);
+                for y=1:length(fieldnames(jsonData.TargetModuleArray(x).fileSaveVars))
+                    obj.module.TargetModuleArray{x}.(currentFieldNames{y}) = jsonData.TargetModuleArray(x).fileSaveVars.(currentFieldNames{y});
+                end
+            end
+        end
     end
 
     methods (Static)
+        % TODO: move to logger class
         function msg = Util_PrintFormattedError( err )
             msg = getReport(err, 'basic');
             msg = regexprep(msg, {'\n\s*', '\n\n+'}, {' ', '\n'});
             msg = regexprep(msg, '<a.*?>|</a>', '');
         end
 
+        % TODO: move to logger class
         function msg = lead_message() 
             msg = datestr(now, 'yyyy/mm/dd HH:MM:SS');
         end
 
+        % TODO: This is a duplicate of the function in the super class 
         function hash = generate_Hash()
             % Get the current time in milliseconds
             timestamp = round(posixtime(datetime('now')) * 1000);
@@ -1514,30 +1596,7 @@ classdef SignalFlowControl < handle
             hash = shuffledString(1:6);
         end
 
-        function EEG = importHelper(method, filename)
-
-            opts = struct();
-            EEG = struct();
-            opts.(method).rawfile = filename;
-            importModule = feval(method, EEG, opts);
-            %EEG = importModule.validate();
-            EEG = importModule.run();
-
-        end
-
-        function EEG = analysisHelper(method, filename)
-
-            opts = struct();
-            EEG = struct();
-            opts.(method).rawfile = filename;
-
-            EEG = pop_loadset(filename);
-
-            Module = feval(method, EEG, opts);
-            EEG = Module.run();
-
-        end
-
+        % TODO: move to logger class
         function msg(str, formatcode)
             % Check if the formatting code was provided
             if nargin < 2

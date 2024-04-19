@@ -37,13 +37,21 @@ classdef outflow_Set2Tidy < SignalFlowSuperClass
             obj = obj@SignalFlowSuperClass(setup, varargin{:});
         end
 
-        function sfOutput = run(obj)
+        function sfOutput = run(obj, varargin)
             % run() - Process the EEG data.
             EEG = obj.beginEEG;
             [args.QADataPre] = util_GetQAData(EEG);
             % Signal Processing Code Below
+
+            % Define output directory
+            outputDir = fullfile(obj.fileIoVar, 'tidy_results');
             
-            args.char_OutputDir = obj.fileIoVar;
+            % Create the output directory if it doesn't exist
+            if ~exist(outputDir, 'dir')
+                mkdir(outputDir);
+            end
+
+            args.char_OutputDir = outputDir;
             args.char_OutputFormat = 'parquet';
             args.char_Suffix = '';
             
