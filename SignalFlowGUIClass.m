@@ -1,8 +1,9 @@
 classdef SignalFlowGUIClass
     %SIGNALFLOWGUI Summary of this class goes here
     %   Detailed explanation goes here
-
+    % TODO: Add description of the class
     properties
+        %TODO , comment with uses of each property
         SelectedModule
         sfControl
         spectraFig
@@ -13,9 +14,7 @@ classdef SignalFlowGUIClass
     end
 
     methods
-        function obj = SignalFlowGUIClass()
-        end
-
+    
         function updateTextbox( obj, app )
             str = obj.sfControl.proj.last_message;
             source =  sprintf('<html><body style="background-color: white; font-family: Arial, Helvetica, sans-serif;"">%s</body></html>', str);
@@ -48,6 +47,7 @@ classdef SignalFlowGUIClass
 
             while obj.guisetup.isLoading
 
+                % Fake loading, just to mess with the user's head
                 app.progress = .5;
                 app.progressDialog.Value = app.progress;
                 app.progressDialog.Message = sprintf('Loading Startup functions... (%.0f%%)', app.progress * 100);
@@ -66,6 +66,13 @@ classdef SignalFlowGUIClass
             pause(1);
             close(app.progressDialog);
         end
+        
+        function obj = moduleSearchButtonPushed(obj, app)
+            flowTypeDropDownValue = app.BuilderModuleFilterDropDown.Value;
+            moduleSearchValue = app.ModuleSearchEditField.Value;
+            obj.sfControl.setModuleViewMode(flowTypeDropDownValue, moduleSearchValue);
+            obj.refreshSourceTree(app)
+        end
 
         function obj = FilterViewByFlowType( obj, app)
             if  isempty(app.BuilderModuleFilterDropDown.Items)
@@ -75,7 +82,8 @@ classdef SignalFlowGUIClass
                 %  app.BuilderModuleFilterDropDown.Value = filter_options{end};
             end
             flowTypeDropDownValue = app.BuilderModuleFilterDropDown.Value;
-            obj.sfControl.setModuleViewMode(flowTypeDropDownValue);
+            moduleSearchValue = app.ModuleSearchEditField.Value;
+            obj.sfControl.setModuleViewMode(flowTypeDropDownValue, moduleSearchValue);
         end
 
         function buttonEnableCheck(obj, app)
@@ -101,7 +109,7 @@ classdef SignalFlowGUIClass
                     setButtonEnableState(app, {'AddFunctionButton'}, isSourceTree);
                     setButtonEnableState(app, {'DeleteFunctionButton'}, isTargetTree);
                 catch
-                    setButtonEnableState(app, {'AddFunctionButton', 'DeleteFunctionButton', 'OutputFolderTagDropDown','ModuleNameEditField', 'DefaultButton', 'UpdateButton'}, false);
+                    setButtonEnableState(app, {'AddFunctionButton', 'DeleteFunctionButton'}, false);
                 end
             end
 
@@ -175,10 +183,11 @@ classdef SignalFlowGUIClass
         function obj = resetPipeline( obj, app)
             app.AddFunctionButton.Enable = false;
             app.DeleteFunctionButton.Enable = false;
-            app.OutputFolderTagDropDown.Enable = false;
-            app.ModuleNameEditField.Enable = false;
-            app.DefaultButton.Enable = false;
-            app.UpdateButton.Enable = false;
+            app.OutputFolderTagDropDown.Visible = false;
+            app.OutputFolderTagDropDownLabel.Visible = false;
+            app.CurrentFolderLabel.Visible = false;
+            app.CurrentFolderEditField.Visible = false;
+            app.OutputFolderResetButton.Visible = false;
             obj.sfControl.Modules_ResetTargetArray();
             obj.refreshTargetTree(app)
         end
@@ -191,30 +200,35 @@ classdef SignalFlowGUIClass
             for i =1 : numel(labelStruct)
                 if ~ismissing(labelStruct(i).folder)
                     module = uitreenode(app.SetupFileListTree, 'Text', sprintf("%s: %s", labelStruct(i).tag, obj.sfControl.proj.(labelStruct(i).tag)));
-                    createFileModules(obj.sfControl.proj.(labelStruct(i).tag), module);
+                    obj.createFileModules(obj.sfControl.proj.(labelStruct(i).tag), module);
                 end
             end
+            
+            expand(app.SetupFileListTree, 'all');
+           
+        end
 
+        function createFileModules(obj, folderPath, parentModule)
 
-            function createFileModules(folderPath, parentModule)
-
+            if ismissing(folderPath)
+                obj.sfControl.msgWarning('Import folder not found. Are project folders assigned?');
+                return;
+            else
                 folderContents = dir(folderPath);
+            end
 
-                for c = 1:numel(folderContents)
-                    entry = folderContents(c);
+            for c = 1:numel(folderContents)
+                entry = folderContents(c);
 
-                    if strcmp(entry.name, '.') || strcmp(entry.name, '..')
-                        continue;
-                    end
-
-                    [~, ~, ext] = fileparts(entry.name);
-
-                    if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
-                        fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
-                    end
+                if strcmp(entry.name, '.') || strcmp(entry.name, '..')
+                    continue;
                 end
 
-                expand(app.SetupFileListTree, 'all');
+                [~, ~, ext] = fileparts(entry.name);
+
+                if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
+                    fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
+                end
             end
         end
 
@@ -320,43 +334,20 @@ classdef SignalFlowGUIClass
                 if contains(currentTargetModule.fname, 'inflow')
                     module = uitreenode(app.ExecuteTree, 'Text', strcat(moduleText,' Folder Tag: [',labelStruct(pathResults).tag,']'));
                     if isfield(obj.sfControl.proj, 'path_import') && ~isempty(obj.sfControl.proj.path_import)
-                        createFileModules(obj.sfControl.proj.path_import, module);
+                        obj.createFileModules(obj.sfControl.proj.path_import, module);
                     end
                 end
 
                 if contains(currentTargetModule.fname, 'outflow')
                     module = uitreenode(app.ExecuteTree, 'Text', strcat(moduleText,' Folder Tag: [',labelStruct(pathResults).tag,']'), 'NodeData', currentTargetModule.fileIoVar);
                     if isfield(obj.sfControl.proj, 'path_results') && ~isempty(obj.sfControl.proj.path_results)
-                        createFileModules(obj.sfControl.proj.path_results, module);
+                        obj.createFileModules(obj.sfControl.proj.path_results, module);
                     end
                 end
             end
 
             expand(app.ExecuteTree, 'all');
-
-            function createFileModules(folderPath, parentModule)
-
-                if ismissing(folderPath)
-                    obj.sfControl.msgWarning('Import folder not found. Are project folders assigned?');
-                    return;
-                else
-                    folderContents = dir(folderPath);
-                end
-
-                for c = 1:numel(folderContents)
-                    entry = folderContents(c);
-
-                    if strcmp(entry.name, '.') || strcmp(entry.name, '..')
-                        continue;
-                    end
-
-                    [~, ~, ext] = fileparts(entry.name);
-
-                    if any(strcmp(ext, {'.set', '.raw', '.xdat', '.edf', '.parquet', '.csv'})) %TODO add all file extensions
-                        fileModule = uitreenode(parentModule, 'Text', entry.name,'NodeData', fullfile(entry.folder,filesep,entry.name));
-                    end
-                end
-            end
+            
         end
 
         function refreshTrees(obj,app)
@@ -380,11 +371,11 @@ classdef SignalFlowGUIClass
                 case 'Builder'
                     app.AddFunctionButton.Enable = false;
                     app.DeleteFunctionButton.Enable = false;
-                    app.OutputFolderTagDropDown.Enable = false;
-                    app.ModuleNameEditField.Enable = false;
-                    app.DefaultButton.Enable = false;
-                    app.UpdateButton.Enable = false;
-
+                    app.OutputFolderTagDropDown.Visible = false;
+                    app.OutputFolderTagDropDownLabel.Visible = false;
+                    app.OutputFolderResetButton.Visible = false;
+                    app.CurrentFolderLabel.Visible = false;
+                    app.CurrentFolderEditField.Visible = false;
                     obj.refreshSourceTree(app);
                     obj.refreshUserModuleTree(app);
                     obj.refreshTargetTree(app);
@@ -418,6 +409,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO, make logger class and all try catck blocks can be merged into one
         function obj = setupEditProjectInformationSave(obj,app)
             try
                 obj.sfControl.proj.name = app.TitleEditField.Value;
@@ -442,6 +434,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO, make logger class. all try catck blocks can be merged into one
         function obj = setupEditProjectInformationLoad(obj,app)
             try
                 if ~ismissing(obj.sfControl.proj.name)
@@ -551,12 +544,60 @@ classdef SignalFlowGUIClass
             set(0,'ShowHiddenHandles','on')
             delete(get(0,'Children'))
         end
+        
+
+        function checkAutoSaveModuleAndPath(obj, app)
+            % Check if the text of obj.SelectedModule contains 'auto save'
+            if contains(lower(obj.SelectedModule.Text), 'auto save')
+                % Check if TargetModuleArray contains at least one element
+                if isempty(obj.sfControl.module.TargetModuleArray)
+                    uialert(app.SignalFlowEEGUIFigure, 'Failed to add the Auto Save module. Please ensure that there is at least one module.', 'Error', 'Icon', 'error');
+                    error('Failed to add the Auto Save module. Please ensure that there is at least one module.');
+                end
+        
+                % Find the index of 'path_autosave' label in the labelStruct array.
+                labelStruct = obj.sfControl.Project_GetFolderLabels;
+                pathAutoSave = strcmp({labelStruct.tag}, 'path_autosave');
+        
+                % Check if 'path_autosave' label is missing
+                if ismissing(labelStruct(pathAutoSave).folder)
+                    uialert(app.SignalFlowEEGUIFigure, 'Failed to add the Auto Save module. Please set the folder for Auto Save in the setup tab.', 'Error', 'Icon', 'error');
+                    error('Failed to add the Auto Save module. Please set the folder for Auto Save.');
+                end
+
+            end
+        end
+        
+        function obj = OutputFolderContainerToggle(obj, app, booleanValue)
+            app.OutputFolderTagDropDown.Visible = booleanValue;
+            app.OutputFolderTagDropDownLabel.Visible = booleanValue;
+            app.CurrentFolderLabel.Visible = booleanValue;
+            app.CurrentFolderEditField.Visible = booleanValue;
+            app.OutputFolderResetButton.Visible = booleanValue;
+        end
+
 
         function obj = addModule(obj,app)
             try
                 hash = obj.SelectedModule.NodeData;
+                checkAutoSaveModuleAndPath(obj, app);
                 obj.sfControl = obj.sfControl.copyObjectByHash(hash);
-                if strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'outflow') && isempty(obj.sfControl.module.TargetModuleArray{end}.fileIoVar)
+                
+                app.ModuleNameEditField.Value = obj.sfControl.module.TargetModuleArray{end}.displayName;
+                app.ModuleTypeEditField.Value = obj.sfControl.module.TargetModuleArray{end}.flowMode;
+
+                OutputFolderContainerToggle(obj, app, false);
+
+                if strcmp(obj.sfControl.module.TargetModuleArray{end}.fname,'outflow_AutoSave')
+                    labelStruct = obj.sfControl.Project_GetFolderLabels;
+                    % Find the index of the 'path_results' label in the labelStruct array.
+                    pathAutoSave = strcmp({labelStruct.tag}, 'path_autosave');
+                    % Set the output directory of the last TargetModule to the folder corresponding to the 'path_results' label.
+                    if ~ismissing(labelStruct(pathAutoSave).folder)
+                        obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathAutoSave).folder;
+                    end
+                    app.OutputFolderTagDropDown.Value = 'path_autosave';
+                elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'outflow') && isempty(obj.sfControl.module.TargetModuleArray{end}.fileIoVar)
                     labelStruct = obj.sfControl.Project_GetFolderLabels;
                     % Find the index of the 'path_results' label in the labelStruct array.
                     pathResults = strcmp({labelStruct.tag}, 'path_results');
@@ -564,9 +605,8 @@ classdef SignalFlowGUIClass
                     if ~ismissing(labelStruct(pathResults).folder)
                         obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathResults).folder;
                     end
-                    if numel(obj.sfControl.module.TargetModuleArray)~= 1 && strcmp(obj.sfControl.module.TargetModuleArray{end}.displayName,'Export Set')
-                        obj.sfControl.module.TargetModuleArray{end}.displayName = strcat('Export Set <-', obj.sfControl.module.TargetModuleArray{end - 1}.displayName);
-                    end
+                    OutputFolderContainerToggle(obj, app, true);
+                    app.OutputFolderTagDropDown.Value = 'path_results';
                 elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'inflow')
                     labelStruct = obj.sfControl.Project_GetFolderLabels;
                     % Find the index of the 'path_results' label in the labelStruct array.
@@ -575,10 +615,17 @@ classdef SignalFlowGUIClass
                     if ~ismissing(labelStruct(pathResults).folder)
                         obj.sfControl.module.TargetModuleArray{end}.fileIoVar = labelStruct(pathResults).folder;
                     end
+                    app.OutputFolderTagDropDown.Value = 'path_import';
+                elseif strcmp(obj.sfControl.module.TargetModuleArray{end}.flowMode,'midflow')
+                    app.OutputFolderTagDropDown.Value = 'path_temp';
+                else
+                    OutputFolderContainerToggle(obj, app, false);
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value;
                 obj.refreshTargetTree(app);
             catch error
                 obj.sfControl.msgError(strcat('SignalFlowGUIClass: addModule, Error:',obj.sfControl.Util_PrintFormattedError(error)));
+                OutputFolderContainerToggle(obj, app, false);
                 return
             end
         end
@@ -595,7 +642,7 @@ classdef SignalFlowGUIClass
         end
 
         function obj = moveModuleUp(obj,app)
-            try
+            try 
                 % Get the currently selected module
                 tempSelectedModule = obj.SelectedModule;
 
@@ -606,7 +653,6 @@ classdef SignalFlowGUIClass
                 parentModule = tempSelectedModule.Parent;
                 siblings = parentModule.Children;
                 moduleIndex = find(siblings == tempSelectedModule);
-
                 newIndex = moduleIndex - 1;
 
                 hash = tempSelectedModule.NodeData;
@@ -631,7 +677,6 @@ classdef SignalFlowGUIClass
                 parentModule = tempSelectedModule.Parent;
                 siblings = parentModule.Children;
                 moduleIndex = find(siblings == tempSelectedModule);
-
                 newIndex = moduleIndex + 1;
 
                 hash = tempSelectedModule.NodeData;
@@ -686,6 +731,7 @@ classdef SignalFlowGUIClass
                     folderLabelIndex = strcmp({labelStruct.tag}, app.OutputFolderTagDropDown.Value);
                     targetModule.fileIoVar = labelStruct(folderLabelIndex).folder;
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value; 
             end
             obj.refreshTargetTree(app)
         end
@@ -715,6 +761,7 @@ classdef SignalFlowGUIClass
                         targetModule.fileIoVar = labelStruct(folderLabelIndex).folder;
                     end
                 end
+                app.CurrentFolderEditField.Value = app.OutputFolderTagDropDown.Value; 
             end
             obj.refreshTargetTree(app)
         end
@@ -739,35 +786,39 @@ classdef SignalFlowGUIClass
                         break;
                     end
                 end
+
                 if found
                     app.ModuleNameEditField.Value = obj.sfControl.module.TargetModuleArray{i}.displayName;
-                    app.ModuleNameEditField.Enable = true;
-                    app.DefaultButton.Enable = true;
-                    app.UpdateButton.Enable = true;
-                    if strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'outflow')
-                        app.OutputFolderTagDropDown.Enable = true;
+                    app.ModuleTypeEditField.Value = obj.sfControl.module.TargetModuleArray{i}.flowMode;
+                    
+                    OutputFolderContainerToggle(obj, app, false);
+
+                    if strcmp(obj.sfControl.module.TargetModuleArray{i}.fname,'outflow_AutoSave')
+                        app.OutputFolderTagDropDown.Value = 'path_autosave';
+                    elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'outflow')
+                        OutputFolderContainerToggle(obj, app, true);
                         for x =1:numel(labelStruct)
                             if strcmp(labelStruct(x).folder, obj.sfControl.module.TargetModuleArray{i}.fileIoVar)
                                 app.OutputFolderTagDropDown.Value = labelStruct(x).tag;
+                                app.CurrentFolderEditField.Value = labelStruct(x).tag;
                                 return
                             else
                                 app.OutputFolderTagDropDown.Value = 'path_results';
+                                app.CurrentFolderEditField.Value = 'path_results';
                             end
                         end
+                    elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'inflow')
+                        app.OutputFolderTagDropDown.Value = 'path_import';
+                    elseif strcmp(obj.sfControl.module.TargetModuleArray{i}.flowMode,'midflow')
+                        app.OutputFolderTagDropDown.Value = 'path_temp';
                     else
-                        app.OutputFolderTagDropDown.Enable = false;
-
+                       OutputFolderContainerToggle(obj, app, false);
                     end
                 else
-                    app.ModuleNameEditField.Enable = false;
-                    app.DefaultButton.Enable = false;
-                    app.UpdateButton.Enable = false;
+                    OutputFolderContainerToggle(obj, app, false);
                 end
             catch
-                app.OutputFolderTagDropDown.Enable = false;
-                app.ModuleNameEditField.Enable = false;
-                app.DefaultButton.Enable = false;
-                app.UpdateButton.Enable = false;
+               OutputFolderContainerToggle(obj, app, false);
             end
         end
 
@@ -798,20 +849,6 @@ classdef SignalFlowGUIClass
 
         end
 
-        function obj = EditModuleButtonPushed(obj, app)
-            baseModuleFile =  obj.sfControl.module.CurrentModuleInfo.filename;
-            edit(baseModuleFile{1});
-        end
-
-        function obj = CopyandEditModuleButtonPushed(obj, app)
-
-
-            obj.sfControl.Modules_CopyandEditModule;
-            %  obj.refreshUserModuleFiles(app);
-
-
-        end
-
         function obj = ViewModuleCodeButtonPushed(obj, app)
 
             try
@@ -836,7 +873,7 @@ classdef SignalFlowGUIClass
             % Get the user's documents directory
             userDocs = fullfile(getenv('USERPROFILE'), 'Documents');
             % Open file explorer in the documents directory and allow user to select a JSON file
-            [file, path] = uigetfile(fullfile(userDocs, '*.mat'), 'Select MAT file');
+            [file, path] = uigetfile(fullfile(userDocs, '*.json'), 'Select JSON file');
             if isequal(file, 0)
                 disp('User selected Cancel');
             else
@@ -888,6 +925,7 @@ classdef SignalFlowGUIClass
             end
         end
 
+        %TODO: Make an actual good looking GUI. Have never moved beyond my dev one 
         function obj = saveAsProject(obj,app)
             % Create the figure
             fig = figure('Name', 'Save File', 'NumberTitle', 'off', ...
@@ -1019,6 +1057,7 @@ classdef SignalFlowGUIClass
         end
 
         function obj = ExecuteLoop(obj,app)
+            obj.sfControl.UIFigure = app.SignalFlowEEGUIFigure;
             obj.sfControl.Project_Execute()
             obj.refreshExecuteTree(app);
         end
@@ -1031,13 +1070,12 @@ classdef SignalFlowGUIClass
         function obj = ExecuteFile(obj,app)
             tempFileSelected = obj.SelectedModule;
             filename = tempFileSelected.Text;
-            filename = strcat(obj.sfControl.proj.path_import, filesep, filename);
-            if exist(filename, 'file') == 2
-                obj.sfControl.singleFileExecute(filename)
-                obj.refreshExecuteTree(app);
-            end
+            obj.sfControl.UIFigure = app.SignalFlowEEGUIFigure;
+            obj.sfControl.Project_SingleFileExecute(filename)
+            obj.refreshExecuteTree(app);
         end
 
+        % TODO: Put this in functions . THis does nothing 
         function obj = BrowseHandler( obj, app, action, value )
 
             if nargin < 4
@@ -1107,6 +1145,8 @@ classdef SignalFlowGUIClass
             obj.reloadPlugins(app);
         end
 
+        % TODO: THis is the lamps placement issues. we need to rework almost entire gui to completely gety rid of bug 
+        % TODO: The only way is to pre-place the lamps and then just make them visible or invisible.
         function [obj,app] = reloadCustomPaths(obj, app)
             for i = 1:numel(app.PathButtons)
                 delete(app.PathButtons{i})
@@ -1132,10 +1172,10 @@ classdef SignalFlowGUIClass
             labelStruct = obj.sfControl.Project_GetFolderLabels;
 
             % Assuming the element's position vector is [left bottom width height]
-            elementPosition = app.PathSetupPanel.Position;
+            elementPosition = app.PathPanel.Position;
             
             % Calculate the top position
-            topPosition = elementPosition(2) + elementPosition(4);
+            topPosition = elementPosition(2) + elementPosition(4) - 75;
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
@@ -1143,7 +1183,7 @@ classdef SignalFlowGUIClass
             % Hardcoded buttons sizes
             ButtonXLeft = elementPosition(1) + 40;
             LampXLeft = elementPosition(1) + 12;
-            buttonWidth = 180;
+            buttonWidth = 175;
             buttonHeight = 22;
             buttonSpacing = 10;
             lampWidthHeight = 20;
@@ -1151,10 +1191,10 @@ classdef SignalFlowGUIClass
             % Check status of button
             for i = 1 : numel({labelStruct.tag})
                 % Create a button/lamp if needed
-                app.PathButtons{i} = uibutton(app.SetupTab, 'state');
+                app.PathButtons{i} = uibutton(app.PathPanel, 'state');
                 app.PathButtons{i}.HorizontalAlignment = 'left';
 
-                app.PathLamps{i} = uilamp(app.SetupTab);
+                app.PathLamps{i} = uilamp(app.PathPanel);
                 % Calculate the button's bottom position for vertical stacking
                 bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
@@ -1250,10 +1290,10 @@ classdef SignalFlowGUIClass
             pluginStatus= SignalFlowDoctor();
 
             % Assuming the element's position vector is [left bottom width height]
-            elementPosition = app.PluginSetupPanel.Position;
+            elementPosition = app.PluginPanel.Position;
             
             % Calculate the top position
-            topPosition = elementPosition(2) + elementPosition(4);
+            topPosition = elementPosition(2) + elementPosition(4) - 75;
 
             % Conditional Plugin Button Label
             fi = @(varargin)varargin{length(varargin)-varargin{1}};
@@ -1261,19 +1301,20 @@ classdef SignalFlowGUIClass
             % Hardcoded buttons sizes
             ButtonXLeft = elementPosition(1) + 40;
             LampXLeft = elementPosition(1) + 12;
-            buttonWidth = 180;
+            buttonWidth = 175;
             buttonHeight = 22;
             buttonSpacing = 10;
             lampWidthHeight = 20;
+            
 
             % Check status of button
             if numel(app.PluginButtons) == 0
                 for i = 1 : numel(pluginNames)
                     % Create a button/lamp if needed
-                    app.PluginButtons{i} = uibutton(app.SetupTab, 'state');
+                    app.PluginButtons{i} = uibutton(app.PluginPanel, 'state');
                     app.PluginButtons{i}.HorizontalAlignment = 'left';
 
-                    app.PluginLamps{i} = uilamp(app.SetupTab);
+                    app.PluginLamps{i} = uilamp(app.PluginPanel);
                     % Calculate the button's bottom position for vertical stacking
                     bottomPosition = topPosition - (i) * (buttonHeight + buttonSpacing);
 
@@ -1315,7 +1356,20 @@ classdef SignalFlowGUIClass
 
             % user can select a path or cancel, if they cancel the loop is
             % broken but the path is still assigned missing
-            directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'),'Select the Folder your plug-in is in:');
+            % directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'),'Select the Folder your plug-in is in:');
+
+            if ispc
+                % Windows
+                directoryPath = uigetdir(fullfile(getenv('USERPROFILE'), 'Documents'), 'Select the Folder your plug-in is in:');
+            elseif ismac
+                % macOS
+                directoryPath = uigetdir(fullfile(getenv('HOME'), 'Documents'), 'Select the Folder your plug-in is in:');
+            else
+                % Linux (and other Unix-like systems)
+                directoryPath = uigetdir(fullfile(getenv('HOME'), 'Documents'), 'Select the Folder your plug-in is in:');
+            end
+
+
             if directoryPath == 0
                 obj.sfControl.proj.(labelStruct(i).tag) = missing;
             else

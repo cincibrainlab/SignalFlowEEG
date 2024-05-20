@@ -1,23 +1,26 @@
 classdef (Abstract) SignalFlowSuperClass < handle
     %SIGNALFLOWSUPERCLASS Summary of this class goes here
     %   Detailed explanation goes here
+    % TODO give more detailed explanation
 
     properties
 
         setup           % * setup options
         displayName     % * For readable names for modules 
+        %TODO: Have a static assigned haschode for each module. Only in source tree. Maybe the target tree can have a hascode like (source_hashcode + number of modules in source tree). This will help in tracking the modules in the target tree.
         hashcode        % * random hash code id    
         tree            % * source, user, target
-        isValid         % * function-specific technical validation
+        %TODO: isValid Property is not used. Remove it
+        isValid         % * function-specific technical validation 
         flowMode        % * inflow, midflow, outflow
         fname           % * flow function name
         filename        % * fullfile name
+        %TODO: modfolder is not used. Remove it
         modfolder       % * subfolder of module
         isUserModule    % * base or custom module
         beginEEG        % * input dataset (mid and outflow functions)
         endEEG          % * output dataset
-        fileIoVar
-
+        fileIoVar       % * file I/O variable
         
     end
 
@@ -40,16 +43,17 @@ classdef (Abstract) SignalFlowSuperClass < handle
 
             obj.beginEEG = in.EEG;
             obj.displayName = in.setup.flabel;
+            %TODO : flable and displayName are the same thing. Change evrything to one. Get rid of flabel
             obj.flowMode = in.setup.flowMode;
 
  %          %Set Unique Hash Value
             obj.hashcode = missing; % obj.generate_Hash();
             obj.setup = in.setup;
-
             obj.isUserModule = false;
 
         end
 
+        %TDOO : This function is only run in one place. Remove it
         function str = messageHandler( obj, action )
             % outputs string for GUI or Shell
             % logs to tidytable
@@ -67,6 +71,7 @@ classdef (Abstract) SignalFlowSuperClass < handle
             end
         end
 
+        %TODO : This function is different but never used 
         function obj = executeFunction( obj )
             if obj.validate()
                 obj.messageHandler( 'isValidated' );
@@ -77,14 +82,17 @@ classdef (Abstract) SignalFlowSuperClass < handle
             end
         end
 
+        %TODO : Thius function is never used 
         function obj = cleanUpFunction( obj, EEG )
             if ~obj.infoMode
             obj.endEEG = EEG;
             end
         end
 
+        %TODO : We should make a logging outside of this so if a file goes missing we know. 
         function EEG = HistoryTable ( obj, EEG, arguments)
             % Get current timestamp
+            %TODO: Change all datestr to datetime
             timestamp = datestr(now, 'mm-dd-yyyy HH:MM:SS.FFF');
             % Create quality index cell array
             data = {obj.fname,'scriptname', obj.fname, EEG.filename;
@@ -116,11 +124,13 @@ classdef (Abstract) SignalFlowSuperClass < handle
             end
         end
 
+        %TODO : This function is never used
         function validateFlag = validate( obj )
             % Should rework to verify it is a module 
             validateFlag = eval(obj.fname);
         end
 
+        %TODO : This function is never used
         function test( obj ) % Tests the algorithm using test data.
             try
                 tempEEG = obj.beginEEG;
@@ -136,6 +146,7 @@ classdef (Abstract) SignalFlowSuperClass < handle
             end
         end
 
+        %TODO: This function is never used, but probably should be
         function help( obj ) % Displays a help message explaining the function's purpose and usage.
             fprintf('\n%s (SignalFlow Help)\n', upper(obj.fname));
             % Open the file
@@ -170,11 +181,12 @@ classdef (Abstract) SignalFlowSuperClass < handle
     end
 
     methods (Abstract)        
-        EEG = run( obj ); % Runs the signal processing algorithm.
+        EEG = run( obj, varargin ); % Runs the signal processing algorithm.
     end
 
     methods (Static)
 
+        %TODO : This function needs to be reworked to the hashing behavior wanted 
         function hash = generate_Hash()
             % Get the current time in milliseconds
             timestamp = round(posixtime(datetime('now')) * 1000);
@@ -191,6 +203,7 @@ classdef (Abstract) SignalFlowSuperClass < handle
             hash = shuffledString(1:6);
         end
 
+        %TODO : This function is never used and useless 
         function value = is_module_file()
             value = true;
         end

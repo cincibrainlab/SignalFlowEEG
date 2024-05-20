@@ -1,0 +1,30 @@
+We will review in the following order.
+1. module superclass 
+- Discuss limitations of the module superclass
+- Discuss the module superclass in the context of the module pattern
+- review code style and best practices
+2. SIgnalFlowControl
+3. SignalFlowGuiClass
+
+ALl changes are marked in file with "TODO"
+
+WHen we change from handlers, we need to make sure those functions are usefull too
+
+Make the filter a text box, make the name and the flowmode searchable  (Praveens Idea ), color code them too
+
+Validttiom for there bing an import on pipeline run (Praveen said he did this for auto) but we need to check for everythign else
+
+For inflow and midflow just completely hide output folder tag selct and button
+
+Maybe just make module information show the info and have the dropdown only for ouflow modules
+
+Review edit module and copy edit module, these don't really have a use case and are confusing. 
+If someone wants to edit a module, they can just copy it and then edit it.
+
+If no module selected in pipeline, reordering just throws a ton of errors.
+
+We should make a permanent loading bar on the gui to show the progress of the pipeline run.
+
+We need to add error handling everywhere. 
+
+We should maybe remmake gui using grid layout, it would be easier to manage and look better.

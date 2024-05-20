@@ -1,0 +1,54 @@
+{
+  "proj": {
+    "name": "Test App",
+    "description": "This is a test app",
+    "author": "Test Author",
+    "pathTags": {
+      "path_import": "C:\\Users\\sueo8x\\Documents\\raw_files_ForNate_3.10.2022\\MEA_30_EDF",
+      "path_temp": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEG_Projs",
+      "path_results": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEGDevSavesDELETELATER"
+    }
+  },
+  "TargetModuleArray": [
+    {
+      "displayName": "Import EDFNeuroNexusH32MEA File",
+      "fname": "inflow_ImportEDFNeuroNexusH32MEA",
+      "isUserModule": false,
+      "fileSaveVars": {
+        "fileIoVar": "C:\\Users\\sueo8x\\Documents\\raw_files_ForNate_3.10.2022\\MEA_30_EDF"
+      }
+    },
+    {
+      "displayName": "Lowpass Filter",
+      "fname": "midflow_LowpassFilter",
+      "isUserModule": false,
+      "fileSaveVars": {
+        "fileIoVar": []
+      }
+    },
+    {
+      "displayName": "Export Set <-Lowpass Filter",
+      "fname": "outflow_ExportSet",
+      "isUserModule": false,
+      "fileSaveVars": {
+        "fileIoVar": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEGDevSavesDELETELATER"
+      }
+    },
+    {
+      "displayName": "Highpass Filter",
+      "fname": "midflow_HighpassFilter",
+      "isUserModule": false,
+      "fileSaveVars": {
+        "fileIoVar": []
+      }
+    },
+    {
+      "displayName": "Export Set <-Highpass Filter",
+      "fname": "outflow_ExportSet",
+      "isUserModule": false,
+      "fileSaveVars": {
+        "fileIoVar": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEGDevSavesDELETELATER"
+      }
+    }
+  ]
+}

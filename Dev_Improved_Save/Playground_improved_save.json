@@ -1,0 +1,76 @@
+{
+    "proj": {
+        "name": "example_pipeline",
+        "description": "A pipeline for processing EEG data",
+        "author": "John Doe",
+        "Paths": {
+            "path_import": "C:\\Users\\sueo8x\\Documents\\raw_files_ForNate_3.10.2022\\MEA_30_EDF",
+            "path_temp": "C:\\Users\\sueo8x\\Documents",
+            "path_results": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEGDevSavesDELETELATER",
+            "path_example_extra": "C:\\Users\\sueo8x\\Documents"
+        },
+        "GitCommit": "djdjdjdjdjdjdjdj_NEED_TO_IMPLEMENT"
+    },
+    "TargetModuleArray": [
+        {
+            "displayName": "Import EDFNeuroNexusH32MEA File",
+            "defauleHash": "CT7LCL_NEED_TO_IMPLEMENT", 
+            "fname": "inflow_ImportEDFNeuroNexusH32MEA",
+            "isUserModule": false,
+            "fileSaveVars": {
+                "fileIoVar": "C:\\Users\\sueo8x\\Documents\\raw_files_ForNate_3.10.2022\\MEA_30_EDF",
+                "boolAutoFolder_fileIo": true,
+                "boolCustomFolder_fileIo": false,
+                "tagCustomFolder_fileIo": "path_temp"
+            }
+        },
+        {
+            "displayName": "Lowpass Filter",
+            "defauleHash": "CT7LCL_NEED_TO_IMPLEMENT", 
+            "fname": "midflow_LowpassFilter",
+            "isUserModule": false,
+            "fileSaveVars": {
+                "fileIoVar": "",
+                "boolAutoFolder_fileIo": true,
+                "boolCustomFolder_fileIo": false,
+                "tagCustomFolder_fileIo": ""
+            }
+        },
+        {
+            "displayName": "Export Set <-Lowpass Filter",
+            "defauleHash": "CT7LCL_NEED_TO_IMPLEMENT", 
+            "fname": "outflow_ExportSet",
+            "isUserModule": false,
+            "fileSaveVars": {
+                "fileIoVar": "C:\\Users\\sueo8x\\Documents\\SignalFlowEEGDevSavesDELETELATER",
+                "boolAutoFolder_fileIo": false,
+                "boolCustomFolder_fileIo": true,
+                "tagCustomFolder_fileIo": "path_results"
+            }
+        },
+        {
+            "displayName": "Highpass Filter",
+            "defauleHash": "CT7LCL_NEED_TO_IMPLEMENT", 
+            "fname": "midflow_HighpassFilter",
+            "isUserModule": false,
+            "fileSaveVars": {
+                "fileIoVar": "",
+                "boolAutoFolder_fileIo": true,
+                "boolCustomFolder_fileIo": false,
+                "tagCustomFolder_fileIo": ""
+            }
+        },
+        {
+            "displayName": "Export Set <-Lowpass Filter",
+            "defauleHash": "CT7LCL_NEED_TO_IMPLEMENT", 
+            "fname": "outflow_ExportSet",
+            "isUserModule": false,
+            "fileSaveVars": {
+                "fileIoVar": "",
+                "boolAutoFolder_fileIo": true,
+                "boolCustomFolder_fileIo": false,
+                "tagCustomFolder_fileIo": ""
+            }
+        }
+    ]
+}
