@@ -1,4 +1,4 @@
-classdef Inflow_ImportMeaXDAT < SignalFlowSuperClass
+classdef inflow_ImportMeaXDAT < SignalFlowSuperClass
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
 %  
@@ -7,7 +7,7 @@ classdef Inflow_ImportMeaXDAT < SignalFlowSuperClass
 %% Contact:
 %  https://github.com/cincibrainlab/SignalFlowEEG/issues
     methods
-        function obj = Inflow_ImportMeaXDAT(varargin)
+        function obj = inflow_ImportMeaXDAT(varargin)
            
             % Define Custom Flow Function
             setup.flabel = 'Import MEA XDAT File';

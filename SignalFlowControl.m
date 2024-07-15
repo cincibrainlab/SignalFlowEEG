@@ -1035,10 +1035,10 @@ classdef SignalFlowControl < handle
                         return; 
                     end
 
-                    success = obj.clearAutoSaveFolder();
-                    if ~success
-                        return; 
-                    end
+                    % success = obj.clearAutoSaveFolder();
+                    % if ~success
+                    %     return; 
+                    % end
                     filename = value;
                     filename = strcat(obj.proj.path_import, filesep, filename);
 
@@ -1054,16 +1054,16 @@ classdef SignalFlowControl < handle
                         return; 
                     end
 
-                    success = obj.clearAutoSaveFolder();
-                    if ~success
-                        return; 
-                    end
+                    % success = obj.clearAutoSaveFolder();
+                    % if ~success
+                    %     return; 
+                    % end
                     
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
                     
-                    validExt = {'.set', '.raw', '.edf'};
+                    validExt = {'.set', '.raw', '.edf', '.xdat'};
                     x = 1;
 
                     while x <= length(dirContents)
@@ -1094,10 +1094,10 @@ classdef SignalFlowControl < handle
                         return; 
                     end
 
-                    success = obj.clearAutoSaveFolder();
-                    if ~success
-                        return; 
-                    end
+                    % success = obj.clearAutoSaveFolder();
+                    % if ~success
+                    %     return; 
+                    % end
                     importDir = obj.proj.path_import;
                     dirContents = dir(importDir);
                     dirContents = dirContents(~[dirContents.isdir]);
@@ -1253,7 +1253,7 @@ classdef SignalFlowControl < handle
             % Extract the file extension from the given input file.
             [~, filename, fileExtension] = fileparts(importFile);
             % Define an array of valid file extensions that the function can process.
-            validExtensions = {'.set', '.raw', '.edf'};
+            validExtensions = {'.set', '.raw', '.edf', '.xdat'};
             labelStruct = obj.Project_GetFolderLabels;
 
 
