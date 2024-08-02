@@ -7,7 +7,22 @@ close all;
 % args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\';
 
 % chirp paradigm broken electrode plugged into AI2
-args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\allego_0__uid0718-12-47-32_data.xdat';
+
+% Good Ones ----------------------------------------------------------------------------------------------------------------------------
+
+% mouse chrip
+args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_1__uid0802-12-56-20_data.xdat';
+
+% mouse assr 40hz
+% args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_2__uid0802-12-58-18_data.xdat';
+
+% mouse rest
+% args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_0__uid0802-12-53-52_dataa.xdat';
+
+
+% ------------------------------------------------------------------------------------------------------------------------------
+
+%args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\allego_0__uid0718-12-47-32_data.xdat';
 % looks really good
 
 % chirp paradigm broken electrode
@@ -42,7 +57,9 @@ if strcmp(fileExtension, '.xdat')
         % Xdat import code from manufacturer
         % [signalStruct,timeRange,jsonData] = xdatImport(extractBefore(dataFile,'_data'));  
         xdat_filename = extractBefore(dataFile,'_data');
-        x=allegoXDatFileReaderR2018a();
+%         x=allegoXDatFileReaderR2018a_new();
+        x=allegoXDatFileReaderR2019b();
+        % x=allegoXDatFileReaderR2018a();
         timeRange = x.getAllegoXDatTimeRange(xdat_filename);
         signalStruct.PriSigs = x.getAllegoXDatPriSigs(xdat_filename,timeRange);
         signalStruct.AuxSigs = x.getAllegoXDatAuxSigs(xdat_filename,timeRange);
@@ -72,7 +89,9 @@ if strcmp(fileExtension, '.xdat')
         
         % Generate a time vector based on the length of the signal
         t = (0:length(signal)-1) / fs;
-%         t = signalStruct.AuxSigs.timeStamps;
+        % t = signalStruct.AuxSigs.timeStamps;
+        
+
 
         % Design a lowpass filter with a cutoff frequency of 100 Hz
         lowpassFilter = designfilt('lowpassiir', 'FilterOrder', 8, ...
@@ -85,21 +104,21 @@ if strcmp(fileExtension, '.xdat')
         
         % Design notch filters for 60 Hz, 120 Hz, and 180 Hz
         notch60 = designfilt('bandstopiir', 'FilterOrder', 2, ...
-                             'HalfPowerFrequency1', 59, 'HalfPowerFrequency2', 61, ...
+                             'HalfPowerFrequency1', 55, 'HalfPowerFrequency2', 65, ...
                              'DesignMethod', 'butter', 'SampleRate', fs);
         
         notch120 = designfilt('bandstopiir', 'FilterOrder', 2, ...
-                              'HalfPowerFrequency1', 119, 'HalfPowerFrequency2', 121, ...
+                              'HalfPowerFrequency1', 115, 'HalfPowerFrequency2', 125, ...
                               'DesignMethod', 'butter', 'SampleRate', fs);
         
         notch180 = designfilt('bandstopiir', 'FilterOrder', 2, ...
-                              'HalfPowerFrequency1', 179, 'HalfPowerFrequency2', 181, ...
+                              'HalfPowerFrequency1', 175, 'HalfPowerFrequency2', 185, ...
                               'DesignMethod', 'butter', 'SampleRate', fs);
         
         % Apply the filters sequentially to the signal
         filtered_signal = filtfilt(notch60, signal);
-%         filtered_signal = filtfilt(notch120, filtered_signal);
-%         filtered_signal = filtfilt(notch180, filtered_signal);
+        filtered_signal = filtfilt(notch120, filtered_signal);
+        filtered_signal = filtfilt(notch180, filtered_signal);
         
         % lowpass
         filtered_signal = filtfilt(lowpassFilter, filtered_signal);
@@ -107,14 +126,15 @@ if strcmp(fileExtension, '.xdat')
         % highpass
         filtered_signal = filtfilt(highpassFilter, filtered_signal);
 
+
 %         % Plot the original and filtered signals
-%         figure;
-%         plot(t, signal);
-%         xlabel('Time (seconds)');
-%         ylabel('Amplitude');
-%         title('Original Signal');
-% %         xlim([0 20]); % Zoom in to the first 20 seconds
-%         grid on;
+        figure;
+        plot(t, signal);
+        xlabel('Time (seconds)');
+        ylabel('Amplitude');
+        title('Original Signal');
+%         xlim([0 20]); % Zoom in to the first 20 seconds
+        grid on;
         
         figure;
         plot(t, filtered_signal);
@@ -124,13 +144,13 @@ if strcmp(fileExtension, '.xdat')
 %         xlim([0 20]); % Zoom in to the first 20 seconds
         grid on;
         
-%         % Generate the spectrogram of the filtered signal
-%         figure;
-%         spectrogram(filtered_signal, 256, 250, 256, fs, 'yaxis');
-%         title('Spectrogram of the Filtered Signal');
-%         xlabel('Time (seconds)');
-%         ylabel('Frequency (Hz)');
-%         colorbar;
+        % Generate the spectrogram of the filtered signal
+        figure;
+        spectrogram(filtered_signal, 256, 250, 256, fs, 'yaxis');
+        title('Spectrogram of the Filtered Signal');
+        xlabel('Time (seconds)');
+        ylabel('Frequency (Hz)');
+        colorbar;
 
         % --------------------------------------------------------------------
         stage1_map = readtable("MouseEEGv2H32_Import_Stage1.csv");
@@ -248,7 +268,7 @@ time = 0:length(data)-1;
 % time = signalStruct.AuxSigs.timeStamps;
  
 % Parameters
-threshold = 300.0;  % Voltage threshold for detecting events (adjust as needed)
+threshold = 0.5;  % Voltage threshold for detecting events (adjust as needed)
 min_duration = 200;  % length to ignore events after threshold is exceeded (samples)
  
 % Find events
