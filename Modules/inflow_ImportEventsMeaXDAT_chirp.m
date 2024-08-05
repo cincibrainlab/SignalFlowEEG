@@ -1,4 +1,4 @@
-classdef inflow_ImportEventsMeaXDAT_assr < SignalFlowSuperClass
+classdef inflow_ImportEventsMeaXDAT_chirp < SignalFlowSuperClass
 %% Disclaimer:
 %  This file is part of the Cincinnati Childrens Brain Lab SignalFlowEEG Pipeline
 %  
@@ -7,7 +7,7 @@ classdef inflow_ImportEventsMeaXDAT_assr < SignalFlowSuperClass
 %% Contact:
 %  https://github.com/cincibrainlab/SignalFlowEEG/issues
     methods
-        function obj = inflow_ImportEventsMeaXDAT_assr(varargin)
+        function obj = inflow_ImportEventsMeaXDAT_chirp(varargin)
            
             % Define Custom Flow Function
             setup.flabel = 'Import Events MEA XDAT File Assr';
