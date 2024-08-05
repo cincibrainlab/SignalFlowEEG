@@ -10,7 +10,7 @@ classdef inflow_ImportEventsMeaXDAT_chirp < SignalFlowSuperClass
         function obj = inflow_ImportEventsMeaXDAT_chirp(varargin)
            
             % Define Custom Flow Function
-            setup.flabel = 'Import Events MEA XDAT File Assr';
+            setup.flabel = 'Import MEA XDAT File w/ Chirp Events';
             setup.flowMode = 'inflow';
 
             % Construction Function
@@ -18,9 +18,7 @@ classdef inflow_ImportEventsMeaXDAT_chirp < SignalFlowSuperClass
         end
 
         function EEG = run(obj, varargin)
-            args.char_filepath = char_filepath;
-            
-            
+            args.char_filepath = obj.fileIoVar;
             args.char_netType = 'MEAXDAT';
             
             % Get the folder path, file name, and file extension
