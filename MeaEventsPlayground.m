@@ -11,13 +11,13 @@ close all;
 % Good Ones ----------------------------------------------------------------------------------------------------------------------------
 
 % mouse chrip
-args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_1__uid0802-12-56-20_data.xdat';
+% args.char_filepath = 'C:\Users\Gam9LG\Documents\TestData\MeaTroubleshooting\080224\allego_1__uid0802-12-56-20_data.xdat';
 
 % mouse assr 40hz
-% args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_2__uid0802-12-58-18_data.xdat';
+ args.char_filepath = 'C:\Users\Gam9LG\Documents\TestData\MeaTroubleshooting\080224\allego_2__uid0802-12-58-18_data.xdat';
 
 % mouse rest
-% args.char_filepath = 'C:\Users\sueo8x\Documents\MeaTroubleshooting\080224\allego_0__uid0802-12-53-52_dataa.xdat';
+% args.char_filepath = 'C:\Users\Gam9LG\Documents\TestData\MeaTroubleshooting\080224\allego_0__uid0802-12-53-52_dataa.xdat';
 
 
 % ------------------------------------------------------------------------------------------------------------------------------
@@ -268,24 +268,35 @@ time = 0:length(data)-1;
 % time = signalStruct.AuxSigs.timeStamps;
  
 % Parameters
-threshold = 0.5;  % Voltage threshold for detecting events (adjust as needed)
-min_duration = 200;  % length to ignore events after threshold is exceeded (samples)
- 
+threshold = 0.2;  % Voltage threshold for detecting events (adjust as needed)
+min_duration = 1600;  % Minimum duration to consider an event valid (samples)
+window_size = 13;  % Size of the window for calculating average (adjust as needed)
+threshold_ratio = .20;  % Ratio to determine when to end an event (adjust as needed)
+
 % Find events
 events = [];
 in_event = false;
- 
+
 for i = 1:length(time)
     amplitude = data(i);
+    
+    % Calculate average amplitude around the current point
+    start_idx = max(1, i - floor(window_size/2));
+    end_idx = min(length(data), i + floor(window_size/2));
+    window_avg = mean(abs(data(start_idx:end_idx)));
+    
     if abs(amplitude) >= threshold && ~in_event
         event_start = time(i);
         in_event = true;
-    elseif abs(amplitude) < threshold && in_event
-        event_duration = time(i) - event_start;
-        if event_duration >= min_duration
-            events(end+1).latency = event_start;
-            events(end).duration = event_duration;
-            in_event = false;
+    elseif in_event
+        if window_avg < threshold * threshold_ratio
+            event_duration = time(i) - event_start;
+            if event_duration >= min_duration
+                events(end+1).latency = event_start;
+                events(end).duration = event_duration;
+                events(end).end_time = time(i);  % Add end time of the event
+                in_event = false;
+            end
         end
     end
 end
@@ -293,10 +304,17 @@ end
  
 % Add events to the EEG structure
 for i = 1:length(events)
-    EEG.event(end+1).type = 'TTL_pulse';
-    EEG.event(end).latency = events(i).latency;  % Convert to samples
-    EEG.event(end).duration = events(i).duration;  % Convert to samples
+    % Add event start
+    EEG.event(end+1).type = 'TTL_pulse_start';
+    EEG.event(end).latency = events(i).latency;
+    EEG.event(end).duration = events(i).duration;
+
+    % Add event end
+    EEG.event(end+1).type = 'TTL_pulse_end';
+    EEG.event(end).latency = events(i).end_time;
+    EEG.event(end).duration = 0;  % End event has no duration
 end
+
  
 % Sort events by latency
 EEG = eeg_checkset(EEG, 'eventconsistency');
@@ -305,14 +323,6 @@ EEG = eeg_checkset(EEG, 'eventconsistency');
 pop_saveset(EEG, 'filename', 'updated_eeglab_file.set');
 
 pop_eegplot(EEG, 1, 1, 1);
-
-
-
-
-
-
-
-
 
 
 
