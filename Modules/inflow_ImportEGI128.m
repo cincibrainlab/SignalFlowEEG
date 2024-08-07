@@ -17,7 +17,7 @@ classdef inflow_ImportEGI128 < SignalFlowSuperClass
             obj = obj@SignalFlowSuperClass(setup, varargin{:});
         end
 
-        function run(obj, varargin)
+        function EEG = run(obj, varargin)
             % run() - Process the EEG data.           
             % Signal Processing Code Below
             args.char_filepath = obj.fileIoVar;
