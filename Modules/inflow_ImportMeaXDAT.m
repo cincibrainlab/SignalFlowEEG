@@ -34,7 +34,13 @@ classdef inflow_ImportMeaXDAT < SignalFlowSuperClass
                 % Code for import 
                 note = @(msg) fprintf('%s: %s\n', mfilename, msg );
                 dataFile = args.char_filepath;
-                if ~isempty(regexp(dataFile,'xdat','match')); xdatFile = true; else; xdatFile = false; end
+                if ~endsWith(dataFile, '_data.xdat')
+                    note(['Skipping file (does not end with _data.xdat): ' dataFile]);
+                    EEG = []; % Return empty to indicate no processing
+                    return;
+                else
+                    xdatFile = true;
+                end
                 
                 if xdatFile
                     % Xdat import code from manufacturer
@@ -186,7 +192,7 @@ classdef inflow_ImportMeaXDAT < SignalFlowSuperClass
                 EEG = [];
             end
             [args.QADataPost] = util_GetQAData(EEG);
-            pop_eegplot(EEG, 1, 1, 1);
+            % pop_eegplot(EEG, 1, 1, 1);
             EEG = obj.HistoryTable(EEG, args);
         end
     end

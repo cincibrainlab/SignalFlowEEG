@@ -29,12 +29,16 @@ classdef inflow_ImportEventsMeaXDAT_assr < SignalFlowSuperClass
             if strcmp(fileExtension, '.xdat')
                 EEG = util_allegoXDatEvents_assr(args.char_filepath);
                 %Parameters and run history is stored in EEG.etc.SignalFlow.History field in EEG structure
-                EEG = obj.HistoryTable(EEG, args);
+                if ~isempty(EEG) % Check if EEG is valid before proceeding
+                    EEG = obj.HistoryTable(EEG, args);
+                end
             else
                 EEG = [];
             end
-            [args.QADataPost] = util_GetQAData(EEG);
-            EEG = obj.HistoryTable(EEG, args);
+            if ~isempty(EEG) % Check if EEG is valid before proceeding
+                [args.QADataPost] = util_GetQAData(EEG);
+                EEG = obj.HistoryTable(EEG, args);
+            end
         end
     end
 end
